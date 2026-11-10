@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Guard approved documents",
+      "trigger": "PreToolUse",
+      "description": "Asks the user before the agent edits, moves, or deletes an approved specification, the approved architecture, the Playbook, or the Operating Guide. Reads stdin only and writes nothing. Fails open on unreadable input. Does not see edits made through shell commands, so it is a safeguard and not a security boundary.",
+      "matcher": "^(fs_write|fs_append|str_replace|delete_file|smart_relocate|semantic_rename)$",
+      "timeout": 10,
+      "action": {
+        "type": "command",
+        "command": "node .kiro/hooks/guard-approved-docs.js"
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.git-credentials
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+htmlcov/
+*.egg-info/
+
+# JavaScript dependencies and build output
+node_modules/
+frontend/dist/
+frontend/build/
+frontend/coverage/
+playwright-report/
+test-results/
+
+# Logs
+*.log
+logs/

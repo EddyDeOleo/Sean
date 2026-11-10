@@ -1,0 +1,58 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# Node dependencies
+node_modules/
+
+# Frontend build output and test artifacts
+frontend/dist/
+frontend/build/
+frontend/coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+logs/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# IDE artifacts
+.idea/
+.vscode/
+*.swp
+
+# Operating-system artifacts
+.DS_Store
+Thumbs.db
+desktop.ini

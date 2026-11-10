@@ -1,0 +1,16 @@
+
+{
+  "mcpServers": {
+    "sean": {
+      "command": "C:\\Users\\User\\source\\repos\\Sean\\backend\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-P",
+        "-m",
+        "app.modules.mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "C:\\Users\\User\\source\\repos\\Sean\\backend"
+      }
+    }
+  }
+}
