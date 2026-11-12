@@ -1,0 +1,36 @@
+{
+  "body": {
+    "conclusion": null,
+    "epistemic_classification": null,
+    "error": {
+      "code": "GIT_FAILED",
+      "message": "Retrieval failed with GIT_FAILED.",
+      "retryable": false
+    },
+    "evidence": [],
+    "explanation": null,
+    "investigation_id": "f90ad942-8647-4392-8355-eb2c97dc09e0",
+    "limitations": [],
+    "ranking": [],
+    "repository": {
+      "repository_id": "broken"
+    },
+    "retrieval_status": "FAILED",
+    "source_references": [],
+    "target": {
+      "line_range": null,
+      "path": "src/billing.py",
+      "resolution": "NOT_RESOLVED",
+      "symbol": null
+    }
+  },
+  "name": "failed-broken",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "broken",
+    "target": {
+      "path": "src/billing.py"
+    }
+  },
+  "status": 200
+}

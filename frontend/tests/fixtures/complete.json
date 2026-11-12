@@ -1,0 +1,641 @@
+{
+  "body": {
+    "conclusion": "Verified repository history records 5 commit(s) that changed src/billing.py.",
+    "epistemic_classification": "DOCUMENTED",
+    "error": null,
+    "evidence": [
+      {
+        "author": "Mira Okafor",
+        "change_side": null,
+        "commit_hash": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53",
+        "event_timestamps": null,
+        "evidence_id": "ev1_60c7ee609598bc9e2a33ffc5f9f81e308a939f2b630397293fb30d6e5e4215e7",
+        "excerpt": null,
+        "file_path": "src/billing.py",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [],
+        "line_range": {
+          "end": 1,
+          "start": 1
+        },
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "BLAMES_TARGET_LINES"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git blame --porcelain",
+        "revision": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:1-1",
+        "source_type": "GIT_BLAME",
+        "source_url": null,
+        "timestamp": "2025-01-10T00:00:00Z",
+        "title": null,
+        "unavailable_fields": [
+          "excerpt",
+          "source_url",
+          "title"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Priya Raman",
+        "change_side": null,
+        "commit_hash": "99197767d6c5ccef4d8c2cc27503e60bd6c11f77",
+        "event_timestamps": null,
+        "evidence_id": "ev1_c75ca12f4a6d7f6cde6aa672aeb92af3b9c7f7630c9f294a22ef4480073f201a",
+        "excerpt": null,
+        "file_path": "src/billing.py",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [],
+        "line_range": {
+          "end": 3,
+          "start": 2
+        },
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "BLAMES_TARGET_LINES"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git blame --porcelain",
+        "revision": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:2-3",
+        "source_type": "GIT_BLAME",
+        "source_url": null,
+        "timestamp": "2025-01-13T00:00:00Z",
+        "title": null,
+        "unavailable_fields": [
+          "excerpt",
+          "source_url",
+          "title"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Tomas Lindqvist",
+        "change_side": null,
+        "commit_hash": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "event_timestamps": null,
+        "evidence_id": "ev1_e3eb7020f719bdc9b5ad0b83f79323579663a1257ab8bab46854a58aefbf9adc",
+        "excerpt": null,
+        "file_path": "src/billing.py",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [],
+        "line_range": {
+          "end": 4,
+          "start": 4
+        },
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "BLAMES_TARGET_LINES"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git blame --porcelain",
+        "revision": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:4-4",
+        "source_type": "GIT_BLAME",
+        "source_url": null,
+        "timestamp": "2025-01-16T00:00:00Z",
+        "title": null,
+        "unavailable_fields": [
+          "excerpt",
+          "source_url",
+          "title"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Tomas Lindqvist",
+        "change_side": null,
+        "commit_hash": "72e8b33b74d3182383a227e0956d8d523530f530",
+        "event_timestamps": null,
+        "evidence_id": "ev1_17e2d47b31c8508a423b5b6984ba473e0dbf52401a2bfdb5e6a956bdbf3d8564",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "72e8b33b74d3182383a227e0956d8d523530f530",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-07T00:00:00Z",
+        "title": "Reject negative charge amounts",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Tomas Lindqvist",
+        "change_side": null,
+        "commit_hash": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "event_timestamps": null,
+        "evidence_id": "ev1_22be394778c908199f3ecffc9d563672c6e96a643f56acf2d8f641b5a6f2c14d",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-16T00:00:00Z",
+        "title": "Return a mapping from charge",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Mira Okafor",
+        "change_side": null,
+        "commit_hash": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7",
+        "event_timestamps": null,
+        "evidence_id": "ev1_235c197a087d6e6c6cec5b957bebffc4935117dad5ad3849611a957994578b95",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-04T00:00:00Z",
+        "title": "Add charge function",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Mira Okafor",
+        "change_side": null,
+        "commit_hash": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53",
+        "event_timestamps": null,
+        "evidence_id": "ev1_609efdbf7e939216397ebbe57e8558ca4b7ae5063702ab61ee19913868fbc72b",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-10T00:00:00Z",
+        "title": "Add currency to charge",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Priya Raman",
+        "change_side": null,
+        "commit_hash": "99197767d6c5ccef4d8c2cc27503e60bd6c11f77",
+        "event_timestamps": null,
+        "evidence_id": "ev1_da3b5b01f02692ff3c46381970ba9daa323a7e0ba8a10a6cc16c183c51ccc915",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "99197767d6c5ccef4d8c2cc27503e60bd6c11f77",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-13T00:00:00Z",
+        "title": "Treat zero as invalid",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Mira Okafor",
+        "change_side": null,
+        "commit_hash": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7",
+        "event_timestamps": null,
+        "evidence_id": "ev1_433232d6e91c8d6903ef2659f365873615ff147f0092e38c2a677cf18965553b",
+        "excerpt": null,
+        "file_path": "docs/billing.md",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "CO_CHANGED_IN_COMMIT_NO_CONTENT_RELATION_VERIFIED"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "INFERRED",
+          "kind": "SEMANTICALLY_RELATES_TO_TARGET"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null,
+        "timestamp": "2025-01-04T00:00:00Z",
+        "title": "Add charge function",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Mira Okafor",
+        "change_side": null,
+        "commit_hash": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53",
+        "event_timestamps": null,
+        "evidence_id": "ev1_cf31e9d14f96b64076c13c680996f26eb6d11e4727fbc23c9b8c3c50c4ce5c52",
+        "excerpt": null,
+        "file_path": "docs/billing.md",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:19Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "CO_CHANGED_IN_COMMIT_NO_CONTENT_RELATION_VERIFIED"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "INFERRED",
+          "kind": "SEMANTICALLY_RELATES_TO_TARGET"
+        },
+        "repository_namespace": "sample",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null,
+        "timestamp": "2025-01-10T00:00:00Z",
+        "title": "Add currency to charge",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      }
+    ],
+    "explanation": "Verified repository history records 5 commit(s) that changed src/billing.py. These records establish that the changes occurred. They do not state why. Blame attributes 3 line range(s) in the target to verified commits. Documentation changed in 2 of these commits. That co-change does not establish a content relation or intent. The symbol charge is not separated from the file history. Commit relevance to the symbol is not established. Unknown: why these changes were made, and whether history outside the retrieved scope affects this answer. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. Symbol history is tracked at file level, so commits that changed other parts of the file are included. Pull request and issue evidence is not included, because the association step is not implemented. Evidence that would help: the diff of each listed commit, to see what each change did.",
+    "investigation_id": "090ac700-b39f-455c-a111-557d116eb3c2",
+    "limitations": [
+      {
+        "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",
+        "evidence_id": null,
+        "message": "Rename and copy detection is heuristic, so some history may be attributed to a different path.",
+        "scope": "history"
+      },
+      {
+        "code": "SYMBOL_HISTORY_FILE_LEVEL",
+        "evidence_id": null,
+        "message": "Symbol history is tracked at file level, so commits that changed other parts of the file are included.",
+        "scope": "history"
+      },
+      {
+        "code": "ASSOCIATION_NOT_IMPLEMENTED",
+        "evidence_id": null,
+        "message": "Pull request and issue evidence is not included, because the association step is not implemented.",
+        "scope": "github"
+      }
+    ],
+    "ranking": [
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "code_region",
+            20
+          ],
+          [
+            "historical_role",
+            20
+          ]
+        ],
+        "evidence_id": "ev1_60c7ee609598bc9e2a33ffc5f9f81e308a939f2b630397293fb30d6e5e4215e7",
+        "score": 65
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "code_region",
+            20
+          ],
+          [
+            "historical_role",
+            20
+          ]
+        ],
+        "evidence_id": "ev1_c75ca12f4a6d7f6cde6aa672aeb92af3b9c7f7630c9f294a22ef4480073f201a",
+        "score": 65
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "code_region",
+            20
+          ],
+          [
+            "historical_role",
+            20
+          ]
+        ],
+        "evidence_id": "ev1_e3eb7020f719bdc9b5ad0b83f79323579663a1257ab8bab46854a58aefbf9adc",
+        "score": 65
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ],
+          [
+            "commit_message",
+            15
+          ]
+        ],
+        "evidence_id": "ev1_17e2d47b31c8508a423b5b6984ba473e0dbf52401a2bfdb5e6a956bdbf3d8564",
+        "score": 60
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ],
+          [
+            "commit_message",
+            15
+          ]
+        ],
+        "evidence_id": "ev1_22be394778c908199f3ecffc9d563672c6e96a643f56acf2d8f641b5a6f2c14d",
+        "score": 60
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ],
+          [
+            "commit_message",
+            15
+          ]
+        ],
+        "evidence_id": "ev1_235c197a087d6e6c6cec5b957bebffc4935117dad5ad3849611a957994578b95",
+        "score": 60
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ],
+          [
+            "commit_message",
+            15
+          ]
+        ],
+        "evidence_id": "ev1_609efdbf7e939216397ebbe57e8558ca4b7ae5063702ab61ee19913868fbc72b",
+        "score": 60
+      },
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ]
+        ],
+        "evidence_id": "ev1_da3b5b01f02692ff3c46381970ba9daa323a7e0ba8a10a6cc16c183c51ccc915",
+        "score": 45
+      },
+      {
+        "awards": [
+          [
+            "repository_context",
+            5
+          ]
+        ],
+        "evidence_id": "ev1_433232d6e91c8d6903ef2659f365873615ff147f0092e38c2a677cf18965553b",
+        "score": 5
+      },
+      {
+        "awards": [
+          [
+            "repository_context",
+            5
+          ]
+        ],
+        "evidence_id": "ev1_cf31e9d14f96b64076c13c680996f26eb6d11e4727fbc23c9b8c3c50c4ce5c52",
+        "score": 5
+      }
+    ],
+    "repository": {
+      "repository_id": "sample"
+    },
+    "retrieval_status": "COMPLETE",
+    "source_references": [
+      {
+        "evidence_id": "ev1_60c7ee609598bc9e2a33ffc5f9f81e308a939f2b630397293fb30d6e5e4215e7",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:1-1",
+        "source_type": "GIT_BLAME",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_c75ca12f4a6d7f6cde6aa672aeb92af3b9c7f7630c9f294a22ef4480073f201a",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:2-3",
+        "source_type": "GIT_BLAME",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_e3eb7020f719bdc9b5ad0b83f79323579663a1257ab8bab46854a58aefbf9adc",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:src/billing.py:4-4",
+        "source_type": "GIT_BLAME",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_17e2d47b31c8508a423b5b6984ba473e0dbf52401a2bfdb5e6a956bdbf3d8564",
+        "source_id": "72e8b33b74d3182383a227e0956d8d523530f530",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_22be394778c908199f3ecffc9d563672c6e96a643f56acf2d8f641b5a6f2c14d",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_235c197a087d6e6c6cec5b957bebffc4935117dad5ad3849611a957994578b95",
+        "source_id": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_609efdbf7e939216397ebbe57e8558ca4b7ae5063702ab61ee19913868fbc72b",
+        "source_id": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_da3b5b01f02692ff3c46381970ba9daa323a7e0ba8a10a6cc16c183c51ccc915",
+        "source_id": "99197767d6c5ccef4d8c2cc27503e60bd6c11f77",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_433232d6e91c8d6903ef2659f365873615ff147f0092e38c2a677cf18965553b",
+        "source_id": "08abe4c39905c6e08bc75fbfd3a8218d7d661df7:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_cf31e9d14f96b64076c13c680996f26eb6d11e4727fbc23c9b8c3c50c4ce5c52",
+        "source_id": "7c1ddcbf531bb1e77bb925a42864f13d835a5a53:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null
+      }
+    ],
+    "target": {
+      "line_range": null,
+      "path": "src/billing.py",
+      "resolution": "RESOLVED",
+      "symbol": "charge"
+    }
+  },
+  "name": "complete",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "sample",
+    "target": {
+      "path": "src/billing.py",
+      "symbol": "charge"
+    }
+  },
+  "status": 200
+}

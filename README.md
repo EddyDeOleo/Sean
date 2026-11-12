@@ -30,6 +30,7 @@ Approved project documents:
 
 - [Spec 1: Evidence Retrieval](docs/specs/spec-1-evidence-retrieval.md)
 - [Spec 2: Ouija Experience](docs/specs/spec-2-ouija-experience.md)
+- [Spec 3: Immersive Experience](docs/specs/spec-3-immersive-experience.md) (Phase 4, owner-directed; extends Spec 2)
 - [Architecture and Project Setup](docs/architecture/architecture-and-project-setup.md)
 - [Kiro Engineering Playbook](docs/development/kiro-engineering-playbook.md)
 - [Kiro Operating Guide](docs/development/kiro-operating-guide.md)
@@ -39,3 +40,20 @@ Kiro project guidance lives in `.kiro/steering/` and `.kiro/skills/`. Its loadin
 ## Development
 
 Development uses Kiro IDE as the primary environment, with Kiro CLI as a complement. Work is specification-first and incremental, with human approval at defined gates. Implementation has not started, and open implementation gates are listed in Architecture section 25 and Spec 1 section 25. Setup instructions will be added once the project has package metadata and verified dependencies.
+
+## Running the Frontend (Phase 4)
+
+The frontend is implemented and tested (see `.kiro/reports/phase-status.md`, Phase 4). It requires Node 24 and the backend virtual environment.
+
+```powershell
+# Terminal 1: backend (from backend\)
+.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+# Terminal 2: frontend (from frontend\)
+npm install
+npm run dev
+```
+
+The Vite dev server proxies `/api` to the backend (override with `SEAN_BACKEND_URL`). The repository ID is typed and must be registered with the backend. Sound is off until you enable it in the interface.
+
+Tests, from `frontend\`: `npx vitest run` for unit, component, and integration tests. `npx playwright test e2e/journey.spec.ts` for browser journeys against the real backend on disposable repositories. It uses the installed Microsoft Edge and downloads nothing.

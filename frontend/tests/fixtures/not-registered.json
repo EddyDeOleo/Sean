@@ -1,0 +1,16 @@
+{
+  "body": {
+    "code": "REPOSITORY_NOT_FOUND",
+    "message": "The repository identifier is not registered.",
+    "retryable": false
+  },
+  "name": "not-registered",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "missing",
+    "target": {
+      "path": "src/billing.py"
+    }
+  },
+  "status": 404
+}

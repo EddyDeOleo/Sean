@@ -1,10 +1,10 @@
 # Sean — Spec 1: Evidence Retrieval
 
 **Document ID:** SEAN-SPEC-01  
-**Version:** 2.3  
+**Version:** 2.4  
 **Status:** Approved  
 **Document type:** Functional and Technical Specification  
-**Previous version:** 2.2  
+**Previous version:** 2.3  
 **Filename:** `spec-1-evidence-retrieval.md`  
 **Product:** Sean
 
@@ -112,7 +112,7 @@ Sean must generate a structured, deterministic explanation from retrieved eviden
 
 ### FR-10 — MCP Access
 
-Sean must expose the approved investigation capabilities through MCP without duplicating backend business logic.
+Sean must expose the four MCP tools listed in Section 12 through MCP, using the same backend logic as the HTTP API. These tools return evidence and retrieval status. Epistemic classification and investigation conclusions are part of the investigation result (Section 10.3) and are not returned by the Section 12 MCP tools.
 
 ## 5. Symbol and Code Context Resolution
 
@@ -768,14 +768,14 @@ The following items remain open for validation. They must not be treated as comp
 
 | ID | Decision or validation | Status |
 |---|---|---|
-| D01 | Confirm final technology stack and compatible dependency versions | Pending validation |
-| D02 | Verify MCP transport and STDIO compatibility with installed Kiro | Pending validation |
-| D03 | Pin the Django repository baseline for Golden Tests | Pending |
-| D04 | Confirm historical Git retrieval behavior against Golden Tests | Pending |
-| D05 | Calibrate evidence-ranking weights | Pending |
-| D06 | Finalize cache invalidation behavior | Pending |
-| D07 | Confirm local deployment and data locations on Windows | Pending validation |
-| D08 | Validate GitHub API behavior and rate-limit handling | Pending validation |
+| D01 | Confirm final technology stack and compatible dependency versions | Resolved for Phase 2 by documentary compatibility research (D01). Runtime and lock verification in Phase 3. |
+| D02 | Verify MCP transport and STDIO compatibility with installed Kiro | Design resolved (`mcp==2.3.0`, STDIO; D02). Runtime verification in Phase 4, against the real MCP module. |
+| D03 | Pin the Django repository baseline for Golden Tests | Resolved (D03): repository `django/django`; baseline Django 5.2, tag `5.2`, commit `9e7cc2b628fe8fd3895986af9b7fc9525034c1b0`. |
+| D04 | Confirm historical Git retrieval behavior against Golden Tests | Pending, Phase 4. |
+| D05 | Calibrate evidence-ranking weights | Pending, Phase 4 (calibration depends on Golden results). |
+| D06 | Finalize cache invalidation behavior | Pending, Phase 3. |
+| D07 | Confirm local deployment and data locations on Windows | Partly resolved: configuration registry location is `%LOCALAPPDATA%\Sean\config\` (Evidence Retrieval design). Cache and other data locations pending, Phase 3. |
+| D08 | Validate GitHub API behavior and rate-limit handling | Pending, Phase 3. |
 
 The no-AI deterministic explanation is a mandatory product requirement, not an optional future enhancement.
 

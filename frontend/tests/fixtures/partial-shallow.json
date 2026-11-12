@@ -1,0 +1,162 @@
+{
+  "body": {
+    "conclusion": "Verified repository history records 1 change(s) to src/billing.py. Retrieval was incomplete, so the supported portion is limited to these records.",
+    "epistemic_classification": "PARTIAL_EVIDENCE",
+    "error": null,
+    "evidence": [
+      {
+        "author": "Tomas Lindqvist",
+        "change_side": null,
+        "commit_hash": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "event_timestamps": null,
+        "evidence_id": "ev1_db75f5b31398e60f9b51f32647783c0132a66b1f08308e94f40ee13db3acfbc7",
+        "excerpt": null,
+        "file_path": null,
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:23Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "HEURISTIC_RENAME_AND_COPY_DETECTION"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "VERIFIED",
+          "kind": "TOUCHES_TARGET_PATH"
+        },
+        "repository_namespace": "shallow",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_type": "GIT_COMMIT",
+        "source_url": null,
+        "timestamp": "2025-01-16T00:00:00Z",
+        "title": "Return a mapping from charge",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      },
+      {
+        "author": "Tomas Lindqvist",
+        "change_side": null,
+        "commit_hash": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "event_timestamps": null,
+        "evidence_id": "ev1_8b22e03886bf2f650fe04bb4bbb82302ee700eb429411cb57ca21e088ddffde2",
+        "excerpt": null,
+        "file_path": "docs/billing.md",
+        "integrity": {
+          "content_digest": null,
+          "retrieved_at": "2026-11-12T06:21:23Z",
+          "served_from_cache": false,
+          "source_verification": "VERIFIED_IN_REPOSITORY"
+        },
+        "limitations": [
+          "CO_CHANGED_IN_COMMIT_NO_CONTENT_RELATION_VERIFIED"
+        ],
+        "line_range": null,
+        "relationship": {
+          "basis": "INFERRED",
+          "kind": "SEMANTICALLY_RELATES_TO_TARGET"
+        },
+        "repository_namespace": "shallow",
+        "retrieval_method": "git log --follow",
+        "revision": null,
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null,
+        "timestamp": "2025-01-16T00:00:00Z",
+        "title": "Return a mapping from charge",
+        "unavailable_fields": [
+          "excerpt",
+          "source_url"
+        ],
+        "verified_absent_fields": []
+      }
+    ],
+    "explanation": "Verified repository history records 1 change(s) to src/billing.py. Retrieval was incomplete, so the supported portion is limited to these records. Unknown: why these changes were made, and the history that the incomplete retrieval did not cover. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. The repository is a shallow clone, so older history may be missing. Pull request and issue evidence is not included, because the association step is not implemented. Evidence that would help: the complete history for the target, from a full clone.",
+    "investigation_id": "ed9fe554-87be-4129-be52-6c8ed9b032a7",
+    "limitations": [
+      {
+        "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",
+        "evidence_id": null,
+        "message": "Rename and copy detection is heuristic, so some history may be attributed to a different path.",
+        "scope": "history"
+      },
+      {
+        "code": "SHALLOW_CLONE",
+        "evidence_id": null,
+        "message": "The repository is a shallow clone, so older history may be missing.",
+        "scope": "history"
+      },
+      {
+        "code": "ASSOCIATION_NOT_IMPLEMENTED",
+        "evidence_id": null,
+        "message": "Pull request and issue evidence is not included, because the association step is not implemented.",
+        "scope": "github"
+      }
+    ],
+    "ranking": [
+      {
+        "awards": [
+          [
+            "exact_symbol_or_path",
+            25
+          ],
+          [
+            "historical_role",
+            20
+          ]
+        ],
+        "evidence_id": "ev1_db75f5b31398e60f9b51f32647783c0132a66b1f08308e94f40ee13db3acfbc7",
+        "score": 45
+      },
+      {
+        "awards": [
+          [
+            "repository_context",
+            5
+          ]
+        ],
+        "evidence_id": "ev1_8b22e03886bf2f650fe04bb4bbb82302ee700eb429411cb57ca21e088ddffde2",
+        "score": 5
+      }
+    ],
+    "repository": {
+      "repository_id": "shallow"
+    },
+    "retrieval_status": "PARTIAL",
+    "source_references": [
+      {
+        "evidence_id": "ev1_db75f5b31398e60f9b51f32647783c0132a66b1f08308e94f40ee13db3acfbc7",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+        "source_type": "GIT_COMMIT",
+        "source_url": null
+      },
+      {
+        "evidence_id": "ev1_8b22e03886bf2f650fe04bb4bbb82302ee700eb429411cb57ca21e088ddffde2",
+        "source_id": "52a4377fed22c4fee21354c8d59223c91f3bfe98:docs/billing.md",
+        "source_type": "DOCUMENTATION",
+        "source_url": null
+      }
+    ],
+    "target": {
+      "line_range": null,
+      "path": "src/billing.py",
+      "resolution": "NOT_REQUESTED",
+      "symbol": null
+    }
+  },
+  "name": "partial-shallow",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "shallow",
+    "target": {
+      "path": "src/billing.py"
+    }
+  },
+  "status": 200
+}

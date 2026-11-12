@@ -1,9 +1,9 @@
 # Sean — Architecture & Project Setup
 
 **Document ID:** SEAN-ARCH-001  
-**Version:** 1.3  
+**Version:** 1.4  
 **Status:** Approved  
-**Supersedes:** Version 1.2  
+**Supersedes:** Version 1.3  
 **Project:** Sean  
 **Tagline:** Summon the reasoning behind the code.
 
@@ -1097,7 +1097,7 @@ Do not sacrifice security, testing, or code quality to reduce credit consumption
 
 ## 23. License
 
-MIT is the selected license.
+MIT is the selected license. The copyright holder, confirmed by the owner, is Eddy Yail De Oleo Arias, with year 2026. The root `LICENSE` file matches this attribution.
 
 The root `LICENSE` file must be created only after confirming the actual copyright holder and appropriate year.
 
@@ -1119,7 +1119,7 @@ Do not leave placeholders or invent an individual or organization as the copyrig
 | A10 | Animation | CSS and browser-native APIs by default | Selected |
 | A11 | Local data | `%LOCALAPPDATA%\Sean\` | Selected |
 | A12 | Kiro workflow | Specs, Steering, Permissions, Kiroignore, Skills, selective Agents and Hooks | Selected |
-| A13 | License | MIT; attribution pending | Selected |
+| A13 | License | MIT; copyright holder confirmed by the owner: Eddy Yail De Oleo Arias, year 2026 (see §23) | Selected |
 | A14 | Documentation | README maintained as project documentation evolves | Selected |
 | A15 | Desktop layout | Evidence and history left; Ouija board right | Selected |
 | A16 | Kiro permissions | Supported user, workspace, and agent permission mechanisms | Selected in principle |
@@ -1144,7 +1144,7 @@ Implementation must not begin until:
 4. The engineering playbook and operating guide are available as project references.
 5. The cross-document consistency review is complete.
 6. Windows runtime versions and dependency compatibility are verified.
-7. Kiro IDE and CLI versions are identified.
+7. Kiro IDE version is identified (1.4.121, Section 13). Kiro CLI is excluded from the mandatory environment. Its version is identified only when a gated task uses the CLI.
 8. Kiro configuration formats and supported capabilities are verified against those versions.
 9. The demo repository and pinned baseline are selected before Golden test implementation.
 10. The MIT copyright holder is confirmed before creating the license file.
@@ -1157,3 +1157,12 @@ No project initialization or implementation beyond the already authorized docume
 
 **End of document.**
 
+
+## Change history
+
+| Version | Change | Basis |
+|---|---|---|
+| 1.4 | §25 item 7 amended. The Kiro IDE version (1.4.121) is identified. The Kiro CLI is excluded from the mandatory environment and its version is identified only when a gated task uses it. | Owner decision 3, Phase 2 closure (CC-6). |
+| 1.4 | §23 and decision A13 record the MIT copyright holder, confirmed by the owner, as Eddy Yail De Oleo Arias, year 2026. These edits were made in Phase 2 without a version change and are recorded here retroactively. `LICENSE` is unchanged. | Owner confirmation, Phase 2 closure. |
+| 1.4 | §12.2 is not amended. The existing workspace MCP launch configuration is kept unchanged until the MCP module and entry point exist. This is an accepted deviation from §12.2 wording, recorded as DEC-13 in D02. Enablement waits for all six §12.2 conditions. | Owner decision 4 and DEC-13, Phase 2 closure (CC-4). |
+| 1.4 | No change to the approved runtime stack. Node.js runtime and dependency pins are recorded in D01, not in this document. | Owner decision 1, Phase 2 closure. |

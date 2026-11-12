@@ -1,0 +1,9 @@
+# Backend development and test pins. Includes the runtime set. D01 section 2 (pytest 9.2.0). Hypothesis is approved
+# for development but is not pinned here, because no test imports it and MCP-10 is not authorized.
+-r requirements.txt
+Pygments==2.21.0
+colorama==0.4.6
+iniconfig==2.3.1
+packaging==26.3
+pluggy==1.7.0
+pytest==9.2.0

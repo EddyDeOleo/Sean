@@ -1,0 +1,21 @@
+{
+  "body": {
+    "candidates": [
+      "A.run",
+      "B.run"
+    ],
+    "code": "TARGET_AMBIGUOUS",
+    "message": "The target matches more than one definition. Choose one candidate and send it again.",
+    "retryable": false
+  },
+  "name": "ambiguous",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "ambiguous",
+    "target": {
+      "path": "src/multi.py",
+      "symbol": "run"
+    }
+  },
+  "status": 409
+}

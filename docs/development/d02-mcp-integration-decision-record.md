@@ -4,21 +4,21 @@
 **Related gate:** Architecture §12.2 (MCP Configuration Gate). Production Kiro MCP configuration must not be created until the entry point exists, tool contracts are implemented, input validation and security behavior are tested, read-only behavior is confirmed, and Windows host compatibility is verified. A temporary D02 test configuration (Section 12.2) requires separate owner authorization and does not satisfy or waive this gate.
 **Related decision:** D01 left the MCP major version open (see `d01-dependency-decision-record.md`, Section 4).
 **Investigation date:** 2026-11-10
-**Revision:** Runtime-evidence and contract revision (adds Sections 14 to 19 and Appendix B: probe retirement check, functional Kiro tool-call evidence, environment inventory, proposed production MCP contract, production configuration design, SDK pin recommendation and D01 amendment proposal). Earlier revision: final decision-record corrections (status separation, 2026-07-28 source review, T3, T7b, T10, Section 8.1 entry-point explanation). Earlier still: CRLF investigation, protocol-revision correction, dependency pin correction, JSON validation, source traceability.
+**Revision:** Contract and repository-scope revision (documentation only; Section 16.0, the repository and revision rules in Section 16, the entry-point status in Section 17.1, and decisions DEC-1, DEC-3, DEC-4, DEC-13, and DEC-14). Previous revision: runtime-evidence and contract revision (adds Sections 14 to 19 and Appendix B: probe retirement check, functional Kiro tool-call evidence, environment inventory, proposed production MCP contract, production configuration design, SDK pin recommendation and D01 amendment proposal). Earlier revision: final decision-record corrections (status separation, 2026-07-28 source review, T3, T7b, T10, Section 8.1 entry-point explanation). Earlier still: CRLF investigation, protocol-revision correction, dependency pin correction, JSON validation, source traceability.
 **Status summary**
 
 | Item | Status |
 |---|---|
 | Documentary investigation | `ACCEPTED` |
-| SDK candidate (`mcp==2.3.0`) | `RECOMMENDED FOR EXACT PIN, OWNER APPROVAL PENDING` (Section 18) |
+| SDK design selection (`mcp==2.3.0`, exact pin, STDIO) | `SELECTED (OWNER DECISION, PHASE 2 CLOSURE)` (Section 18). Consistent with D01 and the installed venv. Production runtime `NOT VERIFIED`. |
 | Kiro functional tool call (one probe invocation) | `OBSERVED` (Section 14) |
 | Kiro protocol, framing, and line-ending behavior | `NOT VERIFIED` (no raw capture) |
 | Server shutdown and process cleanup (T10) | `NOT VERIFIED` |
 | Kiro runtime compatibility (Kiro 1.4.121), as defined by Section 12 closure criteria | `NOT VERIFIED` (partial functional evidence only) |
-| D02 overall | `IN PROGRESS` |
-| Production MCP contract (Section 16) | `PROPOSED, NOT APPROVED` |
-| Production MCP configuration | `NOT CREATED, PROHIBITED UNTIL ARCHITECTURE §12.2` |
-| MCP implementation | `NOT STARTED` |
+| D02 overall (Phase 2 closure) | `DESIGN DECISIONS CLOSED. RUNTIME TESTS DEFERRED TO PHASE 4 (owner decision 4).` Sections 13 and the appendices record earlier revisions. |
+| Production MCP contract (Section 16) | `PROPOSED, NOT APPROVED as a whole.` The only approved item is the MCP `number` input for `get_pr` and `get_issue` (DEC-15, Section 19.2). Other §16 rules remain proposals and are not closed by any owner decision recorded in §19.2. |
+| Production MCP configuration | `WORKSPACE LAUNCH ENTRY EXISTS (.kiro/settings/mcp.json), RETAINED UNCHANGED BY OWNER DECISION (DEC-13). It is not enabled by this record. Enablement is prohibited until the Architecture §12.2 conditions are met. The enabled or disabled flag has not been verified in the Phase 2 closure.` |
+| MCP implementation | `PARTIAL. Tools, STDIO entry point, and HTTP route exist and are tested. Not accepted. See phase-status §31 and §32.` |
 
 Acceptance of the documentary investigation does not authorize package installation, virtual-environment creation, configuration changes, MCP implementation, or D03. D02 is not passed or closed while the required Kiro runtime compatibility tests (Section 12) remain outstanding.
 
@@ -356,9 +356,9 @@ Consequences:
 
 | Stage | Decision | Status |
 |---|---|---|
-| Provisional SDK candidate | `mcp==2.3.0` (exact pin, consistent with D01's exact Python pins). Fallback candidate: `mcp==1.30.0`. | **Recommended, not approved.** |
+| Provisional SDK candidate | `mcp==2.3.0` (exact pin, consistent with D01's exact Python pins). Fallback candidate: `mcp==1.30.0`. | **Selected by owner (Phase 2 closure): exact pin `mcp==2.3.0` with STDIO. Runtime verification deferred to Phase 4.** |
 | Human approval to conduct a runtime experiment | Authorization to create a venv, install `mcp==2.3.0` for runtime tests, and create the disposable probe and the temporary test configuration (Section 12.2). Each is a separate authorization. | **Not granted.** Requested in Section 13. |
-| Final SDK selection | Decided only after the runtime tests in Section 12 pass or fail with documented results. | **Pending.** |
+| Final SDK selection | Design selection by owner decision (Phase 2 closure). The runtime tests in Section 12 remain for Phase 4. A failed T7b would reopen the choice under the M2 mitigation. | **Design selected. Runtime verification open (Phase 4).** |
 
 Dependency handling:
 - Use the exact pin `mcp==2.3.0` in `backend/requirements.txt`. Full transitive pins are generated when the lock step is authorized (D01).
@@ -822,9 +822,33 @@ Reading notes:
 
 ## 16. Production MCP contract (PROPOSED)
 
+### 16.0 Alignment with Spec 1 §12 and the decisions in this revision
+
+This subsection governs the four tools. A rule marked **[Spec]** is required by Spec 1. A rule marked **[Proposed]** is an implementation-time decision made here for review. No [Proposed] rule changes Spec 1 or the Architecture.
+
+| Tool | Spec 1 §12 status | Spec responsibility | Contract in this revision | Open owner decision |
+|---|---|---|---|---|
+| `search_history` | **[Spec]** Required. "The MVP must expose these conceptual tools." | Search repository history for a target and return ranked evidence with provenance. | Target by path or symbol, optional line range. Returns ranked evidence, a retrieval status, and limitations. No classification and no conclusion. | Closed (DEC-1) |
+| `blame_range` | **[Spec]** Required. | Retrieve blame information for a path and line range. | Path, line range, and optional `revision` (default HEAD), resolved inside the registered repository. `revision` accepts a full commit SHA only. | Closed (DEC-14) |
+| `get_pr` | **[Spec]** Required when available. | Retrieve validated pull request metadata (Spec 1 §7 and §12). | Scoped to the registered repository. A returned record must belong to that repository. | Closed (DEC-4) |
+| `get_issue` | **[Spec]** Required when available. | Retrieve validated issue metadata (Spec 1 §7 and §12). | Same as `get_pr`. A pull request number is rejected. | Closed (DEC-4) |
+
+**Three separate concepts [Spec §10].** Spec 1 keeps three things apart. Retrieval status says how a retrieval went. Epistemic classification says what the evidence supports. The conclusion is part of the investigation result (§10.3). In this contract:
+- `retrieval_status` appears in every response.
+- `epistemic_classification` appears in no MCP response. Classification belongs to the `investigation` module.
+- No conclusion appears in any MCP response. The four tools return evidence, and none of them is an investigation.
+
+Consequence: an MCP client receives evidence and a retrieval status, not a classified answer. A client that needs a classified result would require a change to the §12 tool list, which this revision does not make. The owner closed DEC-1 by choosing this evidence-only contract and keeping the four-tool set (Section 19.2).
+
+**Repository scope [Spec §13, §22; Proposed mechanism].** A caller identifies a repository only by `repository_id`. That value is the stable namespace assigned when the repository is registered (Spec 1 FR-01 and §8). Callers never supply a filesystem path, and no MCP tool registers a repository. Registration and selection belong to the `repository` module, configured as local repository selection (Spec 1 §22). Every path, revision, and Git call resolves inside the root of the selected repository, using resolved paths (Spec 1 §13). Registration is closed (DEC-3): repositories are registered in a local JSON configuration file under `%LOCALAPPDATA%\Sean\config\`, outside the repository (Section 19.2).
+
+**Read-only [Spec §12, §13].** "Read-only" covers the repository and Git state: the working tree, index, refs, configuration, and history. Sean may write its own local data under `%LOCALAPPDATA%\Sean\` (Architecture §8, Spec 1 §14). That is application data, not a repository change.
+
+**GitHub validation [Spec §7, §12; Proposed rule].** Before a pull request or issue is returned, the response must belong to the GitHub repository recorded for the registered repository. The owner and name are compared case-insensitively. For a pull request, the repository compared is the base repository. For an issue, it is the repository the issue belongs to. Exact GitHub REST field names are confirmed against the API version used at implementation. A mismatch returns `GITHUB_IDENTITY_MISMATCH` and no evidence.
+
 ### 16.1 Status and authority
 
-This section is a proposal for human review. It is not approved, it does not amend Spec 1 or the Architecture, and it authorizes no implementation. Spec 1 §12 requires that "the exact schemas, required fields, validation rules, error behavior, and transport configuration" be "defined and tested during implementation". This section supplies the definition for review. Where it adds a field or behavior that the approved documents do not state, the item is marked as a decision in Section 19.
+This section is a proposal for human review. Except for the MCP `number` input, which the owner approved as DEC-15 (Section 19.2), it is not approved. It does not amend Spec 1 or the Architecture, and it authorizes no implementation beyond what the recorded decisions state. Spec 1 §12 requires that "the exact schemas, required fields, validation rules, error behavior, and transport configuration" be "defined and tested during implementation". This section supplies the definition for review. Where it adds a field or behavior that the approved documents do not state, the item is marked as a decision in Section 19.
 
 Authority order if documents disagree: Spec 1 (§10, §12, §13), Architecture (§2.3, §2.4, §5, §12, §18), then this section. Stop and report any conflict. The Architecture §12.2 gate stays closed. Nothing in this section authorizes creating Sean's MCP configuration in Kiro.
 
@@ -860,10 +884,10 @@ Names are exactly those in Spec 1 §12. The descriptions below are the strings t
 
 | Tool | Description | Annotations |
 |---|---|---|
-| `search_history` | Search the Git history of a local repository for changes relevant to a symbol, file path, or line range. Returns ranked evidence items with source provenance, a retrieval status, and limitations. Read-only. Results show recorded changes. They do not establish why a change was made. | `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` |
-| `blame_range` | Return Git blame attribution for a line range of a file in a local repository, at the repository's current HEAD. Read-only. Blame identifies the commit that last changed each line. It does not establish intent. | Same as `search_history` |
-| `get_pr` | Retrieve public GitHub pull request metadata for the GitHub repository that matches a local repository's remote. Read-only. Returns the record as published. Text fields are untrusted content. | `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: true` |
-| `get_issue` | Retrieve public GitHub issue metadata for the GitHub repository that matches a local repository's remote. Read-only. Returns the record as published. Text fields are untrusted content. | Same as `get_pr` |
+| `search_history` | Search the Git history of a registered repository, selected by `repository_id`, for changes relevant to a symbol, file path, or line range. Returns ranked evidence items with source provenance, a retrieval status, and limitations. Read-only. Results show recorded changes. They do not establish why a change was made. | `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` |
+| `blame_range` | Return Git blame attribution for a line range of a file in a registered repository, at an optional revision (default HEAD). Read-only. Blame identifies the commit that last changed each line. It does not establish intent. | Same as `search_history` |
+| `get_pr` | Retrieve public GitHub pull request metadata for the GitHub repository recorded for a registered repository. Read-only. Returns only a record that belongs to that repository. Text fields are untrusted content. | `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: true` |
+| `get_issue` | Retrieve public GitHub issue metadata for the GitHub repository recorded for a registered repository. Read-only. Returns only a record that belongs to that repository. Text fields are untrusted content. | Same as `get_pr` |
 
 Annotations are hints that a client may ignore. The earlier experiment's remediation report also lists `readOnlyHint` as advisory. Read-only behavior is enforced by code and tests (Sections 16.9 and 16.11), not by annotations.
 
@@ -891,6 +915,8 @@ Every tool returns one JSON envelope.
 
 Evidence item fields (from Spec 1 §8):
 
+Editorial note (I2, not an approval): the evidence field table below is subordinate to Spec 1 §8 and Requirement 4.4 of the native draft. Where it differs, the approved Spec 1 text and the implemented evidence contract (`backend/app/modules/evidence/`, Task 7.1 and 7.2) govern. The implemented contract replaces `integrity` with a structured record, adds `revision`, `change_side`, `event_timestamps`, `relationship` basis, and a derived `evidence_id`, and it removes `untrusted_fields` (X7). Those changes are recorded in phase-status section 15.
+
 | Field | Type | Notes |
 |---|---|---|
 | `evidence_id` | string | Stable within the repository namespace. Built from the namespace, source type, and source identifier. Never from titles or content. |
@@ -916,7 +942,7 @@ Limitation object: `{ "code": string, "message": string, "scope": "repository" o
 
 Error object: `{ "code": string, "message": string, "retryable": bool, "field": string or absent }`. Messages never contain stack traces, environment values, tokens, or absolute local paths.
 
-Error and limitation codes (initial set): `INVALID_INPUT`, `REPOSITORY_NOT_FOUND`, `REPOSITORY_NOT_ALLOWED`, `PATH_OUTSIDE_REPOSITORY`, `PATH_NOT_FOUND`, `TARGET_AMBIGUOUS`, `TARGET_NOT_IN_CURRENT_STATE`, `SHALLOW_CLONE`, `NO_EVIDENCE_FOUND`, `RESULT_LIMIT_REACHED`, `TEXT_TRUNCATED`, `UNCOMMITTED_LINES`, `GIT_UNAVAILABLE`, `GIT_TIMEOUT`, `OUTPUT_LIMIT_EXCEEDED`, `GITHUB_IDENTITY_UNRESOLVED`, `GITHUB_NOT_FOUND_OR_INACCESSIBLE`, `GITHUB_RATE_LIMITED`, `GITHUB_UNAVAILABLE`, `STALE_CACHE_SERVED`, `INTERNAL_ERROR`.
+Error and limitation codes (initial set): `INVALID_INPUT`, `REPOSITORY_NOT_FOUND`, `REPOSITORY_UNAVAILABLE`, `PATH_OUTSIDE_REPOSITORY`, `PATH_NOT_FOUND`, `REVISION_NOT_FOUND`, `TARGET_AMBIGUOUS`, `TARGET_NOT_IN_CURRENT_STATE`, `SHALLOW_CLONE`, `NO_EVIDENCE_FOUND`, `RESULT_LIMIT_REACHED`, `TEXT_TRUNCATED`, `UNCOMMITTED_LINES`, `GIT_UNAVAILABLE`, `GIT_TIMEOUT`, `OUTPUT_LIMIT_EXCEEDED`, `GITHUB_IDENTITY_UNRESOLVED`, `GITHUB_IDENTITY_MISMATCH`, `GITHUB_NOT_FOUND_OR_INACCESSIBLE`, `GITHUB_RATE_LIMITED`, `GITHUB_UNAVAILABLE`, `STALE_CACHE_SERVED`, `INTERNAL_ERROR`.
 
 ### 16.6 Tool inputs and outputs
 
@@ -926,32 +952,33 @@ All inputs use `additionalProperties: false`. The numeric and length limits belo
 
 | Field | Type | Required | Validation |
 |---|---|---|---|
-| `repository_path` | string | yes | Absolute local directory. Resolved with symlink and junction resolution. Must identify a Git repository. If a repository allowlist is configured (DEC-3), the resolved root must be inside an allowed root. Length at most 1,024. |
+| `repository_id` | string | yes | The namespace of a repository registered with Sean (Section 16.0). Matched only against the registered set. Any other value, including a filesystem path or URL, returns `REPOSITORY_NOT_FOUND`. The exact namespace format is defined by the `repository` module at implementation time. Length at most 128. |
 | `path` | string | one of `path` or `symbol` | Repository-relative. Slash styles are normalized. Rejected: absolute paths, drive letters, UNC paths, `..` segments after normalization, NUL or control characters, alternate data stream syntax (`name:stream`), reserved device names, and segments with trailing dots or spaces. Containment is checked on resolved paths, not by string prefix. A path that no longer exists in the working tree is allowed, because history may refer to deleted files. |
 | `symbol` | string | one of `path` or `symbol` | 1 to 256 characters, no control characters or newlines. Treated as data and never placed in a shell string or an option position. The backend decides whether it is matched as a fixed string or a pattern. Pattern matching needs a timeout and tests. |
 | `line_start`, `line_end` | integer | both or neither; require `path` | 1-based, inclusive, start at most end, span at most 2,000 lines. |
 | `max_results` | integer | no | Default 20, range 1 to 50. |
 
-Output: envelope plus `target`: `{ "resolution": "RESOLVED" or "AMBIGUOUS" or "UNRESOLVED", "path", "symbol", "line_range", "candidates": [] }`. `evidence` holds `GIT_COMMIT` and `CODE_HISTORY` items in rank order. Ties are broken deterministically by the `evidence` module (Spec 1 §9). A repository, path, or symbol that cannot be validated gives `FAILED`.
+Output: envelope plus `target`: `{ "resolution": "RESOLVED" or "UNRESOLVED", "path", "symbol", "line_range" }`. An ambiguous target never reaches this output. It returns the request-level error `TARGET_AMBIGUOUS` (Section 16.8), and the candidates appear in the error details. `evidence` holds `GIT_COMMIT` and `CODE_HISTORY` items in rank order. Ties are broken deterministically by the `evidence` module (Spec 1 §9). A repository, path, or symbol that cannot be validated gives `FAILED`.
 
 **`blame_range`**
 
 | Field | Type | Required | Validation |
 |---|---|---|---|
-| `repository_path` | string | yes | Same as above. |
-| `path` | string | yes | Same path rules. The file must exist at HEAD. |
+| `repository_id` | string | yes | Same as `search_history`. |
+| `path` | string | yes | Same path rules. The file must exist at the resolved revision. |
 | `line_start`, `line_end` | integer | yes | 1-based, inclusive, start at most end, span at most 500 lines, within the file's length. |
+| `revision` | string | no | Default HEAD. Must be a full object name of 40 (SHA-1) or 64 (SHA-256) lowercase hexadecimal characters, validated as described in the revision paragraph below. Any other value is rejected. |
 
-Blame runs against HEAD. There is no revision parameter in the MVP, which keeps the validation surface small. Output: envelope plus `target` (`path`, `line_range`). `evidence` holds one `GIT_BLAME` item per contiguous attribution group, ordered by `line_start`, with `ranking: null`. Lines with no commit yet produce an `UNCOMMITTED_LINES` limitation and no invented commit.
+**Revision [Spec §6 for historical scope; owner decision DEC-14].** `revision` is optional and defaults to HEAD. When it is given, Sean accepts only a full object name of 40 (SHA-1) or 64 (SHA-256) lowercase hexadecimal characters, as DEC-14 is updated for I2. Full object names are validated by one shared contract (`app/core/git_objects.py`). Branch names, tag names, abbreviated SHAs, and expressions are rejected in the MVP, including ancestry (`HEAD~1`), ranges (`a..b`), reflog (`@{...}`), and content search (`:/text`). The check runs before any Git call. Sean then confirms with Git, using an argument array, no shell, and an end-of-options marker, that the SHA names a commit present in the repository. A SHA that Git cannot find returns `REVISION_NOT_FOUND`. The path must exist at the resolved commit, or the call returns `PATH_NOT_FOUND`. The `target` in the response records the resolved commit identifier. The exact Git option set is verified at implementation time (Section 16.9, item 4). Output: envelope plus `target` (`path`, `line_range`). `evidence` holds one `GIT_BLAME` item per contiguous attribution group, ordered by `line_start`, with `ranking: null`. Lines with no commit yet produce an `UNCOMMITTED_LINES` limitation and no invented commit.
 
 **`get_pr` and `get_issue`**
 
 | Field | Type | Required | Validation |
 |---|---|---|---|
-| `repository_path` | string | yes | Same as above. The GitHub owner and name are resolved from the repository's remote configuration by the `repository` and `github` modules (DEC-4). If they cannot be resolved, the result is `GITHUB_IDENTITY_UNRESOLVED`. |
-| `number` | integer | yes | 1 to 2,147,483,647. |
+| `repository_id` | string | yes | Same as `search_history`. The GitHub owner and name come from the identity recorded for the registered repository (DEC-4). If none is recorded, the result is `GITHUB_IDENTITY_UNRESOLVED`. |
+| `number` | string | yes | Approved by DEC-15. ASCII decimal digits only, strictly positive, leading zeros accepted and normalized to canonical decimal form, no upper numeric bound. JSON integers are rejected by the MCP schema. The earlier integer form (1 to 2,147,483,647) was a proposal and is withdrawn. |
 
-Output: envelope with at most one evidence item (`PULL_REQUEST` or `ISSUE`), `ranking: null`. PR fields: number, title, bounded description excerpt, author, created, merged, and closed timestamps, merge status, merge commit, and source URL. Issue fields are the equivalent subset. `get_issue` rejects a number that identifies a pull request. The tools do not link a PR or issue to a commit. Spec 1 §7 states that a commit reference and a PR reference do not establish the same fact.
+Output: envelope with at most one evidence item (`PULL_REQUEST` or `ISSUE`), `ranking: null`. PR fields: number, title, bounded description excerpt, author, created, merged, and closed timestamps, merge status, merge commit, and source URL. Issue fields are the equivalent subset. `get_issue` rejects a number that identifies a pull request. The tools do not link a PR or issue to a commit. Spec 1 §7 states that a commit reference and a PR reference do not establish the same fact. Before any item is returned, the response must belong to the expected repository (Section 16.0). If it does not, the call returns `FAILED` with `GITHUB_IDENTITY_MISMATCH` and no evidence.
 
 ### 16.7 Retrieval status and epistemic classification
 
@@ -960,7 +987,7 @@ Retrieval status values and meanings are those in Spec 1 §10.2. In these tools:
 | `retrieval_status` | Used when |
 |---|---|
 | `COMPLETE` | All planned retrieval operations finished and at least one evidence item was returned. Hitting the result limit still counts as `COMPLETE`, with a `RESULT_LIMIT_REACHED` limitation. `COMPLETE` does not claim that every historical source was found. |
-| `PARTIAL` | Some operations failed, timed out, or returned incomplete data, or the history is known to be incomplete (for example a shallow clone), or the target is ambiguous (DEC-2), or a stale cached record was served after a live request failed. Limitations name what is missing. |
+| `PARTIAL` | Some operations failed, timed out, or returned incomplete data, or the history is known to be incomplete (for example a shallow clone), or a stale cached record was served after a live request failed. Limitations name what is missing. |
 | `INSUFFICIENT` | All planned operations finished and returned no evidence (`NO_EVIDENCE_FOUND`). This does not mean that no history exists. |
 | `FAILED` | A blocking error prevented a meaningful result. `evidence` is empty. |
 
@@ -974,9 +1001,10 @@ The consistency rules in Spec 1 §10.4 apply to what the shared application logi
 |---|---|---|---|
 | Input fails Sean validation | `FAILED` | none | `INVALID_INPUT` with `field`. |
 | Input fails the SDK's schema validation before the handler runs | not under Sean's control | none | The response shape is SDK-defined and `NOT_VERIFIED` (DEC-5). Tests must record it. |
-| Repository missing, not a Git repository, or not allowed | `FAILED` | none | `REPOSITORY_NOT_FOUND` or `REPOSITORY_NOT_ALLOWED`. |
+| `repository_id` is not registered | `FAILED` | none | `REPOSITORY_NOT_FOUND`. The message does not reveal whether a path exists. |
+| Registered repository is missing on disk, is not a Git repository, or cannot be read | `FAILED` | none | `REPOSITORY_UNAVAILABLE`. |
 | Path escapes the repository | `FAILED` | none | `PATH_OUTSIDE_REPOSITORY`. No detail about what exists outside. |
-| Target ambiguous | `PARTIAL` (DEC-2) | none | `TARGET_AMBIGUOUS`, with candidates in `target.candidates`. No candidate is selected silently. |
+| Target ambiguous (DEC-2, closed) | `FAILED` as a request-level error, with no evidence | none | `TARGET_AMBIGUOUS`, with the candidate paths or symbols in the error details. It is never `PARTIAL`. No candidate is selected silently, and the client must send a more specific request. |
 | Symbol or path absent from the current state | per results | per results | `TARGET_NOT_IN_CURRENT_STATE`. The search continues, because a current location is not the historical location (Spec 1 §5). |
 | Shallow clone | at most `PARTIAL` | per results | `SHALLOW_CLONE`. |
 | Git operation times out or exceeds the output bound | `PARTIAL` if other operations yielded evidence, otherwise `FAILED` | partial | `GIT_TIMEOUT` or `OUTPUT_LIMIT_EXCEEDED`, `retryable: true` for the timeout. |
@@ -984,11 +1012,14 @@ The consistency rules in Spec 1 §10.4 apply to what the shared application logi
 | Result limit reached | `COMPLETE` | first `max_results` by rank | `RESULT_LIMIT_REACHED`. |
 | Text cut to the length bound | unchanged | item present | `TEXT_TRUNCATED` at item scope. |
 | `blame_range` on lines with no commit | `COMPLETE` | committed groups only | `UNCOMMITTED_LINES`. |
-| `blame_range` path missing at HEAD | `FAILED` | none | `PATH_NOT_FOUND`. |
+| `revision` is a full SHA that is not in the repository | `FAILED` | none | `REVISION_NOT_FOUND`. If the repository is a shallow clone, `SHALLOW_CLONE` is added, because the commit may be missing from the clone. |
+| `revision` is not a full SHA-1 or SHA-256 object name (branch, tag, abbreviated SHA, or expression) | `FAILED` | none | `INVALID_INPUT` with `field: revision`. |
+| `blame_range` path missing at the resolved revision | `FAILED` | none | `PATH_NOT_FOUND`. |
 | GitHub returns 404 | `FAILED` | none | `GITHUB_NOT_FOUND_OR_INACCESSIBLE`. A 404 is also returned for inaccessible private records, so it is never reported as proof that the record does not exist (Spec 1 §7). |
 | GitHub rate limit | `FAILED`, or `PARTIAL` with a cached record | none, or the cached item | `GITHUB_RATE_LIMITED`, `retryable: true`, and the retry time if GitHub provides one. A cached item carries `served_from_cache: true`, its age, and `STALE_CACHE_SERVED`. |
 | GitHub network failure or timeout | `FAILED` (or `PARTIAL` with a cached record, as above) | none | `GITHUB_UNAVAILABLE`, `retryable: true`. |
-| GitHub identity cannot be resolved from the remote | `FAILED` | none | `GITHUB_IDENTITY_UNRESOLVED`. |
+| GitHub identity is not recorded for the registered repository | `FAILED` | none | `GITHUB_IDENTITY_UNRESOLVED`. |
+| Returned record belongs to a different repository | `FAILED` | none | `GITHUB_IDENTITY_MISMATCH`. The returned record is not used. |
 | Unexpected exception or inconsistent result | `FAILED` | none | `INTERNAL_ERROR`. Details go to the stderr log, bounded and without secrets. |
 | Call cancelled by the client | no completed result | none | Subprocesses terminated. Nothing cached as complete. |
 | No AI provider configured | no effect | no effect | The tools never call an AI provider. |
@@ -997,11 +1028,11 @@ A failed retrieval never carries a classification or a conclusion. Missing metad
 
 ### 16.9 Read-only guarantees and security restrictions
 
-1. No tool writes, commits, pushes, rewrites history, changes repository configuration, or changes the index or working tree (Spec 1 §12 and §13). No tool accepts a command, a free-form Git argument, or a revision expression from input.
+1. No tool writes, commits, pushes, rewrites history, changes repository configuration, or changes the index or working tree (Spec 1 §12 and §13). No tool accepts a command, a free-form Git argument, or a revision expression. The only Git-facing input is `revision`, which Sean validates as a commit name (Section 16.6).
 2. `git_history` exposes an explicit allowlist of read-only Git operations. Nothing else is reachable from MCP input.
 3. Subprocesses use argument arrays and no shell, with an explicit working directory, a controlled environment, a timeout, and bounded captured output (Spec 1 §13). Inputs that begin with `-` cannot become options.
 4. Repository configuration is untrusted. The implementation must neutralize settings that can launch programs (for example a filesystem monitor, external diff, textconv drivers, or credential and SSH helpers) through command-line overrides and read-only options such as `--no-ext-diff` and `--no-textconv`, and it must never run Git operations that fetch, write, or run hooks. The exact option set must be verified against the installed Git in the implementation task.
-5. Path containment uses resolved paths and covers symbolic links and Windows junctions.
+5. Path containment uses resolved paths and covers symbolic links and Windows junctions. Every path, revision, and Git call resolves inside the root of the registered repository. No input supplies a repository location.
 6. Network access is limited to the GitHub REST API over HTTPS with a request timeout, a response size bound, and rate-limit handling. No redirect to another host is followed. No credentials are needed for public repositories. An optional token comes from the environment, is never logged or returned, and is never placed in Kiro's configuration file.
 7. Commit messages, PR and issue text, comments, and documentation are untrusted data. They appear only in fields listed in `untrusted_fields`, are length-bounded, and are never used in server-authored text such as descriptions, `instructions`, error messages, or limitation messages. A downstream model can still follow instructions embedded in such text. Per-call approval, narrow tools, and read-only operation limit what that could do. They do not remove the risk.
 8. stdout carries only protocol messages. Logs go to stderr, use bounded size, and contain no tokens, full environment, or unnecessary repository content (Spec 1 §20, Architecture §18).
@@ -1015,7 +1046,7 @@ The MCP handler calls shared application functions that the HTTP API also calls.
 |---|---|---|
 | `search_history` | `repository`, `symbol_resolution`, `git_history`, `evidence`, `investigation` | Repository identity and path safety, target resolution and ambiguity, history retrieval, evidence normalization and ranking, retrieval status. |
 | `blame_range` | `repository`, `git_history`, `evidence` | Repository identity and path safety, blame retrieval, evidence normalization. |
-| `get_pr`, `get_issue` | `repository`, `github` (including its SQLite cache) | Remote-based GitHub identity, validation against repository identity, rate limits, caching, record retrieval. |
+| `get_pr`, `get_issue` | `repository`, `github` (including its SQLite cache) | GitHub identity recorded at registration, validation against repository identity, rate limits, caching, record retrieval. |
 
 `mcp` itself holds the tool definitions, the input and output serialization, the STDIO entry point, and logging setup. It adds no abstraction layer beyond plain functions. The `explanation` module is not used by these tools. If the HTTP routes for these operations do not exist yet when the MCP handlers are written, the shared function still belongs in the domain modules, not in `mcp`.
 
@@ -1027,7 +1058,7 @@ All tests run with pytest, and property tests use Hypothesis (Spec 1 §18). A te
 |---|---|---|
 | MCP-01 | Tool registry | Exactly the four tools exist, with the names, descriptions, annotations, and input schemas in this section. Every input schema has `additionalProperties: false`. No write-capable tool exists. |
 | MCP-02 | Input validation | Each rule in Section 16.6 is rejected on violation: missing, extra, wrong-type, and out-of-range values, `path` and `symbol` both absent, and a line range without a path. Responses use the structured error shape. The shape produced by SDK-level validation failures is recorded. |
-| MCP-03 | Path containment | Traversal, absolute paths, drive-letter and UNC paths, alternate data stream syntax, reserved device names, trailing dots and spaces, 8.3 short names, case differences, symbolic links, and junctions that leave the repository are all rejected. Property tests cover path normalization. |
+| MCP-03 | Path containment | Traversal, absolute paths, drive-letter and UNC paths, alternate data stream syntax, reserved device names, trailing dots and spaces, 8.3 short names, case differences, symbolic links, and junctions that leave the repository are all rejected. Property tests cover path normalization. A `repository_id` that is a path, a URL, or an unregistered value is rejected. A `revision` containing expression syntax is rejected. |
 | MCP-04 | Option injection | `path` and `symbol` values starting with `-` or containing option-like text never change Git's arguments. Arguments are asserted on the recorded argument array. |
 | MCP-05 | Read-only | A snapshot of refs, index, configuration, and working tree is identical before and after each tool call. |
 | MCP-06 | No repository-controlled execution | A fixture repository with a hook and with configuration that points a filesystem monitor, external diff, and textconv driver at a marker-writing script. After every tool, the marker does not exist. |
@@ -1037,7 +1068,7 @@ All tests run with pytest, and property tests use Hypothesis (Spec 1 §18). A te
 | MCP-10 | Determinism | Identical repository state, input, and configuration produce identical ordering and content (Hypothesis). |
 | MCP-11 | Provenance | Every `GIT_COMMIT`, `CODE_HISTORY`, and `GIT_BLAME` item names a commit hash that exists in the repository. No item is fabricated. Evidence identifiers are stable within a namespace and differ across repositories. |
 | MCP-12 | Untrusted content | Commit messages and mocked PR and issue text containing instruction-like strings appear only in fields named by `untrusted_fields`. Server-authored fields are unchanged. Length bounds hold. |
-| MCP-13 | GitHub behavior | Mocked responses for 200, 404, rate limit, timeout, malformed body, an oversized body, and a PR number passed to `get_issue`. No token appears in output, logs, or errors. Stale cache is flagged. |
+| MCP-13 | GitHub behavior | Mocked responses for 200, 404, rate limit, timeout, malformed body, an oversized body, and a PR number passed to `get_issue`, and a record from a repository other than the registered one (`GITHUB_IDENTITY_MISMATCH`). No token appears in output, logs, or errors. Stale cache is flagged. |
 | MCP-14 | Stdout integrity | The entry point runs as a subprocess under a byte-exact STDIO harness. All stdout bytes are protocol messages, including when handler code calls `print()`. stderr holds only bounded log lines with no secrets. |
 | MCP-15 | No-AI operation | All tools work with no AI configuration or credentials. |
 | MCP-16 | API equivalence | For the same inputs, the MCP tool and the corresponding shared function return equivalent core results. No retrieval or ranking logic exists in `mcp`, which is checked by dependency inspection. |
@@ -1052,7 +1083,20 @@ Acceptance for the contract: MCP-01 to MCP-18 pass, and the Spec 1 §23 items fo
 
 ### 17.1 Status
 
-This is a design. It writes no file. Architecture §12.2 and decision A24 prohibit creating Sean's MCP configuration in Kiro until the entry point exists, the tool contracts are implemented, input validation, security behavior, and read-only behavior are tested, and Windows host compatibility is verified. The temporary probe registration did not satisfy or waive that gate.
+This is a design. It writes no file.
+
+**Current state, as of this revision [Proposed status, not verified]:**
+- The entry point `app.modules.mcp` is not implemented. `backend/app/modules/mcp/` holds only a placeholder.
+- The workspace MCP launch configuration uses the venv interpreter, `-m app.modules.mcp`, and `PYTHONPATH` set to `backend`, as described by the owner. This revision did not open that file, in line with the rule that MCP configuration is opened only when it is being updated. Its contents are therefore taken from the owner's description and were not checked.
+- The launch configuration is a launch configuration only. It is not evidence that MCP is implemented or configured for production use.
+- Architecture §12.2 forbids configuring the entry point in Kiro before it exists. A launch configuration that names a missing module conflicts with that rule (DEC-13). Until DEC-13 is resolved, the configuration must not be treated as an active MCP integration. A launch failure it reports is expected and is not MCP evidence.
+
+**Launch contract the entry point must satisfy [Proposed]:**
+- Interpreter: `backend\.venv\Scripts\python.exe`, as an absolute path under the clone.
+- Arguments: `-m app.modules.mcp`. Whether to add `-P` stays open (DEC-8) until T12 runs against the real module.
+- Environment: `PYTHONPATH` set to the absolute `backend` directory.
+- Import root: `backend`. The entry point does not depend on the launch working directory, which Kiro does not document.
+- Package layout: `app` must import as a package from `backend`. Whether `__init__.py` files are needed is confirmed at implementation time. Architecture §12.2 and decision A24 prohibit creating Sean's MCP configuration in Kiro until the entry point exists, the tool contracts are implemented, input validation, security behavior, and read-only behavior are tested, and Windows host compatibility is verified. The temporary probe registration did not satisfy or waive that gate.
 
 ### 17.2 Evaluation
 
@@ -1136,21 +1180,21 @@ Portable parts: the server name, `args`, the variable names, `disabled`, and `au
 
 ### 18.2 Recommendation
 
-Recommend that the owner approve the exact pin `mcp==2.3.0` as the SDK for Sean's planned implementation. The approval would rest on these points:
+**Selected design (owner decision, Phase 2 closure):** the exact pin `mcp==2.3.0` with STDIO transport is the SDK and transport design for Sean's planned implementation. The selection rests on these points. The evidence matches D01 (candidate `>=2.3.0,<3`, exact pin for the v2 line), the installed `backend/.venv` (`mcp 2.3.0`, `pip check` clean), and the one Kiro tool call in Section 14. It does not establish production runtime behavior:
 - It is the only SDK version that has been run under Kiro 1.4.121 here. `mcp==1.30.0` has not been run.
 - v2 is the stable line, serves every protocol revision that v1 serves plus 2026-07-28, and diverts stray stdout during serving (Section 7.2).
 - Falling back to 1.30.0 would not remove the CR-LF behavior (Section 4.4, M4), so the pin choice does not decide the open framing question.
 - Version selection is reversible while no Sean MCP code exists.
 
-This approval does not close D02, and it does not satisfy the Architecture §12.2 gate. Conditions that stay attached to it:
+This selection does not close D02 runtime criteria, and it does not satisfy the Architecture §12.2 gate, which needs the real module. Conditions that stay attached to it:
 1. Fresh advisory review of the whole locked set at the lock step (D01 condition 1, Section 15.2).
-2. T7b and T10 stay required for D02 closure. If T7b fails, the response in Section 12 (mitigation M2 or an upstream fix, owner decision) applies.
+2. T7b and T10 stay required for D02 runtime closure in Phase 4 (owner decision 4). If T7b fails, the response in Section 12 (mitigation M2 or an upstream fix, owner decision) applies.
 3. Any SDK version change repeats the Kiro tests.
 4. Approval is the owner's decision. This record only recommends it.
 
 ### 18.3 D01 amendment
 
-D01 needs an amendment. D01 was not modified. Proposed exact changes for the owner to apply:
+D01 was amended during the Phase 2 closure, using the changes below. The table is kept as the record of the proposed changes:
 
 | D01 location | Current text (summary) | Proposed change | Justification |
 |---|---|---|---|
@@ -1195,18 +1239,36 @@ D01 §7 and the D02 row in the D01 gate table stay `Pending`. Neither changes un
 
 | ID | Decision |
 |---|---|
-| DEC-1 | Whether `search_history` returns evidence only (proposed) or delegates to investigation orchestration and returns the full Spec 1 §10.3 result with classification. |
-| DEC-2 | Mapping of an ambiguous target to `PARTIAL` (proposed). |
-| DEC-3 | Repository selection: any local Git repository named per call with per-call approval (proposed baseline), or a configured allowlist of roots (hardening). |
-| DEC-4 | Resolving the GitHub owner and name from the repository's remote configuration. |
+| DEC-1 | **CLOSED (owner).** `search_history` returns evidence, `retrieval_status`, and limitations only. No classification and no conclusion. The four-tool set is kept, and no fifth investigation tool is added. Original question: whether `search_history` returns evidence only (proposed) or delegates to investigation orchestration and returns the full Spec 1 §10.3 result with classification. Recommended: evidence only, which matches the Spec 1 §12 wording. Owner confirmation needed. |
+| DEC-2 | **CLOSED (owner).** An ambiguous target is a request-level `TARGET_AMBIGUOUS` error with no evidence. It is never mapped to `PARTIAL`. Original question: mapping of an ambiguous target to `PARTIAL` (proposed). |
+| DEC-3 | **CLOSED (owner).** Repositories are registered in a local JSON configuration file under `%LOCALAPPDATA%\Sean\config\` (proposed name `repositories.json`; the exact name is fixed at implementation). No SQLite registration. The MCP caller never supplies a path. Schema and validation are in the native Evidence Retrieval design. |
+| DEC-4 | **CLOSED (owner).** The GitHub owner and name are recorded explicitly in each registry entry (`github: {owner, name}`). They are never derived from a Git remote, so no remote selection rule is needed. Original question: explicit entry versus derivation from a named remote. |
 | DEC-5 | Text-only results (observed to work) versus structured output, and the SDK's shape for validation failures. Needs a Kiro test. |
 | DEC-6 | Using one SQLite cache from both the API process and the MCP process. Depends on D06 and D07. |
 | DEC-7 | User-level (proposed) versus workspace-level configuration, and whether to ignore the workspace file in `.gitignore`. |
 | DEC-8 | `-P -m app.modules.mcp` with `PYTHONPATH`, to be confirmed by T12. |
 | DEC-9 | Names for the optional GitHub token variable, repository roots, and data location. No approved document defines them. |
 | DEC-10 | Initial limits and timeouts in Section 16.6, to be set in `core` and calibrated. |
-| DEC-11 | Approval of `mcp==2.3.0` and the D01 amendment in Section 18.3. |
-| DEC-12 | L15: whether a host-launched child process meets Architecture §2.4. |
+| DEC-11 | **CLOSED for design (owner).** `mcp==2.3.0` with STDIO is the selected SDK design. The D01 amendment in Section 18.3 is recorded in D01. Runtime tests (Section 12) remain open. |
+| DEC-12 | **CLOSED (Architecture §2.4).** A STDIO entry point "may be launched independently by its host". The host-launched child process is therefore allowed, provided it reuses the backend modules and is not a separately maintained service. Original question (L15): whether a host-launched child process meets Architecture §2.4. |
+| DEC-13 | **CLOSED (owner).** Keep `.kiro/settings/mcp.json` unchanged until the MCP module and entry point are implemented. This is a documented deviation from Architecture §12.2 wording as recorded in the owner's decision. Original conflict: the workspace launch configuration names `app.modules.mcp`, which does not exist, while Architecture §12.2 forbids configuring the entry point before it exists. **Accepted owner decision (Phase 2 closure task):** keep `.kiro/settings/mcp.json` unchanged until the MCP module and entry point are implemented. Validate or correct the launch configuration during that implementation. Runtime enablement remains gated by D02 closure. This is a documented deviation from Architecture §12.2. Sean uses conventional MCP integration, not Kiro Powers. |
+| DEC-14 | **CLOSED (owner), updated for I2 (owner decision: SHA-1 and SHA-256).** `blame_range` `revision` accepts a full object name only: 40 lowercase hexadecimal characters (SHA-1) or 64 (SHA-256). It defaults to HEAD when omitted. SHA-256 support is claimed only where the implementation and tests demonstrate it, and interfaces that have not yet been implemented do not claim it. Branch names, tags, abbreviated SHAs, and expressions are rejected. Original question: whether to accept commit names only or also expressions such as `HEAD~1`. |
+| DEC-15 | **APPROVED (owner), recorded in phase-status §33.** MCP `number` input for `get_pr` and `get_issue`: JSON type `string`; ASCII decimal digits only; value strictly positive; leading zeros accepted at input and normalized to canonical decimal form; no upper numeric bound in the MCP input contract; JSON integer values rejected by the MCP schema. The canonical PR and ISSUE evidence `source_id` remains a positive decimal string under D9. This decision governs the MCP tool input only. It does not alter any other numeric limit, any other §16 rule, or the status of §16 as a whole. |
+
+### 19.2A Still open after closure
+
+Still open after the Phase 2 closure, with their phase:
+
+| Item | Phase | Reason |
+|---|---|---|
+| DEC-5 (structured output and SDK validation shape) | Phase 4 | Needs a Kiro test against the real module. |
+| DEC-6 (shared SQLite cache, API and MCP) | Phase 3 | Depends on D06 and D07. |
+| DEC-7 (user-level or workspace configuration) | Phase 4 | Tied to `mcp.json` enablement; `mcp.json` is unchanged (owner decision 4). |
+| DEC-8 (`-P` flag) | Phase 4 | Confirmed by T12 against the real module. |
+| DEC-9 (environment variable names) | Phase 3 | Implementation-time configuration names (E-D15). |
+| DEC-10 (limits and timeouts) | Phase 3 | Set in `core` and calibrated (E-D14). |
+
+**Runtime tests (Section 12) are deferred to Phase 4 by owner decision 4.** They include T1, T2, T3, T5, T6, T7b, T8, T9, T10, T11, T12, and T13. Their tests need Sean's production module. Probe evidence stays as recorded in Section 14, and nothing in this list needs a repeat of probe-only checks. Phase 4 must run T3 and T7b against the real module, and the M2 mitigation in Section 4.4 applies if T7b fails. Closing the design decisions does not verify runtime behavior, and this record does not claim that it does.
 
 ### 19.3 Documents checked for conflicts
 
@@ -1221,9 +1283,9 @@ No change to an approved specification or architecture document is needed for th
 |---|---|
 | D02 overall | `IN PROGRESS` |
 | Kiro runtime compatibility, as defined by the Section 12 closure criteria | `NOT VERIFIED` |
-| Production MCP contract | `PROPOSED, NOT APPROVED` |
+| Production MCP contract | `PROPOSED, NOT APPROVED`, except the MCP `number` input approved by DEC-15 (Section 19.2) |
 | Production MCP configuration | `NOT CREATED, PROHIBITED` until Architecture §12.2 |
-| MCP implementation | `NOT STARTED` |
+| MCP implementation | `PARTIAL. Not accepted. See phase-status §31 and §32.` |
 
 This record does not claim that Phase 2 is complete or that Phase 3 can start. D03 to D08 and the Architecture and Spec 1 implementation gates remain open.
 
@@ -1256,3 +1318,12 @@ This record does not claim that Phase 2 is complete or that Phase 3 can start. D
 - **Not executed:** the probe, any harness, and any MCP tool other than the single earlier probe invocation recorded in Section 14.2.
 - **Sources added:** the approved Spec 1 (§5 to §14, §16 to §23), Architecture §12 and §14, D01 §2 to §7, the probe source file, the probe log, and the Kiro documentation page already cited as S-K1. No new web source was fetched in this revision.
 - **Gates:** D02 stays `IN PROGRESS`. D03 to D08 and implementation were not started.
+
+## Appendix C. Scope confirmation (contract and repository-scope revision)
+
+- **Files modified:** This decision record only (`docs/development/d02-mcp-integration-decision-record.md`).
+- **Changed in the record:** the revision line; a new Section 16.0 aligning the four tools with Spec 1 §10, §12, §13, and §22; repository identification changed from `repository_path` to `repository_id` in all tool inputs; the `revision` input for `blame_range`; GitHub identity validation; new error codes `REPOSITORY_UNAVAILABLE`, `REVISION_NOT_FOUND`, and `GITHUB_IDENTITY_MISMATCH`, replacing `REPOSITORY_NOT_ALLOWED` where applicable; read-only wording; the entry-point status and launch contract in Section 17.1; decisions DEC-1, DEC-3, DEC-4, DEC-13, and DEC-14.
+- **Not modified:** D01, Spec 1, Spec 2, the Architecture, the Playbook, the Operating Guide, `mcp.json` (both the workspace and user files), `.vscode/settings.json`, permissions, hooks, agents, Skills, source code, and tests.
+- **Not read:** the contents of the workspace `mcp.json`. Its description was taken from the task, and the contents were not verified.
+- **Commands run:** file reads, a directory listing of `backend/`, and text searches. No code, tests, probes, benchmarks, security scans, or MCP runtime checks were run. No package was installed or updated.
+- **Status:** D02 remains `IN PROGRESS`. This documentation revision does not verify MCP transport, process lifecycle, runtime compatibility, or the production entry point. Phase 2 is not complete.

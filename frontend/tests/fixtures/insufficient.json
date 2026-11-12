@@ -1,0 +1,51 @@
+{
+  "body": {
+    "conclusion": null,
+    "epistemic_classification": "INSUFFICIENT_EVIDENCE",
+    "error": null,
+    "evidence": [],
+    "explanation": "The available evidence about src/never_existed.py does not support a reliable conclusion. No historical conclusion is stated. Unknown: whether src/never_existed.py has a documented change history, and why these changes were made. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. Pull request and issue evidence is not included, because the association step is not implemented. No commit history was retrieved for the target. Evidence that would help: complete history for the target, from a full clone or a broader retrieval.",
+    "investigation_id": "9b53a3f6-a43e-476e-aa57-291af92aaf1c",
+    "limitations": [
+      {
+        "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",
+        "evidence_id": null,
+        "message": "Rename and copy detection is heuristic, so some history may be attributed to a different path.",
+        "scope": "history"
+      },
+      {
+        "code": "ASSOCIATION_NOT_IMPLEMENTED",
+        "evidence_id": null,
+        "message": "Pull request and issue evidence is not included, because the association step is not implemented.",
+        "scope": "github"
+      },
+      {
+        "code": "NO_HISTORY_RETRIEVED",
+        "evidence_id": null,
+        "message": "No commit history was retrieved for the target.",
+        "scope": "history"
+      }
+    ],
+    "ranking": [],
+    "repository": {
+      "repository_id": "sample"
+    },
+    "retrieval_status": "INSUFFICIENT",
+    "source_references": [],
+    "target": {
+      "line_range": null,
+      "path": "src/never_existed.py",
+      "resolution": "NOT_REQUESTED",
+      "symbol": null
+    }
+  },
+  "name": "insufficient",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "sample",
+    "target": {
+      "path": "src/never_existed.py"
+    }
+  },
+  "status": 200
+}

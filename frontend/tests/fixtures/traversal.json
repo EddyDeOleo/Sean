@@ -1,0 +1,16 @@
+{
+  "body": {
+    "code": "INVALID_INPUT",
+    "message": "The request is invalid.",
+    "retryable": false
+  },
+  "name": "traversal",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "sample",
+    "target": {
+      "path": "../outside.py"
+    }
+  },
+  "status": 400
+}

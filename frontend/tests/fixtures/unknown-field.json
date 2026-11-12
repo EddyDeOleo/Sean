@@ -1,0 +1,18 @@
+{
+  "body": {
+    "code": "INVALID_INPUT",
+    "field": "retrieval_status",
+    "message": "The request is invalid.",
+    "retryable": false
+  },
+  "name": "unknown-field",
+  "request": {
+    "question": "Why does charge validate its amount?",
+    "repository_id": "sample",
+    "retrieval_status": "COMPLETE",
+    "target": {
+      "path": "src/billing.py"
+    }
+  },
+  "status": 400
+}
