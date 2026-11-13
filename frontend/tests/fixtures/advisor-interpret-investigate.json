@@ -1,0 +1,20 @@
+{
+  "body": {
+    "ai_status": "NOT_REQUESTED",
+    "candidates": [],
+    "interpreter": "deterministic",
+    "message": null,
+    "mode": "INVESTIGATE",
+    "question": "Why does src/billing.py validate the amount?",
+    "repository_id": "sample",
+    "symbol": null,
+    "target_path": "src/billing.py"
+  },
+  "method": "POST",
+  "name": "interpret-investigate",
+  "path": "/interpret",
+  "request": {
+    "text": "sample - Why does src/billing.py validate the amount?"
+  },
+  "status": 200
+}

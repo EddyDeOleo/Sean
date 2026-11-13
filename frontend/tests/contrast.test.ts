@@ -67,3 +67,34 @@ describe("the stylesheet respects reduced motion and flashing limits", () => {
     expect(css).not.toMatch(/animation:[^;]*(?<![\d.])0?\.[0-4]\d*s[^;]*infinite/);
   });
 });
+
+import { productPairs, productPalette } from "../src/styles/palette";
+
+describe("product palette meets WCAG AA", () => {
+  for (const pair of productPairs) {
+    it(`${pair.name} is at least ${pair.min}:1`, () => {
+      expect(contrastRatio(productPalette[pair.fg], productPalette[pair.bg])).toBeGreaterThanOrEqual(pair.min);
+    });
+  }
+});
+
+describe("the product stylesheet repeats the product palette and respects motion settings", () => {
+  const css = readFileSync(resolve(__dirname, "../src/styles/product.css"), "utf-8");
+  for (const [key, value] of Object.entries(productPalette)) {
+    it(`defines ${key} as ${value}`, () => {
+      const kebab = key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`).replace(/(\d+)$/, "-$1");
+      expect(css).toMatch(new RegExp(`--sx-${kebab}:\\s*${value}`, "i"));
+    });
+  }
+  it("has reduced-motion handling for both the system preference and the user setting", () => {
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
+    expect(css).toMatch(/\[data-motion="reduced"\]/);
+  });
+  it("has a visible focus style", () => {
+    expect(css).toMatch(/:focus-visible/);
+  });
+  it("does not animate anything faster than once per second", () => {
+    const durations = [...css.matchAll(/animation:\s*[a-z-]+\s+([\d.]+)s/g)].map((m) => Number(m[1]));
+    for (const seconds of durations) expect(seconds).toBeGreaterThanOrEqual(1);
+  });
+});

@@ -66,6 +66,8 @@ GUARD_OPTIONS: tuple[str, ...] = (
     "-c", "core.askPass=",
     # git log would otherwise run the gpg program named by the repository config for every commit.
     "-c", "log.showSignature=false",
+    # No transport may run. Every call here reads local objects, so nothing legitimate needs one (owner-authorized, 2026-11-13).
+    "-c", "protocol.allow=never",
 )
 
 _SAFE_ENVIRONMENT_KEYS = ("PATH", "SYSTEMROOT")
@@ -106,6 +108,9 @@ def controlled_environment() -> dict[str, str]:
             "GIT_CONFIG_GLOBAL": os.devnull,
             "GIT_TERMINAL_PROMPT": "0",
             "GIT_OPTIONAL_LOCKS": "0",
+            # A partial clone's repository configuration names a remote and an upload-pack command. Without this, a read such
+            # as cat-file fetches a missing object by running that command (owner-authorized amendment, 2026-11-13).
+            "GIT_NO_LAZY_FETCH": "1",
             "LC_ALL": "C",
         }
     )

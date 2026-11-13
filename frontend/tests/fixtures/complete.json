@@ -14,7 +14,7 @@
         "file_path": "src/billing.py",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -36,8 +36,8 @@
         "timestamp": "2025-01-10T00:00:00Z",
         "title": null,
         "unavailable_fields": [
-          "excerpt",
           "source_url",
+          "excerpt",
           "title"
         ],
         "verified_absent_fields": []
@@ -52,7 +52,7 @@
         "file_path": "src/billing.py",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -74,8 +74,8 @@
         "timestamp": "2025-01-13T00:00:00Z",
         "title": null,
         "unavailable_fields": [
-          "excerpt",
           "source_url",
+          "excerpt",
           "title"
         ],
         "verified_absent_fields": []
@@ -90,7 +90,7 @@
         "file_path": "src/billing.py",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -112,8 +112,8 @@
         "timestamp": "2025-01-16T00:00:00Z",
         "title": null,
         "unavailable_fields": [
-          "excerpt",
           "source_url",
+          "excerpt",
           "title"
         ],
         "verified_absent_fields": []
@@ -128,7 +128,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -149,8 +149,8 @@
         "timestamp": "2025-01-07T00:00:00Z",
         "title": "Reject negative charge amounts",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -164,7 +164,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -185,8 +185,8 @@
         "timestamp": "2025-01-16T00:00:00Z",
         "title": "Return a mapping from charge",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -200,7 +200,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -221,8 +221,8 @@
         "timestamp": "2025-01-04T00:00:00Z",
         "title": "Add charge function",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -236,7 +236,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -257,8 +257,8 @@
         "timestamp": "2025-01-10T00:00:00Z",
         "title": "Add currency to charge",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -272,7 +272,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -293,8 +293,8 @@
         "timestamp": "2025-01-13T00:00:00Z",
         "title": "Treat zero as invalid",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -308,7 +308,7 @@
         "file_path": "docs/billing.md",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -329,8 +329,8 @@
         "timestamp": "2025-01-04T00:00:00Z",
         "title": "Add charge function",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       },
@@ -344,7 +344,7 @@
         "file_path": "docs/billing.md",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-12T06:21:19Z",
+          "retrieved_at": "2026-11-13T03:04:31Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -365,14 +365,14 @@
         "timestamp": "2025-01-10T00:00:00Z",
         "title": "Add currency to charge",
         "unavailable_fields": [
-          "excerpt",
-          "source_url"
+          "source_url",
+          "excerpt"
         ],
         "verified_absent_fields": []
       }
     ],
     "explanation": "Verified repository history records 5 commit(s) that changed src/billing.py. These records establish that the changes occurred. They do not state why. Blame attributes 3 line range(s) in the target to verified commits. Documentation changed in 2 of these commits. That co-change does not establish a content relation or intent. The symbol charge is not separated from the file history. Commit relevance to the symbol is not established. Unknown: why these changes were made, and whether history outside the retrieved scope affects this answer. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. Symbol history is tracked at file level, so commits that changed other parts of the file are included. Pull request and issue evidence is not included, because the association step is not implemented. Evidence that would help: the diff of each listed commit, to see what each change did.",
-    "investigation_id": "090ac700-b39f-455c-a111-557d116eb3c2",
+    "investigation_id": "3c437f5e-e70a-4850-8bd8-a8666e019b92",
     "limitations": [
       {
         "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",

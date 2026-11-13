@@ -1,0 +1,15 @@
+{
+  "body": {
+    "ai_interpreter": {
+      "available": false,
+      "model": "gemini-3.6-flash",
+      "provider": "Gemini",
+      "sends": "only the sentence you type, and only when you allow it for that request"
+    }
+  },
+  "method": "GET",
+  "name": "capabilities",
+  "path": "/capabilities",
+  "request": null,
+  "status": 200
+}

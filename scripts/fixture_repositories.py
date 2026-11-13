@@ -93,6 +93,41 @@ def build_main(root: Path) -> Repo:
     return repo
 
 
+def build_rich(root: Path) -> Repo:
+    """A multi-area repository with conventions, a tracked secret-looking file, tooling, and a defect-prone module."""
+    repo = Repo(root)
+    repo.init()
+    people = [
+        ("Mira Okafor", "mira@example.invalid"),
+        ("Tomas Lindqvist", "tomas@example.invalid"),
+        ("Priya Raman", "priya@example.invalid"),
+    ]
+    for area in ("api", "web", "worker"):
+        for index in range(14):
+            suffix = "ts" if area == "web" else "py"
+            repo.write(f"{area}/module_{index}.{suffix}", f"export const v{index} = {index};\n" if suffix == "ts" else f"VALUE = {index}\n")
+        repo.write(f"{area}/tests/test_basic.py" if area != "web" else "web/basic.test.ts", "def test_ok():\n    assert True\n" if area != "web" else "test('ok', () => {});\n")
+    repo.write("api/payments.py", "def pay(amount):\n    return amount\n")
+    repo.write(".editorconfig", "root = true\n")
+    repo.write("ruff.toml", "line-length = 100\n")
+    repo.write("CONTRIBUTING.md", "# Contributing\n\nRun the tests before you push.\n")
+    repo.write("requirements.txt", "fastapi\nhttpx\npytest\n")
+    repo.write("package.json", '{"devDependencies": {"vitest": "^5.0.0", "react": "^19.0.0"}, "scripts": {"test": "vitest run", "lint": "eslint ."}}\n')
+    repo.write(".env", "PAYMENT_API_KEY=not-a-real-secret\n")
+    for name in ("seed.py", "migrate.py", "export.py"):
+        repo.write(f"scripts/{name}", "print('task')\n")
+    repo.commit("feat: initial layout", author=people[0][0], email=people[0][1])
+    for index in range(12):
+        repo.write("api/payments.py", f"def pay(amount):\n    return amount + {index + 1}\n")
+        author, email = people[index % 3]
+        repo.commit(f"fix: correct payment rounding case {index}", author=author, email=email)
+    for index in range(6):
+        repo.write(f"worker/module_{index}.py", f"VALUE = {index + 100}\n")
+        author, email = people[index % 3]
+        repo.commit(f"feat: extend worker module {index}", author=author, email=email)
+    return repo
+
+
 def build_ambiguous(root: Path) -> Repo:
     """One file with two methods named run, so a symbol search is ambiguous."""
     repo = Repo(root)
@@ -141,4 +176,5 @@ def build_all(root: Path) -> dict[str, Path]:
     ambiguous = build_ambiguous(root / "ambiguous").path
     shallow = build_shallow(main, root / "shallow")
     broken = build_broken(root / "broken")
-    return {"main": main, "ambiguous": ambiguous, "shallow": shallow, "broken": broken}
+    rich = build_rich(root / "rich").path
+    return {"main": main, "ambiguous": ambiguous, "shallow": shallow, "broken": broken, "rich": rich}

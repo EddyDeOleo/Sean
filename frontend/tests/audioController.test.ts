@@ -4,7 +4,6 @@ import {
   DEFAULT_VOLUME,
   MASTER_CEILING,
   MAX_CONCURRENT_CUES,
-  SUCCESS_CUES,
   type ContextFactory,
 } from "../src/features/audio/AudioController";
 import { FakeContext } from "./fakeAudio";
@@ -25,7 +24,7 @@ describe("autoplay and defaults", () => {
     const { controller, contexts } = setup();
     expect(contexts).toHaveLength(0);
     controller.setMood("search");
-    controller.cue("wake");
+    controller.cue("settle");
     controller.setVolume(0.5);
     controller.setMuted(true);
     expect(contexts).toHaveLength(0);
@@ -60,7 +59,7 @@ describe("autoplay and defaults", () => {
     expect(controller.getSnapshot()).toMatchObject({ enabled: false, failed: true });
     expect(contexts[0]?.closeCount).toBe(1);
     expect(contexts[0]?.liveNodes()).toHaveLength(0);
-    expect(() => controller.cue("wake")).not.toThrow();
+    expect(() => controller.cue("settle")).not.toThrow();
   });
 
   it("reports a missing Web Audio implementation as a failure, not a crash", async () => {
@@ -151,7 +150,7 @@ describe("ambient beds", () => {
   it("silences the bed when the mood becomes silent", async () => {
     const { controller, current } = setup();
     await controller.enable();
-    controller.setMood("report");
+    controller.setMood("tension");
     controller.setMood("silent");
     current().endAllSources();
     expect(controller.getSnapshot().mood).toBe("silent");
@@ -171,20 +170,36 @@ describe("one-shot cues", () => {
   it("caps concurrent cues", async () => {
     const { controller } = setup();
     await controller.enable();
-    for (let i = 0; i < MAX_CONCURRENT_CUES + 5; i += 1) controller.cue("evidence");
+    for (let i = 0; i < MAX_CONCURRENT_CUES + 5; i += 1) controller.cue("clue");
     expect(controller.getSnapshot().activeCues).toBe(MAX_CONCURRENT_CUES);
   });
 
   it("plays no cue before enable", () => {
     const { controller, contexts } = setup();
-    controller.cue("reveal");
+    controller.cue("clue");
     expect(contexts).toHaveLength(0);
     expect(controller.getSnapshot().activeCues).toBe(0);
   });
 
-  it("lists the success cues so callers can gate them", () => {
-    for (const cue of ["reveal", "evidence", "clue", "escape", "report"] as const) expect(SUCCESS_CUES.has(cue)).toBe(true);
-    for (const cue of ["wake", "settle", "glitch", "whisper", "caught", "door"] as const) expect(SUCCESS_CUES.has(cue)).toBe(false);
+});
+
+describe("starting and stopping quickly", () => {
+  it("two quick enable calls create one context", async () => {
+    const { controller, contexts } = setup();
+    const [a, b] = await Promise.all([controller.enable(), controller.enable()]);
+    expect(a).toBe(true);
+    expect(b).toBe(true);
+    expect(contexts).toHaveLength(1);
+  });
+
+  it("turning sound off while it is starting leaves it off and releases the context", async () => {
+    const { controller, contexts } = setup();
+    const pending = controller.enable();
+    controller.disable();
+    expect(await pending).toBe(false);
+    expect(controller.getSnapshot().enabled).toBe(false);
+    expect(contexts[0]?.liveNodes()).toHaveLength(0);
+    expect(contexts[0]?.closeCount).toBeGreaterThan(0);
   });
 });
 
@@ -240,7 +255,7 @@ describe("resource lifecycle", () => {
     controller.setMood("tension");
     expect(controller.getSnapshot()).toMatchObject({ enabled: false, failed: true });
     expect(context.liveSources()).toHaveLength(0);
-    expect(() => controller.cue("wake")).not.toThrow();
+    expect(() => controller.cue("settle")).not.toThrow();
   });
 
   it("notifies subscribers and stops after unsubscribe", async () => {

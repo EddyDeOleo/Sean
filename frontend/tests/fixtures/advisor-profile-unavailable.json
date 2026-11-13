@@ -1,0 +1,12 @@
+{
+  "body": {
+    "code": "PROFILE_UNAVAILABLE",
+    "message": "The repository has no readable commits, or its tree could not be read.",
+    "retryable": false
+  },
+  "method": "POST",
+  "name": "profile-unavailable",
+  "path": "/repositories/broken/profile",
+  "request": null,
+  "status": 422
+}

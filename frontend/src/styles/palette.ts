@@ -73,3 +73,47 @@ export function contrastRatio(a: string, b: string): number {
   const [hi, lo] = la >= lb ? [la, lb] : [lb, la];
   return (hi + 0.05) / (lo + 0.05);
 }
+
+/**
+ * The product interface palette (src/styles/product.css, custom properties --sx-*). Reading pairs are checked by
+ * tests/contrast.test.ts, which also checks that the stylesheet repeats these values.
+ */
+export const productPalette = {
+  bg: "#0e1013",
+  surface: "#14171c",
+  surface2: "#1a1e25",
+  line: "#2a303b",
+  lineStrong: "#3a4250",
+  text: "#e9ecf1",
+  text2: "#aab2bf",
+  text3: "#8b94a3",
+  accent: "#c8a14a",
+  accentInk: "#14110a",
+  documented: "#7fd1a0",
+  inferred: "#e2bd68",
+  partial: "#f0a05a",
+  insufficient: "#aab2bf",
+  danger: "#f08a7a",
+  link: "#8fb8ff",
+} as const;
+
+export type ProductKey = keyof typeof productPalette;
+
+const surfaces: ProductKey[] = ["bg", "surface", "surface2"];
+const readable: { name: string; fg: ProductKey; min: number }[] = [
+  { name: "text", fg: "text", min: 7 },
+  { name: "secondary text", fg: "text2", min: 4.5 },
+  { name: "tertiary text", fg: "text3", min: 4.5 },
+  { name: "documented", fg: "documented", min: 4.5 },
+  { name: "inferred", fg: "inferred", min: 4.5 },
+  { name: "partial", fg: "partial", min: 4.5 },
+  { name: "insufficient", fg: "insufficient", min: 4.5 },
+  { name: "danger", fg: "danger", min: 4.5 },
+  { name: "link", fg: "link", min: 4.5 },
+  { name: "accent (focus ring and detail)", fg: "accent", min: 3 },
+];
+
+export const productPairs: { name: string; fg: ProductKey; bg: ProductKey; min: number }[] = [
+  ...readable.flatMap((item) => surfaces.map((bg) => ({ name: `${item.name} on ${bg}`, fg: item.fg, bg, min: item.min }))),
+  { name: "dark ink on the accent button", fg: "accentInk", bg: "accent", min: 7 },
+];

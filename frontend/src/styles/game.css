@@ -1,0 +1,212 @@
+/*
+ * The first-person game (Spec 4 section 11). Dark, high-contrast text on opaque panels; nothing here flashes more than
+ * three times per second. The one scare is a single red fade (0.7 s, played once); with reduced motion it is a still tint.
+ */
+
+.gm-root {
+  position: absolute;
+  inset: 0;
+  background: #020304;
+  color: #ece6da;
+  font-family: var(--font-body, system-ui, sans-serif);
+}
+
+.gm-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.gm-canvas canvas {
+  display: block;
+}
+
+.gm-hud {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  max-width: min(32rem, calc(100% - 2rem));
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(4, 5, 7, 0.82);
+  border: 1px solid #3b3a36;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.gm-hud p {
+  margin: 0;
+}
+
+.gm-hud .gm-small {
+  pointer-events: auto;
+  justify-self: start;
+}
+
+.gm-counter {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.gm-threat[data-level="hunting"] {
+  color: #ff9a8a;
+  font-weight: 700;
+}
+
+.gm-threat[data-level="near"] {
+  color: #e8c27a;
+}
+
+.gm-threat:empty {
+  display: none;
+}
+
+.gm-clue {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid #3b3a36;
+  overflow-wrap: anywhere;
+}
+
+.gm-clue-kind {
+  justify-self: start;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid #8a7a52;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.gm-clue-kind[data-kind="ATMOSPHERE"] {
+  border-color: #6b6b6b;
+  color: #c8c8c8;
+}
+
+.gm-clue-detail {
+  color: #bdb6a6;
+  font-size: 0.85rem;
+}
+
+.gm-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(34rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 1.4rem 1.6rem;
+  background: rgba(6, 7, 9, 0.94);
+  border: 1px solid #5a4a2a;
+  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+}
+
+.gm-card h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.4rem;
+}
+
+.gm-card p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.gm-controls {
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.8rem 0;
+  padding: 0;
+}
+
+.gm-controls kbd {
+  display: inline-block;
+  min-width: 1.6rem;
+  padding: 0.05rem 0.35rem;
+  text-align: center;
+  background: #1a1a1d;
+  border: 1px solid #6a6a70;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.gm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.gm-primary,
+.gm-secondary,
+.gm-small {
+  font: inherit;
+  padding: 0.55rem 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #ece6da;
+  background: #14110c;
+  border: 1px solid #8a7a52;
+  min-height: 2.5rem;
+}
+
+.gm-primary {
+  background: #5a3b12;
+  border-color: #d2a85a;
+  font-weight: 700;
+}
+
+.gm-small {
+  min-height: 2rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.gm-primary:focus-visible,
+.gm-secondary:focus-visible,
+.gm-small:focus-visible {
+  outline: 3px solid #f5d98b;
+  outline-offset: 2px;
+}
+
+.gm-scare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, rgba(150, 10, 10, 0.1), rgba(110, 0, 0, 0.75));
+  animation: gm-scare 0.7s ease-out 1 both;
+}
+
+.gm-scare[data-reduced="true"] {
+  animation: none;
+  background: rgba(90, 0, 0, 0.45);
+}
+
+@keyframes gm-scare {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.55;
+  }
+}
+
+.gm-caught {
+  top: auto;
+  bottom: 2rem;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 640px) {
+  .gm-hud {
+    left: 0.5rem;
+    bottom: 0.5rem;
+    font-size: 0.88rem;
+  }
+}

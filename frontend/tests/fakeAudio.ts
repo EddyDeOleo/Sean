@@ -12,6 +12,7 @@ import type {
   FilterLike,
   GainLike,
   OscillatorLike,
+  PannerLike,
   ParamLike,
 } from "../src/features/audio/AudioController";
 
@@ -120,7 +121,18 @@ class FakeCompressor extends FakeNode implements CompressorLike {
   }
 }
 
+class FakePanner extends FakeNode implements PannerLike {
+  pan = new FakeParam();
+  constructor(owner: FakeContext) {
+    super("panner", owner);
+  }
+}
+
 export class FakeContext implements AudioContextLike {
+  createStereoPanner(): PannerLike {
+    return new FakePanner(this);
+  }
+
   nodes: FakeNode[] = [];
   state = "suspended";
   closeCount = 0;

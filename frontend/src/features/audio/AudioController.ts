@@ -13,11 +13,10 @@
  * The context is created through an injected factory, so tests drive the controller with a fake context.
  */
 
-export type Mood = "silent" | "idle" | "search" | "reveal" | "tension" | "escape" | "report";
-export type Cue = "wake" | "settle" | "reveal" | "evidence" | "glitch" | "whisper" | "clue" | "caught" | "door" | "escape" | "report";
-
-/** Moods and cues that mean "something was found". They are never played for a non-success outcome. */
-export const SUCCESS_CUES: ReadonlySet<Cue> = new Set<Cue>(["reveal", "evidence", "clue", "escape", "report"]);
+export type Mood = "silent" | "idle" | "search" | "tension" | "escape";
+export type Cue =
+  | "settle" | "glitch" | "whisper" | "clue" | "caught" | "door" | "escape"
+  | "planchette" | "footstep" | "footstepRun" | "flashlight" | "growl" | "monsterStep";
 
 export interface AudioNodeLike {
   connect(destination: unknown): unknown;
@@ -67,7 +66,13 @@ export interface CompressorLike extends AudioNodeLike {
   release: ParamLike;
 }
 
+export interface PannerLike extends AudioNodeLike {
+  pan: ParamLike;
+}
+
 export interface AudioContextLike {
+  /** Optional: without it, cues play centred. */
+  createStereoPanner?(): PannerLike;
   readonly currentTime: number;
   readonly sampleRate: number;
   readonly state: string;
@@ -87,13 +92,15 @@ export type ContextFactory = () => AudioContextLike;
 export const DEFAULT_VOLUME = 0.35;
 /** The master gain ceiling. The slider value is scaled by this, so even full volume stays moderate. */
 export const MASTER_CEILING = 0.5;
-export const MAX_CONCURRENT_CUES = 4;
+export const MAX_CONCURRENT_CUES = 6;
 const FADE_SECONDS = 1.6;
 
 export interface AudioSnapshot {
   enabled: boolean;
   muted: boolean;
   volume: number;
+  ambient: number;
+  effects: number;
   mood: Mood;
   failed: boolean;
   activeBeds: number;
@@ -124,6 +131,14 @@ export class AudioController {
   private context: AudioContextLike | null = null;
   private master: GainLike | null = null;
   private compressor: CompressorLike | null = null;
+  /** Ambient beds and one-shot effects have their own level, so the user can balance them. Both feed the master. */
+  private ambientBus: GainLike | null = null;
+  private effectsBus: GainLike | null = null;
+  private ambientVolume = 1;
+  private effectsVolume = 1;
+  private tension = 0;
+  private noiseBuffer: unknown = null;
+  private starting: Promise<boolean> | null = null;
   private bed: Bed | null = null;
   private retiring: Bed[] = [];
   private cues = new Set<{ stop(): void }>();
@@ -153,6 +168,8 @@ export class AudioController {
         enabled: this.enabled,
         muted: this.muted,
         volume: this.volume,
+        ambient: this.ambientVolume,
+        effects: this.effectsVolume,
         mood: this.mood,
         failed: this.failed,
         activeBeds: (this.bed ? 1 : 0) + this.retiring.length,
@@ -170,9 +187,17 @@ export class AudioController {
   // --- controls ---------------------------------------------------------------------------------------------------
 
   /** Create the context. Must be called from a user gesture. Returns whether sound is now on. */
-  async enable(): Promise<boolean> {
-    if (this.disposed) return false;
-    if (this.enabled) return true;
+  enable(): Promise<boolean> {
+    if (this.disposed) return Promise.resolve(false);
+    if (this.enabled) return Promise.resolve(true);
+    // A second request while the first is still starting (a double click) shares it, so only one context is ever created.
+    this.starting ??= this.start().finally(() => {
+      this.starting = null;
+    });
+    return this.starting;
+  }
+
+  private async start(): Promise<boolean> {
     try {
       const context = this.factory();
       this.context = context;
@@ -186,9 +211,19 @@ export class AudioController {
       master.gain.value = this.effectiveGain();
       master.connect(compressor);
       compressor.connect(context.destination);
+      const ambientBus = context.createGain();
+      ambientBus.gain.value = this.ambientBusGain();
+      ambientBus.connect(master);
+      const effectsBus = context.createGain();
+      effectsBus.gain.value = this.effectsVolume;
+      effectsBus.connect(master);
+      this.ambientBus = ambientBus;
+      this.effectsBus = effectsBus;
       this.master = master;
       this.compressor = compressor;
       await context.resume();
+      // Sound was turned off (or the controller disposed) while the context was starting.
+      if (this.context !== context || this.disposed) return false;
       this.enabled = true;
       this.failed = false;
       this.publish();
@@ -219,6 +254,42 @@ export class AudioController {
     this.volume = clamp01(volume);
     this.updateMaster();
     this.publish();
+  }
+
+  setAmbientVolume(volume: number): void {
+    this.ambientVolume = clamp01(volume);
+    this.rampBus(this.ambientBus, this.ambientBusGain());
+    this.publish();
+  }
+
+  setEffectsVolume(volume: number): void {
+    this.effectsVolume = clamp01(volume);
+    this.rampBus(this.effectsBus, this.effectsVolume);
+    this.publish();
+  }
+
+  /** How near the threat is, 0 to 1. The ambient bed swells with it. No-op until sound is enabled. */
+  setTension(level: number): void {
+    const next = clamp01(level);
+    if (Math.abs(next - this.tension) < 0.02) return;
+    this.tension = next;
+    this.rampBus(this.ambientBus, this.ambientBusGain());
+  }
+
+  private ambientBusGain(): number {
+    return this.ambientVolume * (1 + 0.7 * this.tension);
+  }
+
+  private rampBus(bus: GainLike | null, value: number): void {
+    if (!this.context || !bus) return;
+    try {
+      const now = this.context.currentTime;
+      bus.gain.cancelScheduledValues(now);
+      bus.gain.setValueAtTime(bus.gain.value, now);
+      bus.gain.linearRampToValueAtTime(value, now + 0.25);
+    } catch {
+      this.fail();
+    }
   }
 
   private effectiveGain(): number {
@@ -262,12 +333,12 @@ export class AudioController {
   }
 
   private buildBed(context: AudioContextLike, mood: Exclude<Mood, "silent">): Bed {
-    const master = this.master as GainLike;
+    const bus = this.ambientBus as GainLike;
     const gain = context.createGain();
     const now = context.currentTime;
     gain.gain.setValueAtTime(0.0001, now);
     gain.gain.linearRampToValueAtTime(this.bedLevel(mood), now + FADE_SECONDS);
-    gain.connect(master);
+    gain.connect(bus);
 
     const filter = context.createBiquadFilter();
     filter.type = "lowpass";
@@ -316,15 +387,13 @@ export class AudioController {
       case "tension":
       case "escape":
         return 0.5;
-      case "reveal":
-        return 0.42;
       default:
         return 0.32;
     }
   }
 
   private bedBrightness(mood: Mood): number {
-    return mood === "tension" ? 520 : mood === "escape" ? 640 : mood === "reveal" ? 760 : 420;
+    return mood === "tension" ? 520 : mood === "escape" ? 640 : 420;
   }
 
   private bedPitch(mood: Mood): number {
@@ -333,27 +402,26 @@ export class AudioController {
         return 49;
       case "escape":
         return 55;
-      case "reveal":
-        return 65.4;
-      case "report":
-        return 73.4;
       default:
         return 55;
     }
   }
 
   private noiseSource(context: AudioContextLike): BufferSourceLike {
-    const length = Math.floor(context.sampleRate * 2);
-    const buffer = context.createBuffer(1, length, context.sampleRate);
-    const data = buffer.getChannelData(0);
-    // A fixed pseudo-random sequence, so the sound is the same each time and tests are deterministic.
-    let seed = 0x2545f491;
-    for (let i = 0; i < data.length; i += 1) {
-      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
-      data[i] = (seed / 4294967296) * 2 - 1;
+    if (this.noiseBuffer === null) {
+      const length = Math.floor(context.sampleRate * 2);
+      const buffer = context.createBuffer(1, length, context.sampleRate);
+      const data = buffer.getChannelData(0);
+      // A fixed pseudo-random sequence, so the sound is the same each time and tests are deterministic.
+      let seed = 0x2545f491;
+      for (let i = 0; i < data.length; i += 1) {
+        seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+        data[i] = (seed / 4294967296) * 2 - 1;
+      }
+      this.noiseBuffer = buffer;
     }
     const source = context.createBufferSource();
-    source.buffer = buffer;
+    source.buffer = this.noiseBuffer;
     source.loop = true;
     return source;
   }
@@ -404,20 +472,28 @@ export class AudioController {
     }
   }
 
-  /** Play one short cue. Success-oriented cues are the caller's responsibility to gate (see SUCCESS_CUES). */
-  cue(cue: Cue): void {
-    if (!this.enabled || !this.context || !this.master) return;
+  /** Play one short cue. Nothing plays before sound has been enabled. */
+  cue(cue: Cue, options: { pan?: number; gain?: number } = {}): void {
+    if (!this.enabled || !this.context || !this.effectsBus) return;
     if (this.cues.size >= MAX_CONCURRENT_CUES) return;
     try {
       const context = this.context;
-      const master = this.master;
+      const bus = this.effectsBus;
       const now = context.currentTime;
       const spec = this.cueSpec(cue);
       const gain = context.createGain();
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(spec.level, now + spec.attack);
+      gain.gain.linearRampToValueAtTime(spec.level * clamp01(options.gain ?? 1), now + spec.attack);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + spec.duration);
-      gain.connect(master);
+      // A stereo position places a sound to the left or right of the listener. Without panner support it plays centred.
+      const panner = options.pan !== undefined && context.createStereoPanner ? context.createStereoPanner() : null;
+      if (panner) {
+        panner.pan.value = Math.min(1, Math.max(-1, Number.isFinite(options.pan) ? (options.pan as number) : 0));
+        panner.connect(bus);
+        gain.connect(panner);
+      } else {
+        gain.connect(bus);
+      }
 
       const filter = context.createBiquadFilter();
       filter.type = spec.filter;
@@ -450,6 +526,7 @@ export class AudioController {
       }
       sources.push({ stop: () => undefined, disconnect: () => filter.disconnect() });
       sources.push({ stop: () => undefined, disconnect: () => gain.disconnect() });
+      if (panner) sources.push({ stop: () => undefined, disconnect: () => panner.disconnect() });
 
       const handle = {
         stop: (): void => {
@@ -488,14 +565,8 @@ export class AudioController {
     voices: { type: "sine" | "triangle" | "sawtooth" | "square"; from: number; to: number }[];
   } {
     switch (cue) {
-      case "wake":
-        return { level: 0.25, attack: 0.05, duration: 1.2, filter: "lowpass", cutoff: 700, noise: 0.02, voices: [{ type: "sine", from: 110, to: 98 }] };
       case "settle":
         return { level: 0.3, attack: 0.02, duration: 0.7, filter: "lowpass", cutoff: 500, noise: 0.05, voices: [{ type: "triangle", from: 82, to: 62 }] };
-      case "reveal":
-        return { level: 0.28, attack: 0.08, duration: 2.0, filter: "lowpass", cutoff: 1200, noise: 0, voices: [{ type: "sine", from: 196, to: 196 }, { type: "sine", from: 294, to: 294 }] };
-      case "evidence":
-        return { level: 0.14, attack: 0.01, duration: 0.35, filter: "bandpass", cutoff: 1400, noise: 0, voices: [{ type: "triangle", from: 660, to: 600 }] };
       case "glitch":
         return { level: 0.22, attack: 0.005, duration: 0.5, filter: "bandpass", cutoff: 900, noise: 0.35, voices: [{ type: "sawtooth", from: 180, to: 60 }] };
       case "whisper":
@@ -508,8 +579,18 @@ export class AudioController {
         return { level: 0.22, attack: 0.02, duration: 1.0, filter: "lowpass", cutoff: 600, noise: 0.15, voices: [{ type: "square", from: 90, to: 120 }] };
       case "escape":
         return { level: 0.26, attack: 0.1, duration: 2.2, filter: "lowpass", cutoff: 1800, noise: 0, voices: [{ type: "sine", from: 262, to: 392 }, { type: "sine", from: 330, to: 494 }] };
-      case "report":
-        return { level: 0.2, attack: 0.1, duration: 1.8, filter: "lowpass", cutoff: 1500, noise: 0, voices: [{ type: "sine", from: 220, to: 220 }, { type: "sine", from: 330, to: 330 }] };
+      case "planchette":
+        return { level: 0.14, attack: 0.03, duration: 0.55, filter: "lowpass", cutoff: 380, noise: 0.25, voices: [] };
+      case "footstep":
+        return { level: 0.12, attack: 0.005, duration: 0.16, filter: "lowpass", cutoff: 300, noise: 0.5, voices: [{ type: "sine", from: 70, to: 50 }] };
+      case "footstepRun":
+        return { level: 0.2, attack: 0.005, duration: 0.14, filter: "lowpass", cutoff: 420, noise: 0.6, voices: [{ type: "sine", from: 85, to: 55 }] };
+      case "flashlight":
+        return { level: 0.12, attack: 0.002, duration: 0.07, filter: "highpass", cutoff: 1800, noise: 0.4, voices: [{ type: "square", from: 1400, to: 900 }] };
+      case "growl":
+        return { level: 0.3, attack: 0.15, duration: 1.4, filter: "lowpass", cutoff: 360, noise: 0.18, voices: [{ type: "sawtooth", from: 62, to: 44 }, { type: "sawtooth", from: 66, to: 47 }] };
+      case "monsterStep":
+        return { level: 0.22, attack: 0.005, duration: 0.2, filter: "lowpass", cutoff: 220, noise: 0.4, voices: [{ type: "sine", from: 48, to: 34 }] };
     }
   }
 
@@ -530,6 +611,8 @@ export class AudioController {
     this.bed = null;
     this.retiring = [];
     try {
+      this.ambientBus?.disconnect();
+      this.effectsBus?.disconnect();
       this.master?.disconnect();
       this.compressor?.disconnect();
     } catch {
@@ -539,6 +622,10 @@ export class AudioController {
     this.context = null;
     this.master = null;
     this.compressor = null;
+    this.ambientBus = null;
+    this.effectsBus = null;
+    this.noiseBuffer = null;
+    this.tension = 0;
     if (context && context.state !== "closed") {
       void context.close().catch(() => undefined);
     }

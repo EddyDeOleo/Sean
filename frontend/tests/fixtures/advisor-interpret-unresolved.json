@@ -1,0 +1,20 @@
+{
+  "body": {
+    "ai_status": "NOT_REQUESTED",
+    "candidates": [],
+    "interpreter": "deterministic",
+    "message": "That GitHub repository is not registered. Sean analyzes registered local repositories and does not clone.",
+    "mode": "UNRESOLVED",
+    "question": "https://github.com/company/project - Explain the authentication architecture",
+    "repository_id": null,
+    "symbol": null,
+    "target_path": null
+  },
+  "method": "POST",
+  "name": "interpret-unresolved",
+  "path": "/interpret",
+  "request": {
+    "text": "https://github.com/company/project - Explain the authentication architecture"
+  },
+  "status": 200
+}

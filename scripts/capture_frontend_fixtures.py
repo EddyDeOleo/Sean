@@ -85,11 +85,27 @@ def free_port() -> int:
         return probe.getsockname()[1]
 
 
-def post(port: int, document: dict) -> tuple[int, dict]:
+ADVISOR_CASES: dict[str, tuple[str, str, dict | None]] = {
+    "repositories": ("GET", "/repositories", None),
+    "capabilities": ("GET", "/capabilities", None),
+    "artifacts-rich": ("POST", "/artifacts/preview", {"repository_id": "rich", "capabilities": ["STEERING", "KIROIGNORE", "HOOKS", "PERMISSIONS", "POWERS"]}),
+    "profile-rich": ("POST", "/repositories/rich/profile", None),
+    "profile-sample": ("POST", "/repositories/sample/profile", None),
+    "profile-shallow": ("POST", "/repositories/shallow/profile", None),
+    "profile-not-registered": ("POST", "/repositories/missing/profile", None),
+    "profile-unavailable": ("POST", "/repositories/broken/profile", None),
+    "interpret-investigate": ("POST", "/interpret", {"text": "sample - Why does src/billing.py validate the amount?"}),
+    "interpret-advise": ("POST", "/interpret", {"text": "rich - Analyze this repository and improve its engineering workflow with Kiro.", "selected_repository_id": "rich"}),
+    "interpret-needs-target": ("POST", "/interpret", {"text": "sample - Why was the billing logic introduced?"}),
+    "interpret-unresolved": ("POST", "/interpret", {"text": "https://github.com/company/project - Explain the authentication architecture"}),
+}
+
+
+def post(port: int, document: dict | None, path: str = "/investigations", method: str = "POST") -> tuple[int, dict]:
     request = urllib.request.Request(
-        f"http://127.0.0.1:{port}/investigations",
-        data=json.dumps(document).encode("utf-8"),
-        method="POST",
+        f"http://127.0.0.1:{port}{path}",
+        data=json.dumps(document).encode("utf-8") if document is not None else (b"" if method == "POST" else None),
+        method=method,
         headers={"Content-Type": "application/json"},
     )
     try:
@@ -116,7 +132,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="sean-fixture-capture-") as temporary:
         environment = prepare(Path(temporary))
         process = subprocess.Popen(
-            [sys.executable, "-P", "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", str(port)],
+            [sys.executable, "-P", "-m", "uvicorn", "app.main_advisor:app", "--host", "127.0.0.1", "--port", str(port)],
             cwd=str(REPOSITORY_ROOT / "backend"),
             env=environment,
             stdout=subprocess.DEVNULL,
@@ -133,6 +149,13 @@ def main() -> int:
                 label = body.get("retrieval_status") or body.get("code")
                 classification = body.get("epistemic_classification")
                 print(f"{name:22} HTTP {status} {label} {classification or ''} evidence={len(body.get('evidence', []))}")
+            for name, (method, path, document) in ADVISOR_CASES.items():
+                status, body = post(port, document, path, method)
+                payload = {"name": name, "method": method, "path": path, "request": document, "status": status, "body": body}
+                (FIXTURE_DIRECTORY / f"advisor-{name}.json").write_text(
+                    json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+                )
+                print(f"advisor-{name:26} HTTP {status}")
         finally:
             process.terminate()
             process.wait(timeout=30)

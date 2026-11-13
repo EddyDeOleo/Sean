@@ -2233,3 +2233,90 @@ Only `jsdom` ~29.1.1 was added to the D01 set, for Vitest component tests (MIT, 
 - The backend does not echo the question, so the frontend keeps it client-side. There is no repository listing endpoint, so the ID is typed.
 - The Kiro MCP client configuration was not touched or tested in this phase.
 - No security-auditor pass has been run on the Phase 4 frontend.
+
+## Phase 4 Master Directive (2026-11-12): stages 1 and 2
+
+Owner choices: leave Spec 1 and Spec 2 untouched and record departures in Spec 4; additive read-only backend modules only; Gemini optional behind `SEAN_GEMINI_API_KEY`; remove the 2D game; stage order fixed. Phase 4 is not ACCEPTED. Phase 3 remains CLOSED.
+
+### Stage 1: plan and specs. IMPLEMENTED
+- `docs/specs/spec-4-engineering-intelligence.md` (SEAN-SPEC-04 v1.0) with departures X-1 to X-6 from Spec 2 and Spec 3.
+- `.kiro/specs/engineering-intelligence/{requirements,design,tasks}.md`.
+- Kiro capability catalog verified against kiro.dev documentation on 2026-11-12 (formats, paths, scopes).
+
+### Stage 2: backend profile and Advisor. VERIFIED by executed tests
+- New files only: `app/modules/repository_profile/`, `app/modules/advisor/`, `app/modules/intent/`, `app/api/advisor_routes.py`, `app/api/local_guard.py`, `app/main_advisor.py`. Start with `uvicorn app.main_advisor:app`.
+- Endpoints: `GET /repositories`, `POST /repositories/{id}/profile`, `POST /interpret`. `POST /artifacts/preview` belongs to stage 4.
+- Executed: 184 new tests passed. Full backend suite: 1245 passed (1061 Phase 3 + 184). SHA256 of all 71 protected Phase 3 files matched the baseline. Mutation check: changing two Advisor thresholds made the boundary tests fail.
+- Live check against the running backend and the Vite proxy: profile of the registered `sean` repository returned 200 and was byte-identical through the proxy; `/interpret` and the Phase 3 `/investigations` route worked through the proxy.
+- Result on the real `sean` repository: 1 `CONSIDER` (sub-agents), 8 `NOT_RECOMMENDED` (Steering, Specs, Hooks, MCP, Custom agents, Skills, Kiroignore, Permissions, because the repository already uses Kiro or shows no signal), 6 `INSUFFICIENT_EVIDENCE` (bugfix specs: only 4 commits; powers, ACP, checkpoints, compaction, chat/IDE/CLI: not decidable from a repository).
+- Independent security review (security-auditor, read-only): 0 HIGH, 4 MEDIUM, 6 LOW, 5 INFO. Fixed in new files: Gemini payload no longer carries repository IDs (M1); Host and Origin guard, concurrency cap and per-HEAD cache (M2); incomplete scans can no longer support a confident negative (M3); redirect refusal, wider error handling, key stripping before redaction, bounded echoed strings, quoted-path handling, longer secret-name list, dead code removed (L1 to L5, I2, I4, I5); weak tests replaced and missing tests added (symlink entry, hostile repository config, transport behavior).
+- Open for the owner: M4. The closed Phase 3 Git runner does not disable Git lazy fetching. Register only trusted repositories until the owner decides whether to authorize a change to that file.
+- Known limits: the Gemini adapter has not called the live service (needs the owner's go-ahead and `SEAN_GEMINI_API_KEY`); the model and request shape are unverified live. Because paths are never sent, the hint can rarely add information beyond the parser. Pull requests, issues and CI results are not analyzed. Only committed content is seen.
+- Operational note: the running backend uses the registry at `...\Temp\sean-i6-runtime\localappdata\Sean\config\repositories.json` (set through `LOCALAPPDATA` in its start command). The frontend dev server proxies `/api` to it.
+
+### Stage 3: product UI, sidebar and report persistence. VERIFIED by executed tests
+- New shell (`src/app/App.tsx`): collapsible sidebar (New Investigation, Recent Investigations, Saved Reports, Repositories, Settings), one natural-language request field, repository context, "Advanced target" for the structured fields, progress with "Stop waiting", and a unified report (overview, engineering history, technical findings, Kiro Repository Advisor, roadmap, evidence and transparency).
+- Independent state: `analysisMachine` and `useAnalysis` own the requests (interpret, then investigation and profile together). A failed Advisor does not discard the investigation, and the reverse. Snapshots (`reportSnapshot.ts`) are frozen, revalidated when read, and stored in IndexedDB (`reportStore.ts`, newest 50, invalid records deleted). Storage failure is reported and the report stays on screen.
+- Every new response is validated before display (`validateAdvisor.ts`), including that each recommendation's evidence exists in the profile and that no classification claims more than the evidence.
+- Fixed during testing: a candidate chosen immediately after a rejected request was ignored because the profile request still held the slot. The rejected request now aborts the other one and frees the slot (regression test in `useAnalysis.test.tsx`).
+- Executed: TypeScript clean. Vitest 13 files, 406 tests passed. Playwright (Edge, real backend, real IndexedDB) 16 passed, covering the natural-language flow, repository-specific Advisor output (the `rich` fixture repository gets 4 adopt-now items, `sample` gets none), save and reopen after reload, file and definition choices, insufficient, failed and unregistered cases, cancel, keyboard-only use, 1280 px and 390 px layouts, reduced motion, and the backend's refusal of foreign Origin and Host headers.
+- Visual review: 19 real browser screenshots were inspected. Fixed: menu button visible on desktop, missing list bullets, misaligned roadmap cards, duplicate badge on not-assessable items.
+- Dependency added: `fake-indexeddb` 6.2.8, dev only, exact pin (Apache-2.0, no dependencies, maintained, used only to test IndexedDB logic; `npm audit` 0 vulnerabilities).
+- Removed as superseded: `InvestigationView`, `TwoZoneLayout`, `EvidencePanel`, `EvidenceCard`, `ErrorPanel`, `InvestigationProgress`, `InvestigationForm`, `sessionStore`, `useExperience`, and the old journey tests.
+- Departure from Spec 2 (recorded as X-1 and X-2 in Spec 4): the ordinary view no longer shows a resting Ouija board. The Ouija components (`OuijaScene`, `HorrorTransition`, `StatusStrip`, `Planchette`), `experienceMachine`, the audio controller and the 2D game are kept in the tree but are NOT mounted. Until stage 5 the report appears directly after the analysis. Stage 5 rewires the interlude, stage 6 replaces the 2D game, stage 7 adds the audio settings.
+- Settings shown now: motion and deleting saved reports. Audio, horror intensity, jumpscare, skip-gameplay and graphics controls appear in the stage in which they take effect, so no control is decorative.
+- Known limits: the report layout was reviewed in Edge only; the Ouija and the game are intentionally absent until their stages.
+
+### Security review follow-up (2026-11-13): M1 to M4 resolved
+- **M1 (free-tier privacy).** Repository IDs were already removed from the payload. Added per-request consent: `allow_ai` (strict boolean, default false) on `/interpret`; `GET /capabilities`; an unchecked, explained checkbox in the interface that resets after each request. Tests: no provider call without consent, consent must be a real boolean, the outgoing payload contains no repository identifiers or paths, capabilities never contain a secret, the checkbox is absent when no provider exists and sends consent for one request only.
+- **M2 (local access).** Host and Origin guard, concurrency cap and per-HEAD cache were done earlier. Added a 15 second total deadline for the provider exchange (reads in non-blocking chunks), tested against a server that trickles its reply.
+- **M3 (absence reported as proof).** Done earlier: every limit hit, unreadable history or skipped manifest makes recommendations `PARTIAL_EVIDENCE` with `LOW` confidence.
+- **M4 (Git lazy fetch).** Reproduced first: with a partial clone whose config names an upload-pack command, `git cat-file` ran the command. Fixed in the Phase 3 runner by owner authorization: `GIT_NO_LAZY_FETCH=1` and `-c protocol.allow=never`. This is the only Phase 3 file changed. New SHA256 of `backend/app/core/git_runner.py`: `C510CAD60CD6B86F12D45EA101A4E8FFD87C2FD89D86545B5B8DE87BA3580948`. The other 70 protected files still match. Tests: 4 new (fixture proves unprotected Git does run the command; the runner does not; the scanner reports the gap; the protections are in the contract). Mutation check: either protection alone blocks the fetch, and removing both fails the tests.
+- Executed: backend 1254 passed. Frontend: TypeScript clean, 412 unit tests passed.
+- Live Gemini call: authorized by the owner on 2026-11-13. NOT yet performed: the key is not visible to processes started by Kiro (not set at user or machine level, and not in the Kiro process environment), so the running backend reports the AI interpreter as unavailable.
+
+### Gemini timeout investigation (2026-11-13)
+- **Connectivity (measured, no key used).** DNS 0.02 s, TCP 0.05 s, TLS 0.05 s, unauthenticated HTTPS request HTTP 403 in 0.18 s, from the backend's Python 3.14.10. No proxy configured. Connectivity is not the cause.
+- **Timeouts in use.** Backend `TIMEOUT_SECONDS = 10` per socket operation, `TOTAL_DEADLINE_SECONDS = 15` checked between reads. The diagnostic uses the value given by `--timeout` (default 60 s), for both limits.
+- **Root cause, as found in code.** The client's reads waited for 8192 bytes instead of returning on the first bytes, so the total deadline could not stop a slow reply. Fixed by `read1`. The 10 s per-operation limit is still the likely reason a reasoning model that is silent before its first byte times out. That is measured by the 60 s diagnostic run, not assumed.
+- **Silent fallback removed.** Every failed attempt now returns a status (`AI_TIMEOUT`, `AI_HTTP_ERROR`, `AI_CONNECTION_FAILED`, `AI_PROTOCOL_ERROR`, `AI_RESPONSE_TOO_LARGE`, `AI_INVALID_REPLY`, `AI_UNEXPECTED`, `AI_NO_USABLE_ANSWER`), returned in `/interpret` as `ai_status`, logged with stage, HTTP status and elapsed time, and never with the key, the sentence, or the reply. The deterministic answer is still produced.
+- **Failure stage.** Each timeout records where it happened: `BEFORE_HEADERS`, `READING_BODY`, or `DEADLINE`. On this machine a refused localhost connection surfaces as a connect timeout, so `BEFORE_HEADERS` is reported for both.
+- **Frontend.** The validator requires `ai_status`. The transparency section shows the AI reader's status in plain words. Fixtures were recaptured from the real backend.
+- **Tests.** Backend full suite 1274 passed. Frontend 414 unit tests passed, type-check clean. New tests cover each failure category against a local server, the redaction of the key in diagnostics, log contents, the timeout argument, and the status in the response.
+- **Pending.** The live result with the owner's key, run by `scripts/diagnose_gemini.py --timeout 60`, decides whether the per-operation timeout must change. Gemini is not declared operational until HTTP 200 is parsed and the result reaches the frontend.
+
+
+## Stages 4 to 8 (2026-11-13)
+
+Status of the work: IMPLEMENTED and VERIFIED by executed tests (results below). Phase 4 is not ACCEPTED; that needs the owner.
+
+### Results observed in this session
+| Check | Result |
+|---|---|
+| Backend full suite | 1349 passed (9 min 50 s) |
+| Frontend type check (`tsc --noEmit`) | clean |
+| Vitest | 15 files, 449 tests passed |
+| Playwright (Edge, real backend, real WebGL) | 33 tests; the full run passed 32 and the one failure was the timing-sensitive full-escape test hitting its time limit under load. After a longer limit and a shorter wait, `e2e/game.spec.ts` passed 10 of 10, and `e2e/screenshots.spec.ts` passed 2 of 2 |
+| Phase 3 hash baseline | 71 entries; only `backend/app/core/git_runner.py` differs (owner-authorized, finding M4) |
+| `npm audit` | 0 vulnerabilities |
+
+The full escape test plays the game with real key presses and retries after capture; it passed on a later run in one to a few attempts. It can still fail on a slow machine. Treat it as the least stable test.
+
+### Stage 4: artifacts
+`POST /artifacts/preview`, ArtifactPanel, lifecycle RECOMMENDED -> PREPARED -> EXPORTED -> VERIFIED (a committed file is byte-identical). Download and copy only; Sean never writes to a repository. Browser test downloads `project-conventions.md` and checks it against the committed tree.
+
+### Stage 5: Ouija
+Full-screen interlude after a successful, saved, eligible analysis. Never for failed, cancelled, insufficient, saved or disabled cases. Question shown as text. Skip button and Escape. Static board with reduced motion.
+
+### Stage 6: game
+Three.js 0.187.0 (D04). One hand-authored archive level, flashlight, noise, a threat with six states, clues taken from the report's own findings, retry, give up, pause, fullscreen, graphics quality, intensity and scare settings. 2D game removed.
+
+### Stage 7: sound
+Procedural Web Audio with ambient and effects buses, positioned creature sounds, tension swell, gesture-gated start, mute and three volume controls, full release on exit. Manifest in `docs/development/audio-asset-manifest.md`.
+
+### Stage 8: reviews and fixes
+security-auditor (0 high, 1 medium, 10 low) and code-reviewer (2 high, 9 medium, many low) ran independently. Fixed with regression tests: repository text in generated files (M1), path regex newline (L1), secret text sent to the browser (L4), YAML quoting (L5), capability length (L6), artifact record races and limits (L7, L8), double enable of sound (L9), partial renderer construction (L10), camera field of view after a catch (H1), the interlude holding the screen after the user moved on (H2), focus after the interlude (M2), the lose-the-trail timer (M3), keys blocked in the pause menu (M4), flashlight shader recompiles (M6), dead audio cues (M8), game failure shown to the user (M9), and smaller items.
+Not fixed, recorded in Spec 4 section 14 and 15: variable time step (departure), the 20 000-path limit for "file exists" (L2), the HEAD race between scan and lookup (L3, cosmetic), a shallow freeze of the snapshot (the game code never mutates it; no deep freeze), per-frame data attributes used by browser tests (M7), duplicated literal types.
+
+### Limits
+Edge only. Gemini was not reachable (HTTP 503 from the provider); the deterministic reader is the tested path. Pull requests, issues and CI are not analysed. Only locally registered, committed content is read. Gameplay feel and sound quality were judged only through screenshots and graph tests.

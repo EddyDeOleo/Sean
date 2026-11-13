@@ -13,9 +13,21 @@ export interface Settings {
   volume: number;
   muted: boolean;
   motion: MotionPreference;
-  /** Whether the narrative interruption and escape game run. When false, the report follows the reveal directly. */
+  /** Whether the surprise experience (the Ouija, the interruption and the game) runs after an analysis. When false the report opens at once. */
   horror: boolean;
   lastRepositoryId: string;
+  sidebarCollapsed: boolean;
+  /** Skip the game: the Ouija and the interruption still play, then the report opens. */
+  skipGameplay: boolean;
+  /** Level of the ambient bed and of the sound effects, each 0 to 1, before the master volume. */
+  ambient: number;
+  effects: number;
+  /** How aggressive the monster is. */
+  intensity: "low" | "normal" | "high";
+  /** Whether being caught shows the brief scare. Off: a plain "you were caught" screen. */
+  jumpscare: boolean;
+  /** Graphics quality of the game. */
+  quality: "low" | "medium" | "high";
 }
 
 export const SETTINGS_KEY = "sean.settings.v1";
@@ -26,7 +38,16 @@ export const DEFAULT_SETTINGS: Settings = {
   motion: "system",
   horror: true,
   lastRepositoryId: "",
+  sidebarCollapsed: false,
+  skipGameplay: false,
+  ambient: 1,
+  effects: 1,
+  intensity: "normal",
+  jumpscare: true,
+  quality: "medium",
 };
+
+const unit = (value: unknown): number => (typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1 ? value : 1);
 
 const REPOSITORY_ID = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 
@@ -48,6 +69,13 @@ export function parseSettings(raw: string | null): Settings {
     motion,
     horror: record.horror === false ? false : true,
     lastRepositoryId: typeof record.lastRepositoryId === "string" && REPOSITORY_ID.test(record.lastRepositoryId) ? record.lastRepositoryId : "",
+    sidebarCollapsed: record.sidebarCollapsed === true,
+    skipGameplay: record.skipGameplay === true,
+    ambient: unit(record.ambient),
+    effects: unit(record.effects),
+    intensity: record.intensity === "low" || record.intensity === "high" ? record.intensity : "normal",
+    jumpscare: record.jumpscare === false ? false : true,
+    quality: record.quality === "low" || record.quality === "high" ? record.quality : "medium",
   };
 }
 

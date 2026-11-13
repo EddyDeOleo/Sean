@@ -1,0 +1,21 @@
+{
+  "body": {
+    "ai_status": "NOT_REQUESTED",
+    "candidates": [],
+    "interpreter": "deterministic",
+    "message": null,
+    "mode": "ADVISE",
+    "question": "Analyze this repository and improve its engineering workflow with Kiro.",
+    "repository_id": "rich",
+    "symbol": null,
+    "target_path": null
+  },
+  "method": "POST",
+  "name": "interpret-advise",
+  "path": "/interpret",
+  "request": {
+    "selected_repository_id": "rich",
+    "text": "rich - Analyze this repository and improve its engineering workflow with Kiro."
+  },
+  "status": 200
+}

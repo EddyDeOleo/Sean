@@ -5,7 +5,7 @@
     "error": null,
     "evidence": [],
     "explanation": "The available evidence about src/never_existed.py does not support a reliable conclusion. No historical conclusion is stated. Unknown: whether src/never_existed.py has a documented change history, and why these changes were made. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. Pull request and issue evidence is not included, because the association step is not implemented. No commit history was retrieved for the target. Evidence that would help: complete history for the target, from a full clone or a broader retrieval.",
-    "investigation_id": "9b53a3f6-a43e-476e-aa57-291af92aaf1c",
+    "investigation_id": "b10a9ee7-0fa7-4800-9944-8d7c3dcffd0d",
     "limitations": [
       {
         "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",

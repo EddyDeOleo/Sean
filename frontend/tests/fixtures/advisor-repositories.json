@@ -1,0 +1,36 @@
+{
+  "body": {
+    "repositories": [
+      {
+        "available": true,
+        "github": null,
+        "repository_id": "ambiguous"
+      },
+      {
+        "available": true,
+        "github": null,
+        "repository_id": "broken"
+      },
+      {
+        "available": true,
+        "github": null,
+        "repository_id": "rich"
+      },
+      {
+        "available": true,
+        "github": null,
+        "repository_id": "sample"
+      },
+      {
+        "available": true,
+        "github": null,
+        "repository_id": "shallow"
+      }
+    ]
+  },
+  "method": "GET",
+  "name": "repositories",
+  "path": "/repositories",
+  "request": null,
+  "status": 200
+}

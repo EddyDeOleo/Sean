@@ -1,0 +1,12 @@
+{
+  "body": {
+    "code": "REPOSITORY_NOT_FOUND",
+    "message": "The repository identifier is not registered.",
+    "retryable": false
+  },
+  "method": "POST",
+  "name": "profile-not-registered",
+  "path": "/repositories/missing/profile",
+  "request": null,
+  "status": 404
+}

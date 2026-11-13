@@ -1,0 +1,23 @@
+{
+  "body": {
+    "ai_status": "NOT_REQUESTED",
+    "candidates": [
+      "src/billing.py",
+      "docs/billing.md"
+    ],
+    "interpreter": "deterministic",
+    "message": "Choose the file this question is about.",
+    "mode": "NEEDS_TARGET",
+    "question": "Why was the billing logic introduced?",
+    "repository_id": "sample",
+    "symbol": null,
+    "target_path": null
+  },
+  "method": "POST",
+  "name": "interpret-needs-target",
+  "path": "/interpret",
+  "request": {
+    "text": "sample - Why was the billing logic introduced?"
+  },
+  "status": 200
+}

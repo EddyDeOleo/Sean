@@ -1,0 +1,854 @@
+{
+  "body": {
+    "advisor": {
+      "catalog_verified_on": "2026-11-12",
+      "limitations": [
+        "Pull requests, issues and CI results are not read in this analysis. Only the committed tree and commit history are used."
+      ],
+      "profile_head": "158a070bc8ac917868d8307a80254f3f611830db",
+      "recommendations": [
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "STEERING",
+          "capability": "STEERING",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-0c56314dee89",
+            "obs-5a15f5deafa4",
+            "obs-a0720d92f34a"
+          ],
+          "expected_benefit": "Generated code follows the repository's own standards without repeating them in each prompt.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Review the generated file so it states the conventions your team actually follows."
+          ],
+          "priority": "P1",
+          "reasoning": "The conventions already exist in tool configuration and documents, but a Kiro agent does not read them as standing instructions. Steering makes them part of every relevant session.",
+          "recommendation_status": "ADOPT_NOW",
+          "repository_signal": "3 separate convention sources are committed (lint, format or contribution files) and no steering exists.",
+          "risks": [
+            "Stale steering misleads the agent. Keep it in step with the configuration files it summarizes."
+          ],
+          "summary": "Capture the repository's existing conventions as persistent Kiro steering.",
+          "title": "Steering",
+          "verification_method": "Open a Kiro session and confirm the steering file is listed as context."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "KIROIGNORE",
+          "capability": "KIROIGNORE",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-018062356642"
+          ],
+          "expected_benefit": "Lower risk of secrets entering an agent session.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Check whether the flagged files are real secrets. If they are, rotate them and remove them from history."
+          ],
+          "priority": "P1",
+          "reasoning": "Files such as environment files and private keys should not enter an agent's context. Only the path names were read, never the contents.",
+          "recommendation_status": "ADOPT_NOW",
+          "repository_signal": "1 committed path(s) with names that usually hold secrets, and no .kiroignore.",
+          "risks": [
+            ".kiroignore limits agent context. It is not a security boundary. Enforce with permission deny rules too."
+          ],
+          "summary": "Keep secret-bearing files out of agent context.",
+          "title": "Kiroignore",
+          "verification_method": "Ask the agent to read a listed file and confirm it is blocked."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "SPEC_SCAFFOLD",
+          "capability": "SPECS",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-fc1601c998e5",
+            "obs-2d8056588340",
+            "obs-271278a50c4d",
+            "obs-c741081115fe",
+            "obs-6732fdb3041e",
+            "obs-3898701aed22"
+          ],
+          "expected_benefit": "Requirements, design and tasks stay linked, which reduces rework on cross-area changes.",
+          "implementation_effort": "MEDIUM",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Pick one upcoming feature to write as the first spec."
+          ],
+          "priority": "P1",
+          "reasoning": "Features that cross several areas need agreed requirements and a task order. Specs record both and keep the work traceable.",
+          "recommendation_status": "ADOPT_NOW",
+          "repository_signal": "46 source files across 4 areas and no specs.",
+          "risks": [
+            "Specs take time. For a one-file change, direct chat is faster."
+          ],
+          "summary": "Use specs for multi-area features.",
+          "title": "Specs",
+          "verification_method": "Open the generated spec folder in Kiro and run its first task."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "BUGFIX_SPEC_SCAFFOLD",
+          "capability": "BUGFIX_SPECS",
+          "confidence": "MEDIUM",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "INFERRED",
+          "evidence_references": [
+            "obs-84962b614826",
+            "obs-8e89bd2c2f5f",
+            "obs-d837f317c9d8"
+          ],
+          "expected_benefit": "Root-cause analysis and regression prevention for the files that keep needing fixes.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Choose the most recent recurring defect as the first case."
+          ],
+          "priority": "P1",
+          "reasoning": "Repeated fixes in the same files point to defect classes that were patched without a recorded root cause. A bugfix spec states the defect, the expected behavior, and what must not change. This is an inference from commit labels, not proof of cause.",
+          "recommendation_status": "ADOPT_NOW",
+          "repository_signal": "12 of 19 commits are fix-labelled, and 1 file(s) recur in fixes.",
+          "risks": [
+            "Commit subjects label changes. They do not prove that each one fixed a defect."
+          ],
+          "summary": "Use bugfix specs for the recurring defect areas.",
+          "title": "Bugfix specs",
+          "verification_method": "Run the bugfix spec's first task and confirm a regression test is added."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "HOOK",
+          "capability": "HOOKS",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-714e8d0a1148",
+            "obs-dfef203fbbbd",
+            "obs-b28b62f8a8b1",
+            "obs-c0155550ee22"
+          ],
+          "expected_benefit": "Faster feedback on agent-made changes.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Confirm the check is quick enough to run on every save."
+          ],
+          "priority": "P2",
+          "reasoning": "The repository declares verification tooling. A hook can run it after the agent changes files, so errors surface at once. Hooks are never adopted automatically because a poorly scoped hook is slow or noisy.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "4 declared test or lint tool(s).",
+          "risks": [
+            "A slow hook interrupts every edit.",
+            "Hook commands run on your machine. Review the command first."
+          ],
+          "summary": "Run the repository's own checks automatically after agent changes.",
+          "title": "Hooks",
+          "verification_method": "Save a file through the agent and confirm the hook runs and reports."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "SKILL",
+          "capability": "SKILLS",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-5b1e7802bed1"
+          ],
+          "expected_benefit": "Repeatable tasks run the same way each time.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Pick the one or two procedures people actually repeat."
+          ],
+          "priority": "P2",
+          "reasoning": "A scripts folder usually holds procedures people repeat. A skill tells the agent when and how to use them.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "3 committed scripts directly under scripts/.",
+          "risks": [
+            "A skill that references a script that changes becomes wrong."
+          ],
+          "summary": "Package the repository's repeatable procedures as a skill.",
+          "title": "Skills",
+          "verification_method": "Ask the agent to perform the procedure and confirm it follows the skill."
+        },
+        {
+          "adoption_scope": "USER",
+          "artifact_kind": null,
+          "capability": "PERMISSIONS",
+          "confidence": "HIGH",
+          "configuration_strategy": "INSTRUCTIONS_ONLY",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-018062356642"
+          ],
+          "expected_benefit": "Agent file reads of those paths are denied, not just hidden.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Edit your own Kiro permissions file."
+          ],
+          "priority": "P2",
+          "reasoning": "Permissions are the enforced control. They live in your own Kiro settings and cannot be committed to the repository, so Sean gives instructions and writes no file.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "1 committed path(s) with names that usually hold secrets.",
+          "risks": [
+            "A rule that is too broad blocks legitimate reads."
+          ],
+          "summary": "Add user-level deny rules for the sensitive-looking files.",
+          "title": "Permissions",
+          "verification_method": "Ask the agent to read a listed file and confirm the read is denied."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "MCP",
+          "confidence": "HIGH",
+          "configuration_strategy": "INSTRUCTIONS_ONLY",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-3caff92190fe"
+          ],
+          "expected_benefit": "Less manual copying of information between those systems and the agent.",
+          "implementation_effort": "MEDIUM",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": true,
+          "prerequisites": [
+            "An MCP server for the specific system.",
+            "Credentials supplied through environment variables, never committed."
+          ],
+          "priority": "P2",
+          "reasoning": "The code talks to external systems. An MCP server for one of them could let the agent read from it directly. Sean does not choose a server or invent an endpoint.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "1 integration signal(s), such as client libraries or API description files.",
+          "risks": [
+            "Each server widens what the agent can reach.",
+            "Servers need review before use."
+          ],
+          "summary": "Connect the external systems the code already depends on.",
+          "title": "MCP servers",
+          "verification_method": "List the server's tools in Kiro and run one read-only call."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": "AGENT",
+          "capability": "CUSTOM_AGENTS",
+          "confidence": "HIGH",
+          "configuration_strategy": "GENERATE_FILE",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-fc1601c998e5",
+            "obs-2d8056588340",
+            "obs-271278a50c4d"
+          ],
+          "expected_benefit": "More consistent work inside each area.",
+          "implementation_effort": "MEDIUM",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Decide each agent's tools and its allowed paths."
+          ],
+          "priority": "P2",
+          "reasoning": "Distinct areas call for different expertise and tool access. A focused agent can carry that, with less context and tighter permissions.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "3 areas each hold at least 10% of the source files: api, web, worker.",
+          "risks": [
+            "Too many agents are harder to maintain than one good one."
+          ],
+          "summary": "Give each major area an agent with a focused role.",
+          "title": "Custom agents",
+          "verification_method": "Start a session with the agent and check that its tools and context match its role."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "SUB_AGENTS",
+          "confidence": "HIGH",
+          "configuration_strategy": "INSTRUCTIONS_ONLY",
+          "evidence_classification": "DOCUMENTED",
+          "evidence_references": [
+            "obs-fc1601c998e5",
+            "obs-2d8056588340",
+            "obs-271278a50c4d",
+            "obs-52dc8ef29b0f"
+          ],
+          "expected_benefit": "Shorter wall-clock time on changes that split cleanly.",
+          "implementation_effort": "MEDIUM",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [
+            "Define which files each task may touch, to avoid conflicts."
+          ],
+          "priority": "P2",
+          "reasoning": "Work in separate areas can run in parallel when it touches different files and each part has its own tests.",
+          "recommendation_status": "CONSIDER",
+          "repository_signal": "3 sizable areas and 3 test file(s) to verify each independently.",
+          "risks": [
+            "Coordination costs time. Parallel edits to shared files cause conflicts."
+          ],
+          "summary": "Delegate independent work in separate areas to sub-agents.",
+          "title": "Sub-agents",
+          "verification_method": "Run two independent tasks in parallel and confirm no shared-file conflict."
+        },
+        {
+          "adoption_scope": "USER",
+          "artifact_kind": null,
+          "capability": "POWERS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Powers are installed per user and chosen by the tools you use. The repository does not decide that.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Powers depends on your tools, not on repository content.",
+          "title": "Powers",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "ACP",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "ACP is an integration protocol used by editor clients. The repository does not decide which client you use.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "ACP integrations depends on your tools, not on repository content.",
+          "title": "ACP integrations",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "CHECKPOINTS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Checkpoints and rewind are session features. They depend on how you work, not on repository content.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Checkpoints and rewind depends on your tools, not on repository content.",
+          "title": "Checkpoints and rewind",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "COMPACTION",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Compaction is automatic and depends on session length, which the repository does not show.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Context compaction depends on your tools, not on repository content.",
+          "title": "Context compaction",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "CHAT_IDE_CLI",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Whether direct chat is enough depends on task size, which the repository does not show.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Chat, IDE and CLI depends on your tools, not on repository content.",
+          "title": "Chat, IDE and CLI",
+          "verification_method": "Not applicable."
+        }
+      ],
+      "repository_id": "rich",
+      "roadmap": {
+        "immediate": [
+          "STEERING",
+          "KIROIGNORE",
+          "SPECS",
+          "BUGFIX_SPECS"
+        ],
+        "insufficient_evidence": [
+          "POWERS",
+          "ACP",
+          "CHECKPOINTS",
+          "COMPACTION",
+          "CHAT_IDE_CLI"
+        ],
+        "longer_term": [
+          "MCP"
+        ],
+        "near_term": [
+          "HOOKS",
+          "SKILLS",
+          "PERMISSIONS",
+          "CUSTOM_AGENTS",
+          "SUB_AGENTS"
+        ],
+        "not_recommended": []
+      }
+    },
+    "profile": {
+      "basis": "COMMITTED_TREE",
+      "head": "158a070bc8ac917868d8307a80254f3f611830db",
+      "history_limited": false,
+      "limitations": [
+        {
+          "code": "PULL_REQUESTS_ISSUES_CI_NOT_ANALYZED",
+          "message": "Pull requests, issues and CI results are not read in this analysis. Only the committed tree and commit history are used."
+        }
+      ],
+      "observations": [
+        {
+          "classification": "DOCUMENTED",
+          "count": 32,
+          "explanation": "32 committed source file(s) with a Python extension.",
+          "kind": "LANGUAGE",
+          "observation_id": "obs-6732fdb3041e",
+          "path": null,
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "Python"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 14,
+          "explanation": "14 committed source file(s) with a TypeScript extension.",
+          "kind": "LANGUAGE",
+          "observation_id": "obs-3898701aed22",
+          "path": null,
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "TypeScript"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 15,
+          "explanation": "15 source and 1 test file(s) under this area.",
+          "kind": "AREA",
+          "observation_id": "obs-fc1601c998e5",
+          "path": "api",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "api"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 14,
+          "explanation": "14 source and 1 test file(s) under this area.",
+          "kind": "AREA",
+          "observation_id": "obs-2d8056588340",
+          "path": "web",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "web"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 14,
+          "explanation": "14 source and 1 test file(s) under this area.",
+          "kind": "AREA",
+          "observation_id": "obs-271278a50c4d",
+          "path": "worker",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "worker"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 3,
+          "explanation": "3 source and 0 test file(s) under this area.",
+          "kind": "AREA",
+          "observation_id": "obs-c741081115fe",
+          "path": "scripts",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "scripts"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 3,
+          "explanation": "3 committed file(s) match test naming or test directory conventions.",
+          "kind": "TEST_LAYOUT",
+          "observation_id": "obs-52dc8ef29b0f",
+          "path": null,
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "test files"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed style, lint or formatting configuration file.",
+          "kind": "CONVENTION",
+          "observation_id": "obs-0c56314dee89",
+          "path": ".editorconfig",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": ".editorconfig"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed style, lint or formatting configuration file.",
+          "kind": "CONVENTION",
+          "observation_id": "obs-5a15f5deafa4",
+          "path": "ruff.toml",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "ruff.toml"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed contribution guide.",
+          "kind": "CONVENTION",
+          "observation_id": "obs-a0720d92f34a",
+          "path": "CONTRIBUTING.md",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "contribution guide"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed Contributing document at the repository root.",
+          "kind": "DOCUMENTATION",
+          "observation_id": "obs-cc390e6bc098",
+          "path": "CONTRIBUTING.md",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "Contributing"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A path with a name that usually holds secrets is committed. Only the path was read, never the content.",
+          "kind": "SENSITIVE_PATH",
+          "observation_id": "obs-018062356642",
+          "path": ".env",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "tracked"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 3,
+          "explanation": "3 committed file(s) directly under scripts/.",
+          "kind": "SCRIPT_SET",
+          "observation_id": "obs-5b1e7802bed1",
+          "path": "scripts",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "scripts folder"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed package.json dependency or build manifest.",
+          "kind": "MANIFEST",
+          "observation_id": "obs-d0ef349cf4f4",
+          "path": "package.json",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "package.json"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "A committed requirements.txt dependency or build manifest.",
+          "kind": "MANIFEST",
+          "observation_id": "obs-9b4ea09032d8",
+          "path": "requirements.txt",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "requirements.txt"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "Vitest is declared in package.json.",
+          "kind": "TOOLING",
+          "observation_id": "obs-714e8d0a1148",
+          "path": "package.json",
+          "role": "TEST_TOOL",
+          "source": "GIT_BLOB",
+          "value": "Vitest"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "React is declared as a dependency in package.json.",
+          "kind": "FRAMEWORK",
+          "observation_id": "obs-d3a0a13227dd",
+          "path": "package.json",
+          "role": null,
+          "source": "GIT_BLOB",
+          "value": "React"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "package.json declares a 'test' script.",
+          "kind": "TOOLING",
+          "observation_id": "obs-dfef203fbbbd",
+          "path": "package.json",
+          "role": "SCRIPT",
+          "source": "GIT_BLOB",
+          "value": "npm script: test"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "package.json declares a 'lint' script.",
+          "kind": "TOOLING",
+          "observation_id": "obs-b28b62f8a8b1",
+          "path": "package.json",
+          "role": "SCRIPT",
+          "source": "GIT_BLOB",
+          "value": "npm script: lint"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "FastAPI is declared as a dependency in requirements.txt.",
+          "kind": "FRAMEWORK",
+          "observation_id": "obs-ab36006a0e7b",
+          "path": "requirements.txt",
+          "role": null,
+          "source": "GIT_BLOB",
+          "value": "FastAPI"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "httpx (HTTP client) is declared as a dependency in requirements.txt.",
+          "kind": "INTEGRATION",
+          "observation_id": "obs-3caff92190fe",
+          "path": "requirements.txt",
+          "role": null,
+          "source": "GIT_BLOB",
+          "value": "httpx (HTTP client)"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": null,
+          "explanation": "pytest is declared in requirements.txt.",
+          "kind": "TOOLING",
+          "observation_id": "obs-c0155550ee22",
+          "path": "requirements.txt",
+          "role": "TEST_TOOL",
+          "source": "GIT_BLOB",
+          "value": "pytest"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 19,
+          "explanation": "19 commit(s) were read.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-8e89bd2c2f5f",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "commits scanned"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 12,
+          "explanation": "12 commit subject(s) start with a fix keyword.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-84962b614826",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "fix commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 7,
+          "explanation": "7 commit subject(s) start with a feature keyword.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-51e5e8c9e385",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "feature commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 0,
+          "explanation": "0 commit subject(s) start with 'revert'.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-90417c1e9323",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "revert commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 19,
+          "explanation": "19 commit subject(s) follow the conventional-commit form.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-d1017bf2780e",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "conventional commits"
+        },
+        {
+          "classification": "INFERRED",
+          "count": 12,
+          "explanation": "12 fix-labelled commits changed this file. Repeated fixes suggest a defect-prone area. The commit subjects label the changes, they do not prove the cause.",
+          "kind": "FIX_RECURRENCE",
+          "observation_id": "obs-d837f317c9d8",
+          "path": "api/payments.py",
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "recurring fixes"
+        }
+      ],
+      "repository_id": "rich",
+      "shallow": false,
+      "summary": {
+        "areas": [
+          {
+            "name": "api",
+            "source_files": 15,
+            "test_files": 1
+          },
+          {
+            "name": "web",
+            "source_files": 14,
+            "test_files": 1
+          },
+          {
+            "name": "worker",
+            "source_files": 14,
+            "test_files": 1
+          },
+          {
+            "name": "scripts",
+            "source_files": 3,
+            "test_files": 0
+          }
+        ],
+        "history": {
+          "commits_scanned": 19,
+          "conventional_commits": 19,
+          "distinct_authors": 3,
+          "feature_commits": 7,
+          "fix_commits": 12,
+          "revert_commits": 0
+        },
+        "languages": [
+          {
+            "files": 32,
+            "language": "Python"
+          },
+          {
+            "files": 14,
+            "language": "TypeScript"
+          }
+        ],
+        "source_files": 46,
+        "test_files": 3,
+        "tree_entries": 55
+      },
+      "truncated": false
+    }
+  },
+  "method": "POST",
+  "name": "profile-rich",
+  "path": "/repositories/rich/profile",
+  "request": null,
+  "status": 200
+}

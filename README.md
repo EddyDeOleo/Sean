@@ -8,7 +8,7 @@ Sean is intended to be a local-first engineering intelligence application. It is
 
 Sean is not intended to claim knowledge of developers' intent. Each result is specified to separate what the evidence documents, what can be inferred, and what remains unknown. Evidence retrieval, ranking, classification, and a structured explanation are required to work without any AI provider.
 
-The interface is specified as two zones: Evidence & History on the left and an Ouija board on the right. The board is the interaction surface and the evidence is the substance.
+The interface is a work tool: a sidebar, one request field, and a unified report (history, findings, a Kiro Advisor with preparable configuration files, and transparency about what was and was not seen). After a successful analysis a short fictional interlude (an Ouija board, then a first-person Three.js game) plays before the report; it can always be skipped and cannot change the report. See [Spec 4](docs/specs/spec-4-engineering-intelligence.md). The earlier two-zone Ouija layout of Spec 2 is superseded where Spec 4 records a departure.
 
 ## Status
 
@@ -47,7 +47,7 @@ The frontend is implemented and tested (see `.kiro/reports/phase-status.md`, Pha
 
 ```powershell
 # Terminal 1: backend (from backend\)
-.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+.venv\Scripts\python.exe -m uvicorn app.main_advisor:app --host 127.0.0.1 --port 8000
 
 # Terminal 2: frontend (from frontend\)
 npm install

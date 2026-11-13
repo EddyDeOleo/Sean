@@ -33,3 +33,18 @@ export const unknownField = (): CapturedFixture<BackendError> => fixture("unknow
 export function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
+
+// ---- repository-intelligence fixtures (captured from the real backend by scripts/capture_frontend_fixtures.py)
+import type { InterpretedRequest, ProfileResponse, RepositoryListItem } from "../src/types/advisor";
+
+export const profileRich = (): CapturedFixture<ProfileResponse> => fixture("advisor-profile-rich");
+export const profileSample = (): CapturedFixture<ProfileResponse> => fixture("advisor-profile-sample");
+export const profileShallow = (): CapturedFixture<ProfileResponse> => fixture("advisor-profile-shallow");
+export const profileNotRegistered = (): CapturedFixture<BackendError> => fixture("advisor-profile-not-registered");
+export const repositoriesFixture = (): CapturedFixture<{ repositories: RepositoryListItem[] }> => fixture("advisor-repositories");
+export const interpretInvestigate = (): CapturedFixture<InterpretedRequest> => fixture("advisor-interpret-investigate");
+export const interpretAdvise = (): CapturedFixture<InterpretedRequest> => fixture("advisor-interpret-advise");
+export const interpretNeedsTarget = (): CapturedFixture<InterpretedRequest> => fixture("advisor-interpret-needs-target");
+export const interpretUnresolved = (): CapturedFixture<InterpretedRequest> => fixture("advisor-interpret-unresolved");
+export const capabilitiesFixture = (): CapturedFixture<{ ai_interpreter: { available: boolean; provider: string; model: string; sends: string } }> => fixture("advisor-capabilities");
+export const artifactsRich = (): CapturedFixture<import("../src/types/advisor").PreviewResponse> => fixture("advisor-artifacts-rich");

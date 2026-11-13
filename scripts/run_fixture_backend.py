@@ -6,7 +6,7 @@ registry under a temporary LOCALAPPDATA, and starts uvicorn on 127.0.0.1. The re
 Usage (from the repository root, with the backend virtual environment):
     backend\\.venv\\Scripts\\python.exe scripts\\run_fixture_backend.py --port 8765
 
-Registered repositories: sample (main), shallow, ambiguous, broken.
+Registered repositories: sample (main), shallow, ambiguous, broken, rich.
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ def prepare(root: Path) -> dict[str, str]:
             {"repository_id": "shallow", "root": str(repos["shallow"])},
             {"repository_id": "ambiguous", "root": str(repos["ambiguous"])},
             {"repository_id": "broken", "root": str(repos["broken"])},
+            {"repository_id": "rich", "root": str(repos["rich"])},
         ],
     }
     (config / "repositories.json").write_text(json.dumps(registry), encoding="utf-8")
@@ -55,7 +56,7 @@ def main() -> int:
         environment = prepare(Path(temporary))
         print(f"fixture backend: http://127.0.0.1:{arguments.port}", flush=True)
         process = subprocess.Popen(
-            [sys.executable, "-P", "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", str(arguments.port)],
+            [sys.executable, "-P", "-m", "uvicorn", "app.main_advisor:app", "--host", "127.0.0.1", "--port", str(arguments.port)],
             cwd=str(REPOSITORY_ROOT / "backend"),
             env=environment,
         )

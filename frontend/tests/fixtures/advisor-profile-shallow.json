@@ -1,0 +1,557 @@
+{
+  "body": {
+    "advisor": {
+      "catalog_verified_on": "2026-11-12",
+      "limitations": [
+        "The repository is a shallow clone. History-based signals cover only the available commits.",
+        "Pull requests, issues and CI results are not read in this analysis. Only the committed tree and commit history are used."
+      ],
+      "profile_head": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+      "recommendations": [
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "HOOKS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "None until verification tooling exists.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "A hook needs a command worth running. None was observed, and Sean will not invent one.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "No test or lint tool or script was found in the parsed manifests.",
+          "risks": [],
+          "summary": "No declared check to automate.",
+          "title": "Hooks",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "MCP",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "None shown.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "No external client libraries, API descriptions or service files were observed.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "No integration signals were found.",
+          "risks": [],
+          "summary": "MCP would add complexity without a demonstrated need.",
+          "title": "MCP servers",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "CUSTOM_AGENTS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [
+            "obs-732531c3b90d"
+          ],
+          "expected_benefit": "Low.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Specialization pays off when areas differ. This repository does not show that.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "0 area(s) are large enough to justify a dedicated agent.",
+          "risks": [],
+          "summary": "One dominant area. Additional agents would add overhead.",
+          "title": "Custom agents",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "SKILLS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Low.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Skills package procedures. None were observed.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "Fewer than 3 scripts and fewer than 5 documents.",
+          "risks": [],
+          "summary": "No repeatable procedures observed.",
+          "title": "Skills",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "SUB_AGENTS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Low.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Delegation needs separable areas and tests to check each part.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "0 sizable area(s) and 0 test file(s).",
+          "risks": [],
+          "summary": "Little independent work to delegate.",
+          "title": "Sub-agents",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "KIROIGNORE",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "None shown.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Nothing in the committed tree needs excluding.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "None observed.",
+          "risks": [],
+          "summary": "No sensitive-looking or generated paths are committed.",
+          "title": "Kiroignore",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "USER",
+          "artifact_kind": null,
+          "capability": "PERMISSIONS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "PARTIAL_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "None shown.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "No repository signal calls for extra permission rules.",
+          "recommendation_status": "NOT_RECOMMENDED",
+          "repository_signal": "None observed.",
+          "risks": [],
+          "summary": "No sensitive-looking paths were found.",
+          "title": "Permissions",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "STEERING",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Without written conventions Sean cannot tell which standards the team follows, so it cannot propose steering content.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No lint, format, editor or contribution files in the committed tree.",
+          "risks": [],
+          "summary": "No committed convention sources were found.",
+          "title": "Steering",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "SPECS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "The repository is too small to show whether structured feature planning would help.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "1 source file(s) in the committed tree.",
+          "risks": [],
+          "summary": "Too little code to assess.",
+          "title": "Specs",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "REPOSITORY",
+          "artifact_kind": null,
+          "capability": "BUGFIX_SPECS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [
+            "obs-8e89bd2c2f5f"
+          ],
+          "expected_benefit": "Not assessable.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Fewer than 10 commits cannot show whether defects recur.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "1 commit(s) were readable.",
+          "risks": [],
+          "summary": "Too little history to assess recurring defects.",
+          "title": "Bugfix specs",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "USER",
+          "artifact_kind": null,
+          "capability": "POWERS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Powers are installed per user and chosen by the tools you use. The repository does not decide that.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Powers depends on your tools, not on repository content.",
+          "title": "Powers",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "ACP",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "ACP is an integration protocol used by editor clients. The repository does not decide which client you use.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "ACP integrations depends on your tools, not on repository content.",
+          "title": "ACP integrations",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "CHECKPOINTS",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Checkpoints and rewind are session features. They depend on how you work, not on repository content.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Checkpoints and rewind depends on your tools, not on repository content.",
+          "title": "Checkpoints and rewind",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "COMPACTION",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Compaction is automatic and depends on session length, which the repository does not show.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Context compaction depends on your tools, not on repository content.",
+          "title": "Context compaction",
+          "verification_method": "Not applicable."
+        },
+        {
+          "adoption_scope": "RUNTIME",
+          "artifact_kind": null,
+          "capability": "CHAT_IDE_CLI",
+          "confidence": "LOW",
+          "configuration_strategy": "NONE",
+          "evidence_classification": "INSUFFICIENT_EVIDENCE",
+          "evidence_references": [],
+          "expected_benefit": "Not assessable from the repository.",
+          "implementation_effort": "LOW",
+          "limitations": [
+            "Based on the committed tree and history at HEAD. Uncommitted files are not seen.",
+            "The repository is a shallow clone, so history signals are incomplete."
+          ],
+          "needs_external_setup": false,
+          "prerequisites": [],
+          "priority": "P3",
+          "reasoning": "Whether direct chat is enough depends on task size, which the repository does not show.",
+          "recommendation_status": "INSUFFICIENT_EVIDENCE",
+          "repository_signal": "No repository signal applies.",
+          "risks": [],
+          "summary": "Chat, IDE and CLI depends on your tools, not on repository content.",
+          "title": "Chat, IDE and CLI",
+          "verification_method": "Not applicable."
+        }
+      ],
+      "repository_id": "shallow",
+      "roadmap": {
+        "immediate": [],
+        "insufficient_evidence": [
+          "STEERING",
+          "SPECS",
+          "BUGFIX_SPECS",
+          "POWERS",
+          "ACP",
+          "CHECKPOINTS",
+          "COMPACTION",
+          "CHAT_IDE_CLI"
+        ],
+        "longer_term": [],
+        "near_term": [],
+        "not_recommended": [
+          "HOOKS",
+          "MCP",
+          "CUSTOM_AGENTS",
+          "SKILLS",
+          "SUB_AGENTS",
+          "KIROIGNORE",
+          "PERMISSIONS"
+        ]
+      }
+    },
+    "profile": {
+      "basis": "COMMITTED_TREE",
+      "head": "52a4377fed22c4fee21354c8d59223c91f3bfe98",
+      "history_limited": false,
+      "limitations": [
+        {
+          "code": "SHALLOW_CLONE",
+          "message": "The repository is a shallow clone. History-based signals cover only the available commits."
+        },
+        {
+          "code": "PULL_REQUESTS_ISSUES_CI_NOT_ANALYZED",
+          "message": "Pull requests, issues and CI results are not read in this analysis. Only the committed tree and commit history are used."
+        }
+      ],
+      "observations": [
+        {
+          "classification": "DOCUMENTED",
+          "count": 1,
+          "explanation": "1 committed source file(s) with a Python extension.",
+          "kind": "LANGUAGE",
+          "observation_id": "obs-6732fdb3041e",
+          "path": null,
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "Python"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 1,
+          "explanation": "1 source and 0 test file(s) under this area.",
+          "kind": "AREA",
+          "observation_id": "obs-732531c3b90d",
+          "path": "src",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "src"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 1,
+          "explanation": "1 committed document(s) under docs/.",
+          "kind": "DOCUMENTATION",
+          "observation_id": "obs-028023b81fbf",
+          "path": "docs",
+          "role": null,
+          "source": "GIT_TREE",
+          "value": "docs folder"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 1,
+          "explanation": "1 commit(s) were read.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-8e89bd2c2f5f",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "commits scanned"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 0,
+          "explanation": "0 commit subject(s) start with a fix keyword.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-84962b614826",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "fix commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 0,
+          "explanation": "0 commit subject(s) start with a feature keyword.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-51e5e8c9e385",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "feature commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 0,
+          "explanation": "0 commit subject(s) start with 'revert'.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-90417c1e9323",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "revert commits"
+        },
+        {
+          "classification": "DOCUMENTED",
+          "count": 0,
+          "explanation": "0 commit subject(s) follow the conventional-commit form.",
+          "kind": "COMMIT_STATS",
+          "observation_id": "obs-d1017bf2780e",
+          "path": null,
+          "role": null,
+          "source": "GIT_LOG",
+          "value": "conventional commits"
+        }
+      ],
+      "repository_id": "shallow",
+      "shallow": true,
+      "summary": {
+        "areas": [
+          {
+            "name": "src",
+            "source_files": 1,
+            "test_files": 0
+          }
+        ],
+        "history": {
+          "commits_scanned": 1,
+          "conventional_commits": 0,
+          "distinct_authors": 1,
+          "feature_commits": 0,
+          "fix_commits": 0,
+          "revert_commits": 0
+        },
+        "languages": [
+          {
+            "files": 1,
+            "language": "Python"
+          }
+        ],
+        "source_files": 1,
+        "test_files": 0,
+        "tree_entries": 2
+      },
+      "truncated": false
+    }
+  },
+  "method": "POST",
+  "name": "profile-shallow",
+  "path": "/repositories/shallow/profile",
+  "request": null,
+  "status": 200
+}

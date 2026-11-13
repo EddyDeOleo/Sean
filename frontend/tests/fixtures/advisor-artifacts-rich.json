@@ -1,0 +1,106 @@
+{
+  "body": {
+    "bundles": [
+      {
+        "capability": "STEERING",
+        "files": [
+          {
+            "alternative_path": null,
+            "content": "---\ninclusion: always\n---\n# Project conventions\n\nPrepared by Sean from what is committed in this repository (commit 158a070b). Review it, change it to match how your team really works, then commit it. Sean wrote nothing here that it did not observe.\n\n## Layout\n- Python: 32 source files\n- TypeScript: 14 source files\n- Area `api`: 15 source and 1 test files\n- Area `web`: 14 source and 1 test files\n- Area `worker`: 14 source and 1 test files\n- Area `scripts`: 3 source and 0 test files\n\n## Where conventions are written down\nFollow these files. They are included as context:\n\n#[[file:.editorconfig]]\n#[[file:ruff.toml]]\n#[[file:CONTRIBUTING.md]]\n\n## Checks the repository declares\n- Run the tests: `npm run test`\n- Run the linter: `npm run lint`\n\n## Keeping this file true\nIf a convention changes, change this file in the same commit.\n",
+            "content_sha256": "be2e213fb5c958d57543e5b57b85304872d4d9d05e9fa4d4f59044ecefb89874",
+            "diff": null,
+            "existing_content": null,
+            "kind": "STEERING",
+            "path": ".kiro/steering/project-conventions.md",
+            "scope": "REPOSITORY",
+            "status": "NEW",
+            "validation": {
+              "ok": true,
+              "problems": []
+            }
+          }
+        ],
+        "title": "Steering"
+      },
+      {
+        "capability": "KIROIGNORE",
+        "files": [
+          {
+            "alternative_path": null,
+            "content": "# Prepared by Sean from paths committed in this repository. Review before committing.\n# .kiroignore limits what the agent reads. It is not a security boundary. Also add permission deny rules (user level).\n\n# Secret-bearing files found in the committed tree\n/.env\n\n# The same kinds of file elsewhere in the repository\n.env.*\n!.env.example\n",
+            "content_sha256": "c88d0b9325847cfe556bd1e92c898459a760b04ff91c84b5c359e78899d0644c",
+            "diff": null,
+            "existing_content": null,
+            "kind": "KIROIGNORE",
+            "path": ".kiroignore",
+            "scope": "REPOSITORY",
+            "status": "NEW",
+            "validation": {
+              "ok": true,
+              "problems": []
+            }
+          }
+        ],
+        "title": "Kiroignore"
+      },
+      {
+        "capability": "HOOKS",
+        "files": [
+          {
+            "alternative_path": null,
+            "content": "{\n  \"version\": \"v1\",\n  \"hooks\": [\n    {\n      \"name\": \"Run the tests\",\n      \"description\": \"Sean prepared this from the repository's own manifests: run the tests after a file is saved.\",\n      \"trigger\": \"PostFileSave\",\n      \"action\": {\n        \"type\": \"command\",\n        \"command\": \"npm run test\"\n      },\n      \"timeout\": 120,\n      \"matcher\": \"\\\\.(py|ts|tsx)$\"\n    },\n    {\n      \"name\": \"Run the linter\",\n      \"description\": \"Sean prepared this from the repository's own manifests: run the linter after a file is saved.\",\n      \"trigger\": \"PostFileSave\",\n      \"action\": {\n        \"type\": \"command\",\n        \"command\": \"npm run lint\"\n      },\n      \"timeout\": 120,\n      \"matcher\": \"\\\\.(py|ts|tsx)$\"\n    }\n  ]\n}\n",
+            "content_sha256": "3c63377f6a8329d2d4ec48f94ed8e4ebb583193526545f2532eca96b58e7907b",
+            "diff": null,
+            "existing_content": null,
+            "kind": "HOOK",
+            "path": ".kiro/hooks/run-checks-after-edits.json",
+            "scope": "REPOSITORY",
+            "status": "NEW",
+            "validation": {
+              "ok": true,
+              "problems": []
+            }
+          }
+        ],
+        "title": "Hooks"
+      }
+    ],
+    "head": "158a070bc8ac917868d8307a80254f3f611830db",
+    "instructions": [
+      {
+        "capability": "PERMISSIONS",
+        "scope": "USER",
+        "snippet": "rules:\n  - capability: fs_read\n    effect: deny\n    match:\n      - \".env\"\n      - \"**/.env\"\n",
+        "snippet_language": "yaml",
+        "steps": [
+          "Permissions are enforced by Kiro and live in your own settings. They cannot be committed to the repository, so Sean does not prepare a repository file.",
+          "Add the rules below to your Kiro workspace permissions file, or to the user-level permissions.yaml.",
+          "Ask the agent to read one of the listed files and confirm the read is denied."
+        ],
+        "title": "Deny the agent access to secret-bearing files"
+      }
+    ],
+    "repository_id": "rich",
+    "skipped": [
+      {
+        "capability": "POWERS",
+        "reason": "This capability is not recommended for this repository, so nothing is prepared."
+      }
+    ],
+    "verification": []
+  },
+  "method": "POST",
+  "name": "artifacts-rich",
+  "path": "/artifacts/preview",
+  "request": {
+    "capabilities": [
+      "STEERING",
+      "KIROIGNORE",
+      "HOOKS",
+      "PERMISSIONS",
+      "POWERS"
+    ],
+    "repository_id": "rich"
+  },
+  "status": 200
+}

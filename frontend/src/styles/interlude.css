@@ -1,0 +1,171 @@
+/*
+ * The interlude: a full-screen Ouija and, after it, the game (Spec 4 section 10).
+ *
+ * Motion rules: nothing flashes more than three times per second. The only brief burst is the single glitch of the
+ * interruption (two steps in 0.8 s, once, not a loop). The candle glow is a slow loop of several seconds. Reduced motion
+ * (the system setting, or the user's setting) removes movement and the glitch: the planchette is placed at rest and the
+ * lines simply appear.
+ */
+
+.il-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 55%, #1a1410 0%, #0b0a0c 55%, #050405 100%);
+  color: #d9ccb2;
+  animation: il-fade-in 1.6s ease both;
+}
+.il-overlay[data-reduced="true"] {
+  animation: none;
+}
+@keyframes il-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.il-fiction {
+  position: absolute;
+  top: 0.75rem;
+  left: 1rem;
+  right: 11rem;
+  margin: 0;
+  font-size: 0.82rem;
+  color: #b3a78f;
+}
+.il-skip {
+  position: absolute;
+  top: 0.6rem;
+  right: 1rem;
+  z-index: 2;
+  min-height: 2.2rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid #5c4a2a;
+  border-radius: 6px;
+  background: rgba(11, 10, 12, 0.7);
+  color: #f1e8d4;
+  font: inherit;
+  cursor: pointer;
+}
+.il-skip:hover {
+  border-color: #c8a14a;
+}
+.il-skip:focus-visible {
+  outline: 3px solid #e2bd68;
+  outline-offset: 2px;
+}
+
+.il-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(94vw, 150vh);
+  max-height: 100vh;
+  padding-top: 2.5rem;
+}
+.il-board {
+  width: 100%;
+  height: auto;
+  max-height: 68vh;
+  filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.7));
+  transition: opacity 1.4s ease, filter 1.4s ease;
+}
+.il-board[data-dim="true"] {
+  opacity: 0.32;
+  filter: drop-shadow(0 0 40px rgba(110, 29, 29, 0.55));
+}
+.il-planchette {
+  transition: transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.il-board[data-reduced="true"] .il-planchette {
+  transition: none;
+}
+.il-candle {
+  animation: il-candle 5.2s ease-in-out infinite;
+}
+.il-board[data-reduced="true"] .il-candle {
+  animation: none;
+}
+@keyframes il-candle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.il-whisper {
+  margin: 0.75rem 1rem 0;
+  max-width: 60ch;
+  text-align: center;
+  font-family: "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic;
+  color: #b3a78f;
+}
+.il-lines {
+  min-height: 6.5rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+.il-line {
+  margin: 0.2rem 1rem;
+  font-family: "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: clamp(1.4rem, 3.6vw, 2.4rem);
+  color: #f1e8d4;
+  animation: il-line-in 1.2s ease both;
+}
+.il-line-two {
+  color: #e07a6a;
+}
+.il-overlay[data-reduced="true"] .il-line {
+  animation: none;
+}
+@keyframes il-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* One short burst when the first line appears. It is not repeated. */
+.il-stage[data-glitch="true"] .il-board {
+  animation: il-glitch-once 0.8s steps(2, end) 1;
+}
+@keyframes il-glitch-once {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-6px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.il-game {
+  position: absolute;
+  inset: 0;
+}
+.il-closing {
+  margin: 0;
+  color: #b3a78f;
+}
+
+/* The application behind the interlude is inert and hidden from view. */
+.sx-shell[data-interlude="true"] {
+  visibility: hidden;
+}
