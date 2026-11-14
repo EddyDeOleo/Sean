@@ -32,6 +32,8 @@ Departures from approved text:
 | X-4 | Spec 2 (structured form) | One natural-language input replaces the long form. The structured fields remain available under "Advanced target". | Directive §4.2. |
 | X-5 | Spec 3 §4 (state machine) | Analysis, Advisor, game and report state become independent reducers (section 9.2). | Directive §13.1. |
 | X-6 | E-D13 (Gemini deferred, no private content to the Free Tier) | Gemini may be used for intent interpretation only, and only the user's typed sentence and registered repository IDs may be sent (section 8). | Directive §14 with E-D13 privacy rule preserved. |
+| X-7 | Section 10 (the game only after a successful, saved investigation) | The game is its own experience. It can be started at any time, with no backend and no report, and it is offered after a failed or empty investigation. Section 17.1. | Owner decision 2026-11-13. |
+| X-8 | O-2 (backend read-only, no existing Phase 3 file changes) | The backend writes its own registry file on an explicit user action, and two Phase 3 files were amended for it. Sections 16 and 17.5. | Owner decision 2026-11-13. |
 
 Not departures: Phase 3 stays CLOSED. Classifications `DOCUMENTED`, `INFERRED`, `PARTIAL_EVIDENCE`, `INSUFFICIENT_EVIDENCE` keep their meaning. Story content never alters evidence.
 
@@ -176,6 +178,8 @@ Sections: repository overview, engineering history, technical findings, Kiro Rep
 
 ## 10. Ouija and 3D game
 
+> **Superseded in part by section 17 (2026-11-13).** The automatic Ouija and game after a successful analysis stay as described here. The game can also be started on its own, and the creature, the capture and the audio are as in sections 17.2 to 17.4.
+
 The Ouija appears only after the report snapshot is saved and only for a successful analysis. Failed, invalid, rejected or cancelled analysis never triggers it. Sequence: fade, board, autonomous planchette, settle, 2000 ms, "Wait... something is wrong.", interruption, game. Fictional lines are labelled fiction and never mixed into the report. Reduced motion produces static text. Skip is always available.
 
 The game is first person and fills the viewport (Fullscreen API where permitted, otherwise a fixed full-viewport layer). Engine: plain Three.js with an own fixed-step loop. Game rules are pure TypeScript modules with no Three.js import, so they are unit-testable: level map and collision, objectives, flashlight and noise, monster state machine, capture and recovery. Three.js only renders state. Assets are procedural (geometry and canvas textures), so there are no third-party art assets to license.
@@ -231,8 +235,107 @@ These record how stages 4 to 8 were implemented, including where the implementat
 - **Threat.** It wakes 8 s after the first clue, not at once. It hears sprinting from 7 tiles and walking from 3.2 tiles, sees within a view cone (shorter when the flashlight is off), pursues slower than the player sprints, loses the trail after 5 s without sight, then recovers and searches. Intensity (low, normal, high) scales its speed and sight.
 - **Keyboard turning** is 3.6 rad/s. Mouse look uses pointer lock when granted.
 - **Artifacts.** Names and paths copied from a repository into generated files must be plain identifiers (letters, digits and `. _ / @ + -`), so repository text cannot become instructions in an always-included steering file. Text that looks like a secret is never sent to the browser, whether it is generated or already committed.
-- **Sound.** Procedural Web Audio, no assets (`docs/development/audio-asset-manifest.md`). Off until the user turns it on in this page. Ambient, effects and master levels persist.
+- **Sound.** Procedural Web Audio, no assets (`docs/development/audio-asset-manifest.md`). On by default from the first click or key press (section 17.6). Ambient, effects and master levels persist.
 - **Known limits.** A repository with more than 20 000 tracked paths may be reported as having a file "absent" or "NEW" when it exists beyond that limit. The scene is hand-authored and small (one archive level). Browser coverage is Microsoft Edge only. The audio output was verified through the Web Audio graph and fake contexts and a clean browser run; whether it sounds good was not judged. Gemini was not reached (HTTP 503 from the provider at the last attempt); the deterministic reader is the tested path.
 ## 15. Deferred and known limits
 
 Pull requests, issues and CI results are not analyzed in this scope. Only locally registered repositories are supported; there is no cloning. Gemini is not exercised against the live service until the owner authorizes a call. Browser coverage is Microsoft Edge only. Gameplay feel and horror quality are subjective and are judged through screenshots, a recording, and the owner's play.
+
+## 16. Repository management API
+
+Owner decision: users add, edit, and remove registered repositories from the application, without restarting the backend. This section supersedes the "no filesystem paths" and "read-only" statements of sections 4.2, 4.3 and 13 for these routes only.
+
+### 16.1 Endpoints
+
+All three are served by `app.main_advisor` (code in `app/api/repository_routes.py` and `app/modules/repository/management.py`). `GET /repositories` items now have the shape `{repository_id, display_name, path, available, github}`. `display_name` defaults to `repository_id`. `path` is the registered root as stored. Registered entries whose folder is currently unusable are listed with `available: false`, so they can be edited or removed.
+
+| Method and path | Body | Success |
+|---|---|---|
+| `POST /repositories` | `{repository_id, display_name, path}` | 201, a list item |
+| `PUT /repositories/{repository_id}` | `{display_name, path}` | 200, a list item. The identifier cannot change. |
+| `DELETE /repositories/{repository_id}` | none | 200 `{"removed": "<id>"}` |
+
+Errors use the existing body `{code, message, retryable}` (plus `field` for a bad path or body, and `existing_repository_id` for `DUPLICATE_PATH`): `INVALID_INPUT` 400, `INVALID_REPOSITORY_ID` 400, `INVALID_DISPLAY_NAME` 400, `PATH_NOT_FOUND` 400, `NOT_A_GIT_REPOSITORY` 400, `DUPLICATE_ID` 409, `DUPLICATE_PATH` 409, `REPOSITORY_NOT_FOUND` 404, `BUSY` 429, `REGISTRY_WRITE_FAILED` 500, `REGISTRY_UNAVAILABLE` 503. Messages are fixed strings and never include request values or paths.
+
+POST and PUT require `Content-Type: application/json`, a body of at most 16 KiB, and exactly the documented fields (unknown, missing, or mistyped fields give `INVALID_INPUT`). DELETE has no body. The local-only guard (section 13) applies to all three.
+
+### 16.2 Validation
+
+- `repository_id` matches `^[a-z0-9][a-z0-9_-]{0,63}$`. `display_name` is 1 to 80 characters with no control, invisible (format), surrogate, or line-separator characters.
+- `path` must be an absolute drive-letter path (`C:\...`), at most 4096 characters. Rejected with `INVALID_INPUT`: relative or drive-relative paths, `..` segments, UNC and device prefixes (`\\server\share`, `\\?\`, `\\.\`), control characters, `< > " | ? *`, `:` after the drive, reserved device names, segments ending in a dot or space. UNC is refused although the loader accepts it, because opening a network path can send credentials to a remote host. The stored path is the normalized spelling (backslashes, no trailing separator, no `.` segments).
+- The folder must exist and be a directory (`PATH_NOT_FOUND`), and must be the root of a Git work tree. This is checked with `run_git` (`rev-parse --show-toplevel`; guarded runner, no repository-controlled program) and a same-folder comparison. A subfolder of a repository, a bare repository, and the inside of `.git` give `NOT_A_GIT_REPOSITORY`.
+- Duplicates: `DUPLICATE_ID` for the identifier, `DUPLICATE_PATH` for the folder after `realpath`, `normcase`, and `normpath` (case, trailing separators, `.` segments, forward slashes, junctions, symlinks, 8.3 names). An edit may keep its own folder. The comparison covers every entry in the file, including entries that are currently unusable.
+
+### 16.3 Writing the registry
+
+The backend writes only `%LOCALAPPDATA%\Sean\config\repositories.json` (from `default_registry_path()`, never from request data), plus one `repositories.json.bak` and a short-lived temp file in the same directory. It creates only `Sean` and `Sean\config`. It never writes, lists, or changes a repository, on add, edit, or delete.
+
+All mutations take one process-wide lock. Each reads the current file, edits the raw entry list, and writes the whole file: temp file with a fixed name pattern (`repositories.json.tmp-<random>`), flush, `fsync`, `os.replace`. Entries Sean does not edit stay exactly as they were, in the same order, including entries that fail validation now (for example a moved folder). New entries are appended. Edits keep `github` and other stored fields. On any failure the original file is untouched and the temp file is removed (`REGISTRY_WRITE_FAILED`). A missing file is created. A file that is unreadable, over `MAX_REGISTRY_BYTES`, not valid JSON, repeats a key, or has an unsupported structure is never overwritten (`REGISTRY_UNAVAILABLE`, as is an unset `LOCALAPPDATA`). `RegistryEntry` gained an optional `display_name` (1 to 80 characters).
+
+### 16.4 Live reload
+
+`RegistryHolder` (`app/modules/repository/holder.py`) holds the current `LoadedRegistry`. `create_app` and `create_advisor_router` accept either a `LoadedRegistry` (unchanged behavior) or a holder, which they read on every request. After a successful write the registry is reloaded from the file and the holder is replaced, so the next request on any route (investigations, profile, interpret, artifacts preview, list) sees the change. The profile cache is keyed by repository, stored root, and HEAD, and entries for removed or re-pointed repositories are dropped when the registry changes. `app.main` (the Phase 3 entry point) and the MCP entry point still load the registry once at startup, so they need a restart to see changes.
+
+### 16.5 Phase 3 amendment (owner-authorized, repository management only)
+
+- `backend/app/api/app.py`: `create_app` accepts `LoadedRegistry | RegistryHolder` and passes `registry.current` to `investigate` when given a holder. No route, status code, or message changed.
+- `backend/app/modules/repository/registry.py`: `RegistryEntry` gained the optional `display_name` field. The loader and resolution logic are unchanged.
+
+Known limits: a mapped network drive that does not answer can delay the existence check of the request that names it. Windows reserved-name and short-name handling relies on the operating system's path resolution.
+
+## 17. Product decisions of 2026-11-13 (owner): the game is its own experience, a scarier creature, and repository management
+
+These decisions supersede any conflicting text above, including the gating rule at the start of section 10 and the readiness rules in section 9. The owner did not supply an item 5 in the numbered list of this round (the items were 1, 2, 3, 4 and 6). No requirement was invented for it.
+
+### 17.1 The game is independent of the investigation (supersedes section 10, first paragraph, and departure X-2 in part)
+
+New departure **X-7**: the game no longer needs a successful, saved investigation.
+
+- **Three lifecycles, kept apart.** (1) The investigation lifecycle (`analysisMachine`, snapshots, saved reports, statuses and error causes). (2) The game lifecycle (`interludeMachine` with the new `BEGIN_GAME` event: straight to `GAME_INITIALIZATION`, then play, caught, retry, give up, quit, escaped, failed). (3) The optional use of report findings as clues (`features/game/clues.ts`). The game reads a snapshot, never writes one. The investigation never reads the game.
+- **Entry points.** The game after an analysis is the surprise, as before. The only manual entry is the demo in Settings, under Experience ("Play the demo"). It has no report and no backend. It is not in the sidebar, on the progress screen, in error notices, or on a report (section 17.7).
+- **Case A, success.** A game started from the report, or the automatic one, takes its clues from the report's findings with the report's own classification. The clue set is fixed when the game starts.
+- **Case B, incomplete or insufficient.** `INSUFFICIENT_EVIDENCE` findings never become clues. Where the report has no usable evidence the clues are torn archive tags that say "not evidence". The report still says what it said.
+- **Case C, technical failure.** The error and its cause stay on screen, unchanged and not written into the story. The game starts only when the user chooses. "Try again" repeats the same request. Nothing waits for the game and the game waits for nothing. If the game cannot run (no WebGL, touch only, lost context) a note says so and Sean is as it was.
+- **Finishing while playing.** If an investigation finishes during a game, the game is not interrupted. The report waits behind it, with no Ouija and no second interruption.
+- **Fiction versus evidence.** Evidence clues show the report's classification label. Fictional clues show "ATMOSPHERE · not evidence". The first screen of the game says which kind of run it is.
+- Settings: intensity, graphics quality and the scare are always available, because the Play button uses them.
+
+### 17.2 The creature (supersedes the creature text in section 14)
+
+- **Body.** `features/game/creature.ts`: tall, thin, stooped humanoid built from primitives with a canvas skin texture (mottling, stains, veins) and roughened surfaces. Long arms that reach the floor, visible ribs, an elongated head on a thin neck, hollow sockets with a faint glint, a loose jaw with uneven teeth, a faint cold glow so it can be read in the dark. Animated: a heavy uneven gait, swaying arms, head that follows the player when it sees them, twitches, a deeper stoop and reaching arms while hunting, a jaw that opens.
+- **Rules** (`features/game/world.ts`, pure, seeded, no rendering).
+  - It sleeps until a few seconds after the first clue (5, 8 or 10 s by difficulty), then makes rounds through 16 waypoints, with looks around at each stop. Every third choice is a hiding place it has not checked lately.
+  - It hears sprinting from 7 tiles and walking from 3.2 (times the difficulty's hearing). A clue rustles (5 tiles). The gate groans (9 tiles). It goes to where the sound was made, not to where the player is now, looks around, then searches the waypoints near it.
+  - It sees in a cone, farther when the flashlight is lit. It senses anything within 1.6 tiles in line of sight.
+  - Hunted: it runs at 2.9 tiles per second (times difficulty), slower than a sprinting player (3.6), and lunges once when close, then rests 7 s. Out of sight for 5 s it stops, listens, then searches around where it lost the player.
+  - **Hiding.** Lockers (`H` in the map). E to enter or leave, any movement leaves. A creature that did not see the player go in does not find them by sight. A creature that was chasing, or sees them go in, or is within 1.6 tiles, knows and comes straight there. Otherwise it may open the place after standing beside it (7, 4.5 or 2.5 s by difficulty).
+  - Difficulty changes only the creature: speed, sight, hearing, wake delay, search width and how long it dwells at a locker.
+- **Balance by playing** (`tests/gameBalance.test.ts`): a scripted player plays 80 games on each difficulty on the real rules, varying route and patience by game. A careful player (walks, stands still or steps out of sight when it is about, runs and hides when hunted) escapes in 57, 47 and 43 of 80 games on low, normal and high. A reckless sprinter escapes in 36, 20 and 4. A player who stands still never escapes. The tests assert winnable on every setting, not trivial, harder with each step, and a real threat to the careless.
+- **Presence, tension and camera.** Distant footsteps, breathing, a heartbeat that rises with tension, a low drone when it is close, now and then a drip, a pipe or a far creak. Near it, lights in the room stutter and the flashlight dips, the edges darken, the field of view tightens and pulses and the picture shakes a little. Light changes hold their state for at least 0.4 s, so nothing changes more than 2.5 times a second. With reduced motion, or with the scare setting off, none of that moves: lights dim steadily and nothing shakes.
+
+### 17.3 The capture (jumpscare)
+
+- **Picture.** On capture the camera snaps to the creature, which is thrown to the camera: its face fills the view, arms wide, jaw open, with one pale flash (0.16 s, once), a red fade and a shake that dies away. The choices fade in after about a second so the face is seen first. With the scare off there is none of this: only a plain capture screen. With reduced motion there is no flash and no shake.
+- **Sound.** A layered, distorted scream (several detuned voices with pitch sweeps and vibrato, two moving formant filters, a noise burst and a sub impact) with a strong onset and a controlled decay, and a heavy impact. Both are priority cues. Peak level is measured: at most -3 dBFS at every volume setting and in the worst mix of simultaneous sounds, through a soft limiter. The scare setting also turns off the scream and softens the impact.
+- **Retry** restores the camera, field of view, shake, creature pose, lights and controls; tests cover it.
+
+### 17.4 The Ouija sounds like wood
+
+Procedural (no recordings, no new licences): resonant wooden knocks and thuds from decaying inharmonic partials with a noise click, planchette ticks, felt-and-wood sliding with stick-slip, creaks, and a room bed with faint candle crackle. Measured in Edge with an offline render; WAV files can be written for listening (`docs/development/audio-asset-manifest.md`).
+
+### 17.5 Repository management on the existing Repositories page
+
+New departure **X-8** (supersedes owner decision O-2's "read-only backend" for this one purpose): the backend may write its own registry file, `%LOCALAPPDATA%\Sean\config\repositories.json`, and nothing else, on an explicit user action. Details, validation, atomic write, live reload, security boundary and the two Phase 3 files amended (`app/api/app.py`, `app/modules/repository/registry.py`) are in section 16.
+
+- **One page.** The existing Repositories page lists each repository with name, identifier, folder and status, and adds Add, Edit (name and folder; the identifier is fixed because saved reports refer to it) and Remove (with an explicit confirmation that says the folder is not touched). Nothing was added as a separate page. The request screen's repository menu shows names and updates at once.
+- **Friction removed.** The identifier is suggested from the name, a path pasted from Explorer's "Copy as path" (with quotes) is accepted, each problem is shown next to its field in plain words, and a repository can be used the moment it is added. No restart, no file editing.
+- **Hardening added after review.** Every change must carry `X-Sean-Client: web`, which a web page on another origin cannot send without a preflight the backend does not answer. The list reload runs under the write lock, so concurrent changes cannot leave the list older than the file.
+- **Known limits.** One backend process is assumed (a second process writing the same file is not coordinated). The MCP entry point reads the registry once at start. A `.git` file that redirects to another directory is accepted, as Git accepts it. A mapped network drive that does not answer can delay the request that names it.
+
+### 17.6 Sound is on by default (departure X-9)
+
+Spec 2 section 14.1 says sound is off by default and is never stored as on. The owner decided on 2026-11-13 that the game's sound is on by default. Browsers still forbid audio before a user gesture, so sound starts with the first click or key press in the page. The choice (on or off), the volume and the mute are stored. Outside the interlude and the game nothing plays, so nothing is heard before the surprise. Spec 2 itself is not edited.
+
+### 17.7 The demo lives in Settings only (decision of 2026-11-13)
+
+The owner decided the playable demo belongs in Settings, under Experience, and not in the sidebar, on the Investigating page, in error notices or on the report. The game after a prompt remains the surprise. The earlier rule of 17.1 that a failed investigation offers the game is replaced by this: after a failure the game is reached only through the demo in Settings. The failure itself is still shown with its cause.

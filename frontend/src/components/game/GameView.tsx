@@ -7,12 +7,13 @@
  * the pointer is released and every GPU resource is freed.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GameProps } from "../../features/interlude/gameApi";
 import { GameInput, MOUSE_SENSITIVITY } from "../../features/game/input";
 import type { GameRenderer } from "../../features/game/renderer";
-import { NO_INPUT, createWorld, step, threatInfo, toggleFlashlight, type GameEvent, type World } from "../../features/game/world";
+import { NO_INPUT, createWorld, step, nearHidingPlace, threatInfo, toggleFlashlight, toggleHiding, type GameEvent, type World } from "../../features/game/world";
 import { LEVEL } from "../../features/game/level";
+import { buildClues } from "../../features/game/clues";
 import type { ClueRecord } from "../../features/game/clues";
 
 interface Hud {
@@ -22,6 +23,10 @@ interface Hud {
   gateOpen: boolean;
   threat: "none" | "near" | "hunting";
   flashlight: boolean;
+  /** Inside a hiding place. */
+  hidden: boolean;
+  /** A hiding place is within reach. */
+  canHide: boolean;
 }
 
 const CLASSIFICATION_TEXT: Record<string, string> = {
@@ -52,10 +57,19 @@ export function GameView(props: GameProps) {
   const [unsupported, setUnsupported] = useState<string | null>(null);
   const [paused, setPaused] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  // Whether the browser has the mouse captured for mouse look. Releasing it (Esc, in the browser) does not pause the game.
+  const [mouseLocked, setMouseLocked] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const announce = useCallback((text: string): void => setAnnouncement((previous) => (previous === text ? `${text}\u00a0` : text)), []);
-  const [hud, setHud] = useState<Hud>({ collected: 0, total: 0, last: null, gateOpen: false, threat: "none", flashlight: true });
+  const [hud, setHud] = useState<Hud>({ collected: 0, total: 0, last: null, gateOpen: false, threat: "none", flashlight: true, hidden: false, canHide: false });
   const primaryRef = useRef<HTMLButtonElement>(null);
+  // Only a report that has real evidence lends the game real clues. A report without any (or no report) gives atmosphere only.
+  /** A click on the picture takes the mouse for mouse look, while the game is being played. */
+  const captureMouse = (): void => {
+    const canvas = rendererRef.current?.canvas;
+    if (canvas && phase === "GAME_ACTIVE" && !pausedRef.current) requestLock(canvas);
+  };
+  const fromReport = useMemo(() => buildClues(props.snapshot).some((clue) => clue.kind === "EVIDENCE"), [props.snapshot]);
 
   const setPausedBoth = useCallback((value: boolean) => {
     pausedRef.current = value;
@@ -79,13 +93,8 @@ export function GameView(props: GameProps) {
       try {
         const { GameRenderer } = await import("../../features/game/renderer");
         if (cancelled || !containerRef.current) return;
-        let renderer: GameRenderer | null = null;
-        try {
-          renderer = new GameRenderer(containerRef.current, LEVEL, propsRef.current.quality);
-        } catch (error) {
-          renderer?.dispose();
-          throw error;
-        }
+        // The renderer frees what it built if its constructor fails.
+        const renderer = new GameRenderer(containerRef.current, LEVEL, propsRef.current.quality);
         rendererRef.current = renderer;
         renderer.canvas.addEventListener("webglcontextlost", onContextLost);
         setReady(true);
@@ -112,16 +121,23 @@ export function GameView(props: GameProps) {
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!ready || !renderer) return;
-    const world = createWorld(propsRef.current.snapshot, propsRef.current.intensity);
+    const world = createWorld(propsRef.current.snapshot, propsRef.current.intensity, LEVEL, attempt);
     worldRef.current = world;
     renderer.resetView();
+    renderer.setJumpscare(propsRef.current.jumpscare);
     renderer.setClues(world);
     renderer.resize();
     renderer.render(world, 0, propsRef.current.reducedMotion);
     setPausedBoth(false);
-    setHud({ collected: 0, total: world.clues.length, last: null, gateOpen: false, threat: "none", flashlight: true });
+    setHud({ collected: 0, total: world.clues.length, last: null, gateOpen: false, threat: "none", flashlight: true, hidden: false, canHide: false });
+    rootRef.current?.style.setProperty("--vignette-stop", "48%");
     setAnnouncement("");
   }, [ready, attempt, setPausedBoth]);
+
+  // The scare setting can change between attempts, from the first screen.
+  useEffect(() => {
+    rendererRef.current?.setJumpscare(props.jumpscare);
+  }, [ready, props.jumpscare]);
 
   // Keep the picture the right size.
   useEffect(() => {
@@ -157,6 +173,17 @@ export function GameView(props: GameProps) {
           propsRef.current.onEvent?.(event);
           if (event.type === "FLASHLIGHT") setHud((h) => ({ ...h, flashlight: event.on }));
         },
+        onInteract: () => {
+          const world = worldRef.current;
+          if (!world || pausedRef.current || world.status !== "PLAYING") return;
+          for (const event of toggleHiding(world)) {
+            propsRef.current.onEvent?.(event);
+            if (event.type === "HIDING") {
+              setHud((h) => ({ ...h, hidden: event.hidden }));
+              announce(event.hidden ? "You are hiding. Stay still and quiet. Press E or move to come out." : "You came out of hiding.");
+            }
+          }
+        },
         onPause: () => {
           const next = !pausedRef.current;
           setPausedBoth(next);
@@ -177,19 +204,19 @@ export function GameView(props: GameProps) {
     );
     inputRef.current = input;
     input.attach();
-    const onLockChange = (): void => {
-      if (document.pointerLockElement !== canvas && !pausedRef.current) setPausedBoth(true);
-    };
+    const onLockChange = (): void => setMouseLocked(document.pointerLockElement === canvas);
+    // The creature does not wait for a player who has looked away: a hidden tab or a window that lost focus pauses the game.
+    const onAway = (): void => setPausedBoth(true);
     const onHidden = (): void => {
-      if (document.hidden) setPausedBoth(true);
+      if (document.hidden) onAway();
     };
     document.addEventListener("pointerlockchange", onLockChange);
     document.addEventListener("visibilitychange", onHidden);
-    window.addEventListener("blur", onHidden);
+    window.addEventListener("blur", onAway);
     return () => {
       document.removeEventListener("pointerlockchange", onLockChange);
       document.removeEventListener("visibilitychange", onHidden);
-      window.removeEventListener("blur", onHidden);
+      window.removeEventListener("blur", onAway);
       input.detach();
       if (inputRef.current === input) inputRef.current = null;
     };
@@ -215,9 +242,13 @@ export function GameView(props: GameProps) {
         setHud((h) => (h.threat === threat ? h : { ...h, threat }));
         if (threat === "hunting") announce("The creature has seen you. Run.");
         else if (event.previous === "PURSUING") announce("You lost it. Stay quiet.");
+      } else if (event.type === "HIDING") {
+        setHud((h) => (h.hidden === event.hidden ? h : { ...h, hidden: event.hidden }));
       } else if (event.type === "CAUGHT") {
+        setHud((h) => (h.hidden ? { ...h, hidden: false } : h));
         p.onCaught();
       } else if (event.type === "ESCAPED") {
+        setHud((h) => (h.hidden ? { ...h, hidden: false } : h));
         p.onEscaped();
       }
     };
@@ -236,9 +267,12 @@ export function GameView(props: GameProps) {
           const info = threatInfo(world);
           const level = info.level;
           propsRef.current.onThreat?.(info);
+          const hunting = world.monster.state === "PURSUING" || world.monster.state === "ATTACKING";
+          rootRef.current?.style.setProperty("--vignette-stop", hunting ? "40%" : "48%");
+          const canHide = nearHidingPlace(world);
           setHud((h) => {
             const threat = h.threat === "hunting" ? "hunting" : level > 0.6 ? "near" : "none";
-            return threat === h.threat ? h : { ...h, threat };
+            return threat === h.threat && canHide === h.canHide ? h : { ...h, threat, canHide };
           });
         }
       }
@@ -250,6 +284,8 @@ export function GameView(props: GameProps) {
         root.dataset.monster = world.monster.state;
         root.dataset.monsterAt = `${world.monster.pos.x.toFixed(2)},${world.monster.pos.y.toFixed(2)}`;
         root.dataset.status = world.status;
+        root.dataset.hidden = String(world.player.hidden);
+        root.dataset.canhide = String(nearHidingPlace(world));
       }
       frame = requestAnimationFrame(tick);
     };
@@ -288,8 +324,18 @@ export function GameView(props: GameProps) {
   const threatText = hud.threat === "hunting" ? "The creature is hunting you." : hud.threat === "near" ? "Something is near." : "";
 
   return (
-    <div className="gm-root" ref={rootRef} data-testid="game" data-phase={phase} data-attempt={attempt} data-paused={paused}>
-      <div className="gm-canvas" ref={containerRef} />
+    <div className="gm-root" ref={rootRef} data-testid="game" data-phase={phase} data-attempt={attempt} data-paused={paused} data-reduced={props.reducedMotion}>
+      <div className="gm-canvas" ref={containerRef} onClick={captureMouse} />
+      <div className="gm-vignette" aria-hidden="true" data-testid="vignette" />
+      <div className="gm-grain" aria-hidden="true" data-testid="film-grain" />
+      {ready && phase === "GAME_ACTIVE" && !paused && !mouseLocked ? (
+        <div className="gm-mouse-hint" role="note" data-testid="mouse-hint">
+          <p className="gm-mouse-title">Look with the mouse</p>
+          <p>Click the picture to take the mouse. The arrow keys also turn you, and the game keeps running.</p>
+          <p className="gm-mouse-sub"><kbd>Esc</kbd> pauses the game.</p>
+        </div>
+      ) : null}
+      {hud.hidden && phase === "GAME_ACTIVE" ? <div className="gm-slit" aria-hidden="true" data-testid="hiding-view" /> : null}
 
       {unsupported ? (
         <div className="gm-card" role="alert" data-testid="game-unsupported">
@@ -302,6 +348,7 @@ export function GameView(props: GameProps) {
           <p className="gm-counter" data-testid="clue-counter">Clues {hud.collected} / {hud.total}</p>
           <p className="gm-objective">{hud.gateOpen ? "The gate is open. Find the green exit." : "Find every clue to open the gate."}</p>
           <p className="gm-flash" data-testid="flashlight-status">Flashlight {hud.flashlight ? "on" : "off"} (F)</p>
+          {hud.hidden ? <p className="gm-hint" data-testid="hide-hint">Hiding. Stay still. Press E or move to come out. If it saw you go in, it knows.</p> : hud.canHide ? <p className="gm-hint" data-testid="hide-hint">Press E to hide here.</p> : null}
           <p className="gm-threat" data-testid="threat" data-level={hud.threat}>{threatText}</p>
           {hud.last ? (
             <div className="gm-clue" data-testid="last-clue">
@@ -323,14 +370,29 @@ export function GameView(props: GameProps) {
       {ready && phase === "GAME_INITIALIZATION" ? (
         <div className="gm-card" role="group" aria-labelledby="gm-intro-title" data-testid="game-intro">
           <h2 id="gm-intro-title">{attempt > 1 ? "Try again" : "Something else is in this repository"}</h2>
-          <p>Collect every clue to open the gate, then reach the green exit. Do not let it catch you. This is fiction; your report is already saved and cannot change.</p>
+          <p>Collect every clue to open the gate, then reach the green exit. Do not let it catch you. This is fiction and it never changes a report.</p>
+          <p data-testid="game-clue-source">
+            {fromReport
+              ? "Some clues come from your latest report and keep the report's own labels. Torn archive tags are fiction and say so."
+              : props.snapshot
+                ? "Your latest report has no evidence to use here, so every clue is fiction and says so."
+                : "This run is not tied to any report. Every clue is fiction and none comes from a repository."}
+          </p>
           <ul className="gm-controls" aria-label="Controls">
             <li><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move</li>
             <li>Mouse or <kbd>←</kbd> <kbd>→</kbd> look</li>
             <li><kbd>Shift</kbd> run (it hears you)</li>
             <li><kbd>F</kbd> flashlight</li>
+            <li><kbd>E</kbd> hide in a locker, and come out</li>
             <li><kbd>Esc</kbd> pause</li>
           </ul>
+          {props.scare ? (
+            <p>
+              <button type="button" className="gm-secondary" onClick={props.scare.onToggle} aria-pressed={props.scare.enabled} data-testid="game-scare">
+                Scare when caught: {props.scare.enabled ? "on" : "off"}
+              </button>
+            </p>
+          ) : null}
           {props.sound ? (
             <p>
               <button type="button" className="gm-secondary" onClick={props.sound.onToggle} aria-pressed={props.sound.enabled} data-testid="game-sound">
@@ -340,7 +402,7 @@ export function GameView(props: GameProps) {
           ) : null}
           <p className="gm-actions">
             <button type="button" className="gm-primary" onClick={begin} ref={primaryRef} data-testid="game-begin">Begin</button>
-            <button type="button" className="gm-secondary" onClick={props.onQuit}>Go to the report</button>
+            <button type="button" className="gm-secondary" onClick={props.onQuit}>{props.standalone ? "Leave the game" : "Go to the report"}</button>
           </p>
         </div>
       ) : null}
@@ -350,20 +412,21 @@ export function GameView(props: GameProps) {
           <h2>Paused</h2>
           <p className="gm-actions">
             <button type="button" className="gm-primary" onClick={resume} ref={primaryRef} data-testid="game-resume">Resume</button>
-            <button type="button" className="gm-secondary" onClick={props.onQuit} data-testid="game-quit">Quit to the report</button>
+            <button type="button" className="gm-secondary" onClick={props.onQuit} data-testid="game-quit">{props.standalone ? "Leave the game" : "Quit to the report"}</button>
           </p>
         </div>
       ) : null}
 
       {phase === "PLAYER_CAUGHT" ? (
         <>
+          {props.jumpscare ? <div className="gm-whiteout" data-reduced={props.reducedMotion} aria-hidden="true" /> : null}
           {props.jumpscare ? <div className="gm-scare" data-testid="jumpscare" data-reduced={props.reducedMotion} aria-hidden="true" /> : null}
-          <div className="gm-card gm-caught" role="alertdialog" aria-labelledby="gm-caught-title" data-testid="game-caught">
+          <div className="gm-card gm-caught" data-scare={String(props.jumpscare)} role="alertdialog" aria-labelledby="gm-caught-title" data-testid="game-caught">
             <h2 id="gm-caught-title">You were caught</h2>
             <p>This is part of the fiction. Your report is unchanged.</p>
             <p className="gm-actions">
               <button type="button" className="gm-primary" onClick={props.onRetry} ref={primaryRef} data-testid="game-retry">Try again</button>
-              <button type="button" className="gm-secondary" onClick={props.onGiveUp} data-testid="game-giveup">Give up and open the report</button>
+              <button type="button" className="gm-secondary" onClick={props.onGiveUp} data-testid="game-giveup">{props.standalone ? "Give up and leave" : "Give up and open the report"}</button>
             </p>
           </div>
         </>

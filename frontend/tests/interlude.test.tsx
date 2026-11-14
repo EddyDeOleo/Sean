@@ -174,7 +174,7 @@ describe("the sequence", () => {
     await throughInterruption();
     expect(tid("fake-game")!.getAttribute("data-phase")).toBe("GAME_INITIALIZATION");
     expect(lastGame!.attempt).toBe(1);
-    expect(lastGame!.snapshot.id).toBe("snap-1");
+    expect(lastGame!.snapshot!.id).toBe("snap-1");
     await act(async () => lastGame!.onReady());
     expect(tid("fake-game")!.getAttribute("data-phase")).toBe("GAME_ACTIVE");
   });

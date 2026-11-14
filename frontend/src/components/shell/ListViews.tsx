@@ -1,7 +1,6 @@
 /** Saved reports, repositories and settings screens. */
 
 import { useState } from "react";
-import type { RepositoryListItem } from "../../types/advisor";
 import type { SnapshotSummary } from "../../features/report/reportSnapshot";
 import type { MotionPreference, Settings } from "../../features/experience/settingsStore";
 import { ClassificationBadge, PlainBadge, RetrievalBadge } from "../report/badges";
@@ -58,34 +57,6 @@ export function SavedReportsView(props: {
   );
 }
 
-export function RepositoriesView(props: { repositories: RepositoryListItem[] | null; problem: string | null; onUse(id: string): void }) {
-  const { repositories } = props;
-  return (
-    <div className="sx-page" data-testid="repositories">
-      <h1 className="sx-h1">Repositories</h1>
-      <p className="sx-lede">These are the repositories registered with the backend. Sean reads only these, and only their committed history. It never changes them.</p>
-      {props.problem ? <div className="sx-notice" data-tone="danger" role="alert"><h3>The list could not be loaded</h3><p>{props.problem}</p></div> : null}
-      {repositories === null && !props.problem ? <p className="sx-muted">Loading…</p> : null}
-      {repositories !== null && repositories.length === 0 ? <div className="sx-empty">No repositories are registered. Add one to the registry file and restart the backend.</div> : null}
-      {repositories !== null && repositories.length > 0 ? (
-        <table className="sx-table">
-          <thead><tr><th scope="col">Identifier</th><th scope="col">Status</th><th scope="col">GitHub</th><th scope="col"><span className="visually-hidden">Actions</span></th></tr></thead>
-          <tbody>
-            {repositories.map((r) => (
-              <tr key={r.repository_id} data-testid="repository-row">
-                <td className="sx-mono">{r.repository_id}</td>
-                <td>{r.available ? <PlainBadge tone="documented">AVAILABLE</PlainBadge> : <PlainBadge tone="danger">UNAVAILABLE</PlainBadge>}</td>
-                <td>{r.github ? <span className="sx-mono">{r.github.owner}/{r.github.name}</span> : <span className="sx-faint">not set</span>}</td>
-                <td><button type="button" className="sx-btn sx-btn-small" disabled={!r.available} onClick={() => props.onUse(r.repository_id)}>Use</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : null}
-    </div>
-  );
-}
-
 export function SettingsView(props: {
   motion: MotionPreference;
   onMotion(value: MotionPreference): void;
@@ -93,8 +64,10 @@ export function SettingsView(props: {
   onExperience(value: boolean): void;
   skipGameplay: boolean;
   onSkipGameplay(value: boolean): void;
+  onPlayDemo?(): void;
   sound: {
     enabled: boolean;
+    wanted: boolean;
     failed: boolean;
     muted: boolean;
     volume: number;
@@ -148,35 +121,53 @@ export function SettingsView(props: {
         </label>
         <div style={{ display: "grid", gap: "0.4rem", margin: "0.6rem 0" }}>
           <label className="sx-label" htmlFor="intensity-select">Horror intensity</label>
-          <select id="intensity-select" className="sx-select" style={{ maxWidth: "20rem" }} value={props.intensity} disabled={!props.experience || props.skipGameplay} onChange={(event) => props.onIntensity(event.target.value as Settings["intensity"])} data-testid="intensity">
+          <select id="intensity-select" className="sx-select" style={{ maxWidth: "20rem" }} value={props.intensity} onChange={(event) => props.onIntensity(event.target.value as Settings["intensity"])} data-testid="intensity">
             <option value="low">Gentle: a slower, less alert creature</option>
             <option value="normal">Normal</option>
             <option value="high">Intense: a faster, more alert creature</option>
           </select>
           <label className="sx-label" htmlFor="quality-select">Graphics quality</label>
-          <select id="quality-select" className="sx-select" style={{ maxWidth: "20rem" }} value={props.quality} disabled={!props.experience || props.skipGameplay} onChange={(event) => props.onQuality(event.target.value as Settings["quality"])} data-testid="quality">
+          <select id="quality-select" className="sx-select" style={{ maxWidth: "20rem" }} value={props.quality} onChange={(event) => props.onQuality(event.target.value as Settings["quality"])} data-testid="quality">
             <option value="low">Low (best performance)</option>
             <option value="medium">Medium</option>
             <option value="high">High (shadows, sharper image)</option>
           </select>
         </div>
         <label style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "0.4rem 0" }}>
-          <input type="checkbox" checked={props.jumpscare} disabled={!props.experience || props.skipGameplay} onChange={(event) => props.onJumpscare(event.target.checked)} data-testid="jumpscare-toggle" />
-          <span>Show the scare when you are caught</span>
+          <input type="checkbox" checked={props.jumpscare} onChange={(event) => props.onJumpscare(event.target.checked)} data-testid="jumpscare-toggle" />
+          <span>Intense scare when you are caught (a flash, a close-up and a scream). Turn it off for a plain capture screen.</span>
         </label>
+        {props.onPlayDemo ? (
+          <div style={{ marginTop: "0.9rem" }}>
+            <p style={{ margin: "0 0 0.4rem" }}>
+              <button type="button" className="sx-btn" onClick={props.onPlayDemo} data-testid="play-demo">Play the demo</button>
+            </p>
+            <p className="sx-faint" style={{ margin: 0, maxWidth: "60ch" }}>
+              The demo is the game with no investigation behind it, so it has no clues from a report. It follows the settings above.
+            </p>
+          </div>
+        ) : null}
       </section>
       <section className="sx-card" aria-labelledby="sound-heading">
         <h2 className="sx-h2" id="sound-heading">Sound</h2>
         <p className="sx-muted" style={{ marginTop: 0 }}>
-          Sound belongs to the interlude only. It is off whenever you open Sean and starts only when you turn it on here or on the game's first screen.
+          Sound plays during the interlude and the game, and nowhere else. It is on by default. Browsers only allow sound after you have clicked or pressed a key in Sean, so it starts with your first click.
         </p>
         <p>
-          <button type="button" className="sx-btn" onClick={props.sound.onToggle} aria-pressed={props.sound.enabled} data-testid="sound-toggle">
-            {props.sound.enabled ? "Turn sound off" : "Turn sound on"}
+          <button type="button" className="sx-btn" onClick={props.sound.onToggle} aria-pressed={props.sound.wanted} data-testid="sound-toggle">
+            {props.sound.wanted ? "Turn sound off" : "Turn sound on"}
           </button>
         </p>
         <p role="status" className="sx-faint" data-testid="sound-status">
-          {props.sound.failed ? "Sound could not start in this browser." : props.sound.enabled ? (props.sound.muted ? "Sound is on but muted." : "Sound is on.") : "Sound is off."}
+          {props.sound.failed
+            ? "Sound could not start in this browser."
+            : !props.sound.wanted
+              ? "Sound is off."
+              : !props.sound.enabled
+                ? "Sound starts with your first click or key press in Sean."
+                : props.sound.muted
+                  ? "Sound is on but muted."
+                  : "Sound is on."}
         </p>
         <label style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "0.4rem 0" }}>
           <input type="checkbox" checked={props.sound.muted} onChange={(event) => props.sound.onMuted(event.target.checked)} data-testid="mute" />

@@ -1,6 +1,6 @@
 """Additive HTTP routes for repository intelligence (Spec 4 section 4.2).
 
-These routes are read-only. They never write to a repository, never echo paths, and use the Phase 3 error body shape with
+These routes are read-only (repository management is in `app.api.repository_routes`). They never write to a repository, never echo paths, and use the Phase 3 error body shape with
 fixed messages. The Phase 3 routes and the Phase 3 application factory are not modified: `app.main_advisor` includes this
 router into the application that `create_app` builds.
 """
@@ -21,6 +21,8 @@ from app.modules.advisor.contract import ContractViolation
 from app.modules.advisor.roadmap import advise
 from app.modules.intent.gemini import MODEL, Transport, build_hint
 from app.modules.intent.parser import RepositoryRef, interpret
+from app.api.repository_routes import repository_item
+from app.modules.repository.holder import RegistryHolder
 from app.modules.repository.registry import (
     LoadedRegistry,
     RepositoryError,
@@ -77,40 +79,53 @@ def _error(code: str, status: int) -> JSONResponse:
     return JSONResponse(status_code=status, content={"code": code, "message": _MESSAGE[code], "retryable": False})
 
 
-def create_advisor_router(registry: LoadedRegistry, *, gemini_transport: Transport | None = None) -> APIRouter:
+def create_advisor_router(
+    registry: LoadedRegistry | RegistryHolder, *, gemini_transport: Transport | None = None
+) -> APIRouter:
+    """`registry` may be a RegistryHolder. It is then read on every request, so repository changes need no restart."""
     router = APIRouter()
     slots = threading.BoundedSemaphore(MAX_CONCURRENT_WORK)
-    # Responses keyed by (repository, HEAD). A new commit changes the key, so a cached profile is never stale.
-    cache: OrderedDict[tuple[str, str], dict[str, Any]] = OrderedDict()
+    # Responses keyed by (repository, root, HEAD). A new commit or a changed folder changes the key, so a cached profile is
+    # never stale. Entries of removed or re-pointed repositories are dropped when the registry object changes.
+    cache: OrderedDict[tuple[str, str, str], dict[str, Any]] = OrderedDict()
     cache_lock = threading.Lock()
+    seen: list[LoadedRegistry] = []
+
+    def _now() -> LoadedRegistry:
+        current = registry.current if isinstance(registry, RegistryHolder) else registry
+        with cache_lock:
+            if not seen or seen[0] is not current:
+                live = {(identifier, entry.root) for identifier, entry in current.entries.items()}
+                for stale in [key for key in cache if key[:2] not in live]:
+                    del cache[stale]
+                seen[:] = [current]
+        return current
 
     def _tree_paths(repository_id: str) -> list[str]:
         try:
-            return committed_paths(resolve_repository(registry, repository_id).root)
+            return committed_paths(resolve_repository(_now(), repository_id).root)
         except RepositoryError:
             return []
 
     @router.get("/repositories")
     def list_repositories() -> dict[str, Any]:
-        items = []
-        for repository_id, entry in sorted(registry.entries.items()):
-            try:
-                resolve_repository(registry, repository_id)
-                available = True
-            except RepositoryError:
-                available = False
-            github = {"owner": entry.github.owner, "name": entry.github.name} if entry.github else None
-            items.append({"repository_id": repository_id, "available": available, "github": github})
-        return {"repositories": items}
+        current = _now()
+        entries = dict(current.entries)
+        # Entries that are valid but whose folder is unusable now stay visible, so the user can edit or remove them.
+        if isinstance(registry, RegistryHolder):
+            entries.update({entry.repository_id: entry for entry in registry.unavailable})
+        return {"repositories": [repository_item(current, entry) for _, entry in sorted(entries.items())]}
 
     @router.post("/repositories/{repository_id}/profile", response_model=None)
     def profile_repository(repository_id: Annotated[str, Path(pattern=REPOSITORY_ID_PATTERN)]) -> Any:
+        current = _now()
         try:
-            resolved = resolve_repository(registry, repository_id)
+            resolved = resolve_repository(current, repository_id)
         except RepositoryError as error:
             return _error(error.code, _STATUS.get(error.code, 400))
+        root_key = current.entries[repository_id].root
         head = current_head(resolved.root)
-        key = (repository_id, head) if head else None
+        key = (repository_id, root_key, head) if head else None
         if key is not None:
             with cache_lock:
                 if key in cache:
@@ -137,7 +152,7 @@ def create_advisor_router(registry: LoadedRegistry, *, gemini_transport: Transpo
         )
         response = {"profile": profile.model_dump(mode="json"), "advisor": advisor.model_dump(mode="json")}
         with cache_lock:
-            cache[(repository_id, profile.head)] = response
+            cache[(repository_id, root_key, profile.head)] = response
             while len(cache) > PROFILE_CACHE_ENTRIES:
                 cache.popitem(last=False)
         return response
@@ -146,7 +161,7 @@ def create_advisor_router(registry: LoadedRegistry, *, gemini_transport: Transpo
     def preview_artifacts(body: PreviewIn) -> Any:
         """Prepare files for review. This reads the committed repository and writes nothing anywhere."""
         try:
-            resolved = resolve_repository(registry, body.repository_id)
+            resolved = resolve_repository(_now(), body.repository_id)
         except RepositoryError as error:
             return _error(error.code, _STATUS.get(error.code, 400))
         if not slots.acquire(blocking=False):
@@ -193,7 +208,7 @@ def create_advisor_router(registry: LoadedRegistry, *, gemini_transport: Transpo
                 repository_id=repository_id,
                 github=(entry.github.owner.lower(), entry.github.name.lower()) if entry.github else None,
             )
-            for repository_id, entry in registry.entries.items()
+            for repository_id, entry in _now().entries.items()
         }
         if not slots.acquire(blocking=False):
             return _error("BUSY", 429)

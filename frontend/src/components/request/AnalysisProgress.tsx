@@ -40,7 +40,7 @@ export function AnalysisProgress({ state, onCancel }: { state: AnalysisState; on
       <div role="status" aria-live="polite" className="sx-faint" data-testid="progress-status">
         {interpreting ? "Reading your request." : "Reading the committed repository. This can take a few seconds."}
       </div>
-      <p>
+      <p className="sx-request-row">
         <button type="button" className="sx-btn sx-btn-quiet" onClick={onCancel}>Stop waiting</button>
       </p>
       <p className="sx-faint" style={{ maxWidth: "60ch" }}>

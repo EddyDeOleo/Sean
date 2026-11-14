@@ -2,8 +2,9 @@
 
 Implements Evidence Retrieval Requirements 1.1 to 1.7 (task 1.1 to 1.3) and the design section
 "Repository registration and selection". The Git work-tree check is limited to the presence of a
-.git entry; full verification waits for the guarded Git runner (task 3). Sean reads the registry
-file and never writes it. External callers pass only a repository_id, never a path.
+.git entry; full verification waits for the guarded Git runner (task 3). This module only reads the registry file.
+The one module that writes it, on an explicit user request, is app.modules.repository.management (Spec 4 section 16).
+External callers pass only a repository_id, never a path.
 """
 
 from __future__ import annotations
@@ -71,6 +72,8 @@ class RegistryEntry(BaseModel):
     repository_id: str = Field(pattern=REPOSITORY_ID_PATTERN)
     root: str = Field(min_length=1, max_length=MAX_ROOT_LENGTH)
     github: GitHubIdentity | None = None
+    # Optional label for the UI (Spec 4 section 16, owner-authorized amendment). Written only by repository management.
+    display_name: str | None = Field(default=None, min_length=1, max_length=80)
 
 
 @dataclass(frozen=True)

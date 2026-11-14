@@ -14,7 +14,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:36Z",
+          "retrieved_at": "2026-11-13T21:29:07Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -50,7 +50,7 @@
         "file_path": "docs/billing.md",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:36Z",
+          "retrieved_at": "2026-11-13T21:29:07Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -78,7 +78,7 @@
       }
     ],
     "explanation": "Verified repository history records 1 change(s) to src/billing.py. Retrieval was incomplete, so the supported portion is limited to these records. Unknown: why these changes were made, and the history that the incomplete retrieval did not cover. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. The repository is a shallow clone, so older history may be missing. Pull request and issue evidence is not included, because the association step is not implemented. Evidence that would help: the complete history for the target, from a full clone.",
-    "investigation_id": "2b1d36ea-7424-4cc7-b097-170c7bbc5f1e",
+    "investigation_id": "32b506d1-5f9b-4719-b995-49252a789594",
     "limitations": [
       {
         "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",

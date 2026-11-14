@@ -41,16 +41,19 @@ def _entries(sample, **extra):
     return {"sample": RegistryEntry(repository_id="sample", root=str(sample.path), **extra)}
 
 
-def test_list_repositories_hides_paths_and_reports_availability(sample, tmp_path):
+def test_list_repositories_reports_name_path_and_availability(sample, tmp_path):
+    # Spec 4 section 16: the list now includes display_name (defaults to the identifier) and the registered path.
     entries = _entries(sample, github=GitHubIdentity(owner="acme", name="sample"))
-    entries["gone"] = RegistryEntry(repository_id="gone", root=str(tmp_path / "does-not-exist"))
+    entries["gone"] = RegistryEntry(repository_id="gone", root=str(tmp_path / "does-not-exist"), display_name="Gone repo")
     status, body = asgi(_app(entries), "GET", "/repositories")
     assert status == 200
     assert body["repositories"] == [
-        {"repository_id": "gone", "available": False, "github": None},
-        {"repository_id": "sample", "available": True, "github": {"owner": "acme", "name": "sample"}},
+        {"repository_id": "gone", "display_name": "Gone repo", "path": str(tmp_path / "does-not-exist"), "available": False, "github": None},
+        {
+            "repository_id": "sample", "display_name": "sample", "path": str(sample.path), "available": True,
+            "github": {"owner": "acme", "name": "sample"},
+        },
     ]
-    assert str(sample.path) not in json.dumps(body)
 
 
 def test_profile_returns_profile_and_advisor(sample):

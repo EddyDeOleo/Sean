@@ -3,27 +3,37 @@
     "repositories": [
       {
         "available": true,
+        "display_name": "ambiguous",
         "github": null,
+        "path": "C:\\fixtures\\ambiguous",
         "repository_id": "ambiguous"
       },
       {
         "available": true,
+        "display_name": "broken",
         "github": null,
+        "path": "C:\\fixtures\\broken",
         "repository_id": "broken"
       },
       {
         "available": true,
+        "display_name": "rich",
         "github": null,
+        "path": "C:\\fixtures\\rich",
         "repository_id": "rich"
       },
       {
         "available": true,
+        "display_name": "sample",
         "github": null,
+        "path": "C:\\fixtures\\sample",
         "repository_id": "sample"
       },
       {
         "available": true,
+        "display_name": "shallow",
         "github": null,
+        "path": "C:\\fixtures\\shallow",
         "repository_id": "shallow"
       }
     ]

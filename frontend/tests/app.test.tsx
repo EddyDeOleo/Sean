@@ -435,8 +435,12 @@ describe("navigation, settings and preferences", () => {
     await settle();
     const rows = document.querySelectorAll('[data-testid="repository-row"]');
     expect(rows.length).toBe(repositoriesFixture().body.repositories.length);
-    expect(document.body.textContent).not.toMatch(/[A-Z]:\\/);
-    await click(byRole("button", "Use", rows[0] as HTMLElement) as HTMLElement);
+    // The page shows each repository's name, identifier and folder (owner decision, Spec 4 section 17).
+    for (const [i, item] of repositoriesFixture().body.repositories.entries()) {
+      expect(rows[i]!.textContent).toContain(item.display_name);
+      expect(rows[i]!.textContent).toContain(item.path);
+    }
+    await click(byRole("button", /^Use /, rows[0] as HTMLElement) as HTMLElement);
     await settle();
     expect((document.querySelector("select") as HTMLSelectElement).value).toBe(repositoriesFixture().body.repositories[0]!.repository_id);
   });

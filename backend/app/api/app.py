@@ -25,6 +25,7 @@ from pydantic import BaseModel, ConfigDict
 from app.core.diagnostics import diagnostic_record
 from app.modules.investigation.orchestrator import RequestError, investigate
 from app.modules.investigation.result import InvestigationResult, ResultInvariantViolation
+from app.modules.repository.holder import RegistryHolder
 from app.modules.repository.registry import LoadedRegistry
 
 logger = logging.getLogger("sean.api")
@@ -113,8 +114,12 @@ def _serialize(result: InvestigationResult) -> dict[str, Any]:
     }
 
 
-def create_app(registry: LoadedRegistry) -> FastAPI:
-    """Build the application around one loaded registry. The registry is read once and never written."""
+def create_app(registry: LoadedRegistry | RegistryHolder) -> FastAPI:
+    """Build the application around a loaded registry, or around a RegistryHolder that is read on every request.
+
+    This function never writes the registry. Phase 3 amendment (owner-authorized for repository management, Spec 4 section
+    16): a RegistryHolder lets the registry change without a restart. A plain LoadedRegistry behaves exactly as before.
+    """
     app = FastAPI(title="Sean backend", version="0.1.0", docs_url=None, redoc_url=None, openapi_url=None)
 
     @app.exception_handler(RequestError)
@@ -145,7 +150,7 @@ def create_app(registry: LoadedRegistry) -> FastAPI:
     async def create_investigation(body: InvestigationRequest) -> dict[str, Any]:
         started = time.monotonic()
         result = investigate(
-            registry,
+            registry.current if isinstance(registry, RegistryHolder) else registry,
             body.repository_id,
             body.target.path,
             symbol=body.target.symbol,

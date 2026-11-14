@@ -2320,3 +2320,25 @@ Not fixed, recorded in Spec 4 section 14 and 15: variable time step (departure),
 
 ### Limits
 Edge only. Gemini was not reachable (HTTP 503 from the provider); the deterministic reader is the tested path. Pull requests, issues and CI are not analysed. Only locally registered, committed content is read. Gameplay feel and sound quality were judged only through screenshots and graph tests.
+
+
+## Owner decisions of 2026-11-13 (stage 9)
+
+Status: IMPLEMENTED and VERIFIED by the executed tests below. Phase 4 is not ACCEPTED. Item 5 of the owner's numbered list was not supplied, and no requirement was invented for it.
+
+| Check | Result |
+|---|---|
+| Backend full suite | 1463 passed (12 min 57 s) |
+| Type check (`tsc --noEmit`, includes the browser tests) | clean |
+| Vitest | 21 files, 590 tests passed (with `--maxWorkers=3`; on a busy machine the default worker count can fail to start workers, which is not a test failure) |
+| Playwright, Edge, real WebGL, real backend | 51 passed (10.7 min): journeys, game (10), horror and independence (10), repositories (8), screenshots |
+| Audio measurements in Edge (`playwright.audio.config.ts`) | 47 passed; table and WAV files in `%TEMP%\sean-audio` |
+| Phase 3 hash baseline | 71 entries; 3 differ, all owner-authorized: `core/git_runner.py` (M4, earlier), `api/app.py` and `modules/repository/registry.py` (repository management, Spec 4 section 16) |
+
+What was done: creature model and rules, jumpscare and scream, wooden Ouija sound, presence sounds, the game as its own experience (Play button, failure notices, play while waiting), repository management on the existing Repositories page. Spec 4 sections 16 and 17 describe the behavior and record departures X-7 and X-8.
+
+Balance (80 games per row, a scripted player on the real rules): careful player escapes in 57, 47, 43 of 80 on low, normal, high; reckless sprinter in 36, 20, 4. Written by `tests/gameBalance.test.ts`.
+
+Review: security-auditor and code-reviewer ran again on this work. Fixed with tests: a hiding mechanic that never caught anyone, every locker now takes its turn, a look-around that was cancelled, a flicker above three changes a second (now 2.5 at most, and none with the scare setting off), settings that were disabled for people who press Play, a stale game note, focus on the Repositories page, a window blur that did not pause, a half-built renderer that leaked its WebGL context, stale list after concurrent changes (reload now runs under the write lock), a missing application header on registry changes. One reported "lost registration" was a test that gave up while the server answered busy; the test now fails if any worker gives up. Not fixed and recorded: no cross-process lock for two backends, a `.git` redirect file is accepted, path errors tell a local caller which of a few cases applies, the MCP entry point reads the registry once.
+
+Limits: Edge only. Sound and scare quality were measured and looked at in screenshots, not listened to or felt. Gemini still unreachable at the last attempt. The old backend on port 8000 must be restarted to get the new routes.

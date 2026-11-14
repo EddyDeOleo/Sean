@@ -1,8 +1,8 @@
 /**
  * Experience settings (Spec 3 section 14). Stored in localStorage and validated on load.
  *
- * Sound ON is never stored: sound starts only after an explicit gesture in the current page (Spec 2 section 14.1). Only the
- * volume and the muted flag persist. A stored value that is missing, unparsable, or out of range falls back to the default.
+ * Sound is on by default (Spec 4 section 17.6). It starts with the first gesture in the page, which browsers require. The
+ * on or off choice, the volume and the mute persist. A stored value that is missing, unparsable, or out of range falls back to the default.
  */
 
 import { DEFAULT_VOLUME } from "../audio/AudioController";
@@ -28,6 +28,8 @@ export interface Settings {
   jumpscare: boolean;
   /** Graphics quality of the game. */
   quality: "low" | "medium" | "high";
+  /** Whether sound is wanted. It starts with the first click or key press in the page, because browsers require a gesture. */
+  soundOn: boolean;
 }
 
 export const SETTINGS_KEY = "sean.settings.v1";
@@ -45,6 +47,7 @@ export const DEFAULT_SETTINGS: Settings = {
   intensity: "normal",
   jumpscare: true,
   quality: "medium",
+  soundOn: true,
 };
 
 const unit = (value: unknown): number => (typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1 ? value : 1);
@@ -76,6 +79,7 @@ export function parseSettings(raw: string | null): Settings {
     intensity: record.intensity === "low" || record.intensity === "high" ? record.intensity : "normal",
     jumpscare: record.jumpscare === false ? false : true,
     quality: record.quality === "low" || record.quality === "high" ? record.quality : "medium",
+    soundOn: record.soundOn === false ? false : true,
   };
 }
 

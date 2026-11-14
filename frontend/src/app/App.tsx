@@ -11,7 +11,8 @@ import { AnalysisNotice } from "../components/request/AnalysisNotice";
 import { AnalysisProgress } from "../components/request/AnalysisProgress";
 import { RequestScreen } from "../components/request/RequestScreen";
 import { ReportView } from "../components/report/ReportView";
-import { RepositoriesView, SavedReportsView, SettingsView } from "../components/shell/ListViews";
+import { SavedReportsView, SettingsView } from "../components/shell/ListViews";
+import { RepositoriesView, type RepositoryActions, type RepositoryField, type RepositoryResult } from "../components/shell/RepositoriesView";
 import { Sidebar, type View } from "../components/shell/Sidebar";
 import { useAnalysis, type AnalysisDependencies } from "../features/analysis/useAnalysis";
 import { loadSettings, resolveReducedMotion, saveSettings, type MotionPreference, type Settings } from "../features/experience/settingsStore";
@@ -24,10 +25,14 @@ import type { RenderGame } from "../features/interlude/gameApi";
 import { useInterlude } from "../features/interlude/useInterlude";
 import { useAudio } from "../features/audio/useAudio";
 import type { ContextFactory } from "../features/audio/AudioController";
-import { MonsterSteps, cueForPhase, moodForPhase, planForGameEvent, type CuePlan } from "../features/audio/director";
+import { PresenceSounds, cueForPhase, moodForPhase, planForGameEvent, planForOuijaStep, type CuePlan } from "../features/audio/director";
 import type { GameEvent, ThreatInfo } from "../features/game/world";
 import { isInterludeEligible, type ArtifactRecord } from "../features/report/reportSnapshot";
-import { getCapabilities as defaultGetCapabilities, listRepositories as defaultListRepositories, previewArtifacts as defaultPreviewArtifacts, type CapabilitiesFn, type ListRepositoriesFn, type PreviewFn } from "../services/advisorClient";
+import {
+  createRepository as defaultCreateRepository, deleteRepository as defaultDeleteRepository, getCapabilities as defaultGetCapabilities,
+  listRepositories as defaultListRepositories, previewArtifacts as defaultPreviewArtifacts, updateRepository as defaultUpdateRepository,
+  type CallOutcome, type CapabilitiesFn, type CreateRepositoryFn, type DeleteRepositoryFn, type ListRepositoriesFn, type PreviewFn, type UpdateRepositoryFn,
+} from "../services/advisorClient";
 import type { RepositoryListItem } from "../types/advisor";
 import type { InvestigationRequest } from "../types/contract";
 
@@ -35,6 +40,9 @@ export interface AppProps {
   /** Test seams. Production uses the defaults. */
   analysisDeps?: Partial<AnalysisDependencies>;
   listRepositories?: ListRepositoriesFn;
+  createRepository?: CreateRepositoryFn;
+  updateRepository?: UpdateRepositoryFn;
+  deleteRepository?: DeleteRepositoryFn;
   getCapabilities?: CapabilitiesFn;
   previewArtifacts?: PreviewFn;
   exporter?: Exporter;
@@ -114,6 +122,31 @@ export function App(props: AppProps) {
     return () => controller.abort();
   }, [listRepositories]);
 
+  const createRepositoryFn = props.createRepository ?? defaultCreateRepository;
+  const updateRepositoryFn = props.updateRepository ?? defaultUpdateRepository;
+  const deleteRepositoryFn = props.deleteRepository ?? defaultDeleteRepository;
+  /** Reload the list after a change, so the page, the request screen and the selection all see the same registry. */
+  const refreshRepositories = useCallback(async (): Promise<void> => {
+    const outcome = await listRepositories();
+    if (outcome.kind === "ok") {
+      setRepositories(outcome.value);
+      setRepositoriesProblem(null);
+    }
+  }, [listRepositories]);
+  const repositoryActions: RepositoryActions = useMemo(() => {
+    const finish = async <T,>(outcome: CallOutcome<T>): Promise<RepositoryResult> => {
+      const result = repositoryResult(outcome);
+      // The registry changed even if the answer was odd, so look again.
+      if (result.ok || outcome.kind === "invalid") await refreshRepositories();
+      return result;
+    };
+    return {
+      create: async (input) => finish(await createRepositoryFn(input)),
+      update: async (id, body) => finish(await updateRepositoryFn(id, body)),
+      remove: async (id) => finish(await deleteRepositoryFn(id)),
+    };
+  }, [createRepositoryFn, updateRepositoryFn, deleteRepositoryFn, refreshRepositories]);
+
   const [aiAvailable, setAiAvailable] = useState(false);
   const getCapabilities = props.getCapabilities ?? defaultGetCapabilities;
   useEffect(() => {
@@ -132,21 +165,53 @@ export function App(props: AppProps) {
     audio.setAmbientVolume(settings.ambient);
     audio.setEffectsVolume(settings.effects);
   }, [audio, settings.volume, settings.muted, settings.ambient, settings.effects]);
+  // Sound is on by default. Browsers only let it start after a gesture, so it starts with the first click or key press in Sean.
+  useEffect(() => {
+    if (!settings.soundOn || audioState.enabled) return;
+    const start = (): void => void audio.enable();
+    document.addEventListener("pointerdown", start);
+    document.addEventListener("keydown", start);
+    return () => {
+      document.removeEventListener("pointerdown", start);
+      document.removeEventListener("keydown", start);
+    };
+  }, [audio, settings.soundOn, audioState.enabled]);
   const lastThreat = useRef<ThreatInfo | null>(null);
-  const monsterSteps = useRef(new MonsterSteps());
-  const play = useCallback((plan: CuePlan | null): void => {
-    if (plan) audio.cue(plan.cue, plan.options);
+  const presence = useRef(new PresenceSounds());
+  const presenceClock = useRef(0);
+  const playAll = useCallback((plans: CuePlan[]): void => {
+    for (const plan of plans) audio.cue(plan.cue, plan.options);
   }, [audio]);
+  // Intense sound (the scream and the heavy impact) follows the same setting as the intense picture.
+  useEffect(() => {
+    audio.setIntenseAllowed(settings.jumpscare);
+  }, [audio, settings.jumpscare]);
   const toggleSound = useCallback((): void => {
-    if (audio.getSnapshot().enabled) audio.disable();
-    else void audio.enable();
-  }, [audio]);
+    const next = !settings.soundOn;
+    persist({ soundOn: next });
+    if (next) void audio.enable();
+    else audio.disable();
+  }, [audio, persist, settings.soundOn]);
 
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
   const currentSnapshotId = useRef<string | null>(null);
   const interlude = useInterlude({ reducedMotion: reduced, gameAllowed: settings.horror && !settings.skipGameplay && props.renderGame !== undefined });
   const beginInterlude = interlude.begin;
+  const standalone = interlude.state.standalone;
+  const phaseRef = useRef(interlude.state.phase);
+  phaseRef.current = interlude.state.phase;
+  const standaloneCount = useRef(0);
+  const beginGame = interlude.beginGame;
+  const renderGameAvailable = props.renderGame !== undefined;
+  // The game on its own. It needs nothing from the backend or from any report, and it ignores the interlude settings: the user asked for it.
+  // The demo: the game with no investigation behind it. It is offered only in Settings. The game after an analysis is the surprise.
+  const startDemo = useCallback((): void => {
+    if (!renderGameAvailable) return;
+    standaloneCount.current += 1;
+    setGameNote(null);
+    beginGame(`standalone-${standaloneCount.current}`);
+  }, [beginGame, renderGameAvailable]);
   const [finishedInterludes, setFinishedInterludes] = useState<ReadonlySet<string>>(new Set());
 
   // The sound follows the interlude's phase and the planchette's steps. Leaving the interlude silences everything.
@@ -157,22 +222,26 @@ export function App(props: AppProps) {
     audio.setMood(moodForPhase(phaseNow));
     const cue = cueForPhase(phaseNow);
     if (cue) audio.cue(cue);
-    if (phaseNow === "OFF" || phaseNow === "REPORT_AVAILABLE") {
+    if (phaseNow === "OFF" || phaseNow === "REPORT_AVAILABLE" || phaseNow === "GAME_INITIALIZATION") {
       audio.setTension(0);
       lastThreat.current = null;
-      monsterSteps.current = new MonsterSteps();
+      presence.current.reset();
+      presenceClock.current = 0;
     }
   }, [audio, phaseNow]);
   useEffect(() => {
-    if (phaseNow === "OUIJA_ACTIVE" && boardStep > 0 && !boardSettled) audio.cue("planchette");
-    if (phaseNow === "OUIJA_ACTIVE" && boardSettled) audio.cue("settle");
-  }, [audio, phaseNow, boardStep, boardSettled]);
-  const onGameEvent = useCallback((event: GameEvent): void => play(planForGameEvent(event, lastThreat.current)), [play]);
+    if (phaseNow === "OUIJA_ACTIVE") playAll(planForOuijaStep(boardStep, boardSettled));
+  }, [playAll, phaseNow, boardStep, boardSettled]);
+  const onGameEvent = useCallback(
+    (event: GameEvent): void => playAll(planForGameEvent(event, lastThreat.current, { jumpscare: settingsRef.current.jumpscare })),
+    [playAll],
+  );
   const onThreat = useCallback((info: ThreatInfo): void => {
     lastThreat.current = info;
+    presenceClock.current += 0.1;
     audio.setTension(info.level);
-    play(monsterSteps.current.update(info, 0.1));
-  }, [audio, play]);
+    playAll(presence.current.update(info, 0.1, presenceClock.current));
+  }, [audio, playAll]);
 
   const analysis = useAnalysis({
     deps: props.analysisDeps,
@@ -187,7 +256,13 @@ export function App(props: AppProps) {
       const waited = Promise.race([saved, new Promise<void>((resolve) => window.setTimeout(resolve, 3000))]);
       void waited.then(() => {
         // The user may have started something else during the wait; then there is nothing to interrupt.
-        if (settingsRef.current.horror && isInterludeEligible(snapshot) && currentSnapshotId.current === snapshot.id) beginInterlude(snapshot.id);
+        if (currentSnapshotId.current !== snapshot.id) return;
+        // A game is already running (the user went to play while waiting): the report simply waits behind it.
+        if (isActive(phaseRef.current)) {
+          setFinishedInterludes((current) => new Set(current).add(snapshot.id));
+          return;
+        }
+        if (settingsRef.current.horror && isInterludeEligible(snapshot)) beginInterlude(snapshot.id);
       });
     },
   });
@@ -201,8 +276,12 @@ export function App(props: AppProps) {
   const interludePhase = interlude.state.phase;
   const interludeEnd = interlude.state.endedBy;
   useEffect(() => {
-    if (interludePhase === "REPORT_AVAILABLE" && interludeEnd === "GAME_FAILED") setGameNote("The game could not run in this browser (it needs WebGL and a keyboard), so your report opened instead. Nothing in the report is affected.");
-  }, [interludePhase, interludeEnd]);
+    if (interludePhase === "REPORT_AVAILABLE" && interludeEnd === "GAME_FAILED") {
+      setGameNote(standalone
+        ? "The game could not run in this browser. It needs WebGL and a keyboard."
+        : "The game could not run in this browser (it needs WebGL and a keyboard), so your report opened instead. Nothing in the report is affected.");
+    }
+  }, [interludePhase, interludeEnd, standalone]);
   useEffect(() => {
     if (interludePhase === "REPORT_AVAILABLE" && interludeSnapshot) setFinishedInterludes((current) => new Set(current).add(interludeSnapshot));
   }, [interludePhase, interludeSnapshot]);
@@ -232,7 +311,7 @@ export function App(props: AppProps) {
   const [view, setView] = useState<View>("new");
   const [menuOpen, setMenuOpen] = useState(false);
   // The interlude belongs to one snapshot. If the user has moved on to something else, it must not hold the screen.
-  const interludeMatches = state.snapshot !== null && state.snapshot.id === interlude.state.snapshotId;
+  const interludeMatches = standalone || (state.snapshot !== null && state.snapshot.id === interlude.state.snapshotId);
   const interludeActive = isActive(interlude.state.phase) && interludeMatches;
   const skipInterlude = interlude.skip;
   const strayInterlude = isActive(interlude.state.phase) && !interludeMatches;
@@ -251,6 +330,7 @@ export function App(props: AppProps) {
   function navigate(next: View): void {
     setMenuOpen(false);
     setOpenNote(null);
+    setGameNote(null);
     if (next === "new") {
       analysis.reset();
       setOpenedId(null);
@@ -267,16 +347,19 @@ export function App(props: AppProps) {
       return;
     }
     setOpenNote(null);
+    setGameNote(null);
     setOpenedId(snapshot.id);
     analysis.open(snapshot);
     setView("new");
   }
 
   const submitText = (text: string, allowAi: boolean): void => {
+    setGameNote(null);
     setOpenedId(null);
     analysis.submit(text, selectedRepository || null, allowAi);
   };
   const submitStructured = (request: InvestigationRequest): void => {
+    setGameNote(null);
     setOpenedId(null);
     persist({ lastRepositoryId: request.repository_id });
     analysis.submitPlan(
@@ -309,6 +392,8 @@ export function App(props: AppProps) {
       <RepositoriesView
         repositories={repositories}
         problem={repositoriesProblem}
+        selectedId={selectedRepository}
+        actions={repositoryActions}
         onUse={(id) => {
           selectRepository(id);
           navigate("new");
@@ -324,8 +409,10 @@ export function App(props: AppProps) {
         onExperience={(horror) => persist({ horror })}
         skipGameplay={settings.skipGameplay}
         onSkipGameplay={(skipGameplay) => persist({ skipGameplay })}
+        onPlayDemo={renderGameAvailable ? startDemo : undefined}
         sound={{
           enabled: audioState.enabled,
+          wanted: settings.soundOn,
           failed: audioState.failed,
           muted: settings.muted,
           volume: settings.volume,
@@ -353,7 +440,7 @@ export function App(props: AppProps) {
     );
   } else if (state.phase === "INTERPRETING" || state.phase === "ANALYZING") {
     content = <AnalysisProgress state={state} onCancel={analysis.cancel} />;
-  } else if (holdReport || interludeActive) {
+  } else if (holdReport || (interludeActive && !standalone)) {
     content = (
       <div className="sx-page" data-testid="preparing">
         <h1 className="sx-h1">Your report is ready</h1>
@@ -390,12 +477,13 @@ export function App(props: AppProps) {
         initialText={state.text}
         notice={
           <>
+            {gameNote && view === "new" && state.phase !== "READY" ? <div className="sx-notice" role="status" data-testid="game-note"><h3>The game did not start</h3><p>{gameNote}</p></div> : null}
             {openNote ? <div className="sx-notice" data-tone="warn" role="alert" data-testid="open-note"><h3>Report not opened</h3><p>{openNote}</p></div> : null}
             {state.phase === "NEEDS_TARGET" && state.plan?.message ? <div className="sx-notice" role="status" data-testid="needs-target"><h3>One more detail</h3><p>{state.plan.message}</p></div> : null}
             {state.phase === "CANCELLED" ? (
               <div className="sx-notice" role="status" data-testid="cancelled"><h3>Stopped</h3><p>You stopped waiting. Nothing was concluded, and this says nothing about whether evidence exists.</p></div>
             ) : null}
-            {state.error ? <AnalysisNotice error={state.error} onDismiss={analysis.reset} /> : null}
+            {state.error ? <AnalysisNotice error={state.error} onDismiss={analysis.reset} onRetry={state.text ? () => submitText(state.text, false) : undefined} /> : null}
           </>
         }
       />
@@ -403,18 +491,21 @@ export function App(props: AppProps) {
   }
 
   const game =
-    props.renderGame && state.snapshot && isGamePhase(interlude.state.phase)
+    props.renderGame && interludeActive && isGamePhase(interlude.state.phase)
       ? props.renderGame({
-          snapshot: state.snapshot,
+          // The demo has no report. A game after an analysis uses that analysis.
+          snapshot: standalone ? null : state.snapshot ?? null,
           phase: interlude.state.phase as "GAME_INITIALIZATION" | "GAME_ACTIVE" | "PLAYER_CAUGHT",
           attempt: interlude.state.attempts,
           reducedMotion: reduced,
+          standalone,
           intensity: settings.intensity,
           jumpscare: settings.jumpscare,
           quality: settings.quality,
           onEvent: onGameEvent,
           onThreat,
-          sound: { enabled: audioState.enabled, onToggle: toggleSound },
+          sound: { enabled: settings.soundOn, onToggle: toggleSound },
+          scare: { enabled: settings.jumpscare, onToggle: () => persist({ jumpscare: !settings.jumpscare }) },
           onReady: interlude.gameReady,
           onFailed: interlude.gameFailed,
           onCaught: interlude.caught,
@@ -447,13 +538,36 @@ export function App(props: AppProps) {
         {content}
       </main>
     </div>
-    {interludeActive && state.snapshot ? (
-      <InterludeOverlay state={interlude.state} question={state.snapshot.input.question} reducedMotion={reduced} onSkip={interlude.skip}>
+    {interludeActive ? (
+      <InterludeOverlay state={interlude.state} question={state.snapshot?.input.question ?? ""} standalone={standalone} reducedMotion={reduced} onSkip={interlude.skip}>
         {game}
       </InterludeOverlay>
     ) : null}
     </>
   );
+}
+
+const REPOSITORY_FIELDS: Record<string, RepositoryField | undefined> = {
+  INVALID_REPOSITORY_ID: "repository_id", DUPLICATE_ID: "repository_id", INVALID_DISPLAY_NAME: "display_name",
+  PATH_NOT_FOUND: "path", NOT_A_GIT_REPOSITORY: "path", DUPLICATE_PATH: "path",
+};
+
+/** Turn a call outcome into what the Repositories page shows. A failure never looks like success. */
+function repositoryResult<T>(outcome: CallOutcome<T>): RepositoryResult {
+  switch (outcome.kind) {
+    case "ok":
+      return { ok: true };
+    case "rejected": {
+      const field = REPOSITORY_FIELDS[outcome.error.code] ?? (outcome.error.field === "path" || outcome.error.field === "display_name" || outcome.error.field === "repository_id" ? outcome.error.field : null);
+      return { ok: false, code: outcome.error.code, message: outcome.error.message, field };
+    }
+    case "network":
+      return { ok: false, code: "NETWORK", message: "The backend could not be reached, so nothing was changed. Check that it is running, then try again.", field: null };
+    case "invalid":
+      return { ok: false, code: "INVALID_RESPONSE", message: "The backend answered in an unexpected way. The list was reloaded; check whether the change was made.", field: null };
+    case "aborted":
+      return { ok: false, code: "ABORTED", message: "The request was stopped.", field: null };
+  }
 }
 
 function announce(phase: string): string {

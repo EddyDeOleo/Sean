@@ -10,15 +10,19 @@ import type { ReportSnapshot } from "../report/reportSnapshot";
 import type { GameEvent, ThreatInfo } from "../game/world";
 
 export interface GameProps {
-  /** The saved snapshot. Used only to decorate the fiction with real, clearly labelled records. */
-  snapshot: Readonly<ReportSnapshot>;
+  /** A saved snapshot, when there is one. Used only to decorate the fiction with real, clearly labelled records. The game is fully playable without it. */
+  snapshot: Readonly<ReportSnapshot> | null;
   phase: "GAME_INITIALIZATION" | "GAME_ACTIVE" | "PLAYER_CAUGHT";
   /** 1 for the first run, then one more for each retry. */
   attempt: number;
   reducedMotion: boolean;
+  /** The game was started on its own, not after an analysis. Its exits say "leave the game" instead of "open the report". */
+  standalone: boolean;
   intensity: "low" | "normal" | "high";
   jumpscare: boolean;
   quality: "low" | "medium" | "high";
+  /** The scare when the player is caught (a close-up, a flash and a scream). The first screen lets the player turn it off before playing. */
+  scare?: { enabled: boolean; onToggle(): void };
   /** Sound is off until the user turns it on; this lets the game's first screen offer it. */
   sound?: { enabled: boolean; onToggle(): void };
   /** Gameplay happenings (clue found, monster state, footsteps...) for sound. Optional. */

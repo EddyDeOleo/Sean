@@ -33,6 +33,7 @@ export function ReportView({ snapshot, origin, onNew, artifacts }: ReportViewPro
           </p>
         </div>
         <button type="button" className="sx-btn" onClick={onNew}>New investigation</button>
+
       </header>
 
       <nav className="sx-toc" aria-label="Report sections">

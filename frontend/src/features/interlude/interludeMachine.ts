@@ -37,6 +37,8 @@ export interface InterludeState {
   beat: 0 | 1 | 2;
   attempts: number;
   endedBy: InterludeEnd | null;
+  /** The game was started on its own (the play button), not after an analysis. It has no report and no Ouija. */
+  standalone: boolean;
 }
 
 export const initialInterlude: InterludeState = {
@@ -47,10 +49,12 @@ export const initialInterlude: InterludeState = {
   beat: 0,
   attempts: 0,
   endedBy: null,
+  standalone: false,
 };
 
 export type InterludeEvent =
   | { type: "BEGIN"; snapshotId: string }
+  | { type: "BEGIN_GAME"; id: string }
   | { type: "INTRO_DONE" }
   | { type: "STEP"; step: number }
   | { type: "SETTLED" }
@@ -94,6 +98,11 @@ export function interludeReducer(state: InterludeState, event: InterludeEvent): 
       if (state.phase !== "OFF" && state.phase !== "REPORT_AVAILABLE") return state;
       if (state.snapshotId === event.snapshotId) return state;
       return { ...initialInterlude, phase: "OUIJA_INTRODUCTION", snapshotId: event.snapshotId };
+
+    case "BEGIN_GAME":
+      // The game on its own: straight to the game, no board and no interruption.
+      if (state.phase !== "OFF" && state.phase !== "REPORT_AVAILABLE") return state;
+      return { ...initialInterlude, phase: "GAME_INITIALIZATION", snapshotId: event.id, attempts: 1, standalone: true };
 
     case "INTRO_DONE":
       return state.phase === "OUIJA_INTRODUCTION" ? { ...state, phase: "OUIJA_ACTIVE" } : state;

@@ -21,7 +21,7 @@ describe("the mapping from the interlude to sound", () => {
     for (const phase of ["OFF", "REPORT_AVAILABLE", "GAME_SKIPPED"] as InterludePhase[]) expect(moodForPhase(phase)).toBe("silent");
   });
   it("gives each phase a mood and the key moments a cue", () => {
-    expect(moodForPhase("OUIJA_ACTIVE")).toBe("search");
+    expect(moodForPhase("OUIJA_ACTIVE")).toBe("ouija");
     expect(moodForPhase("GAME_ACTIVE")).toBe("tension");
     expect(cueForPhase("OUIJA_INTRODUCTION")).toBe("whisper");
     expect(cueForPhase("NARRATIVE_INTERRUPTION")).toBe("glitch");
@@ -30,12 +30,12 @@ describe("the mapping from the interlude to sound", () => {
   });
   it("maps game events to cues, and places the growl where the creature is", () => {
     const threat: ThreatInfo = { level: 0.5, distance: 4, pan: -0.6, awake: true };
-    expect(planForGameEvent({ type: "FOOTSTEP", sprinting: true }, null)).toEqual({ cue: "footstepRun" });
-    expect(planForGameEvent({ type: "FOOTSTEP", sprinting: false }, null)).toEqual({ cue: "footstep" });
-    expect(planForGameEvent({ type: "CAUGHT" }, null)).toEqual({ cue: "caught" });
-    expect(planForGameEvent({ type: "MONSTER_STATE", state: "PURSUING", previous: "SEARCHING" }, threat)).toEqual({ cue: "growl", options: { pan: -0.6 } });
-    expect(planForGameEvent({ type: "MONSTER_STATE", state: "SEARCHING", previous: "DORMANT" }, threat)).toBeNull();
-    expect(planForGameEvent({ type: "ESCAPED" }, null)).toBeNull();
+    expect(planForGameEvent({ type: "FOOTSTEP", sprinting: true }, null)).toEqual([{ cue: "footstepRun" }]);
+    expect(planForGameEvent({ type: "FOOTSTEP", sprinting: false }, null)).toEqual([{ cue: "footstep" }]);
+    expect(planForGameEvent({ type: "CAUGHT" }, null, { jumpscare: false }).map((p) => p.cue)).toEqual(["caught"]);
+    expect(planForGameEvent({ type: "MONSTER_STATE", state: "PURSUING", previous: "SEARCHING" }, threat)).toEqual([{ cue: "growl", options: { pan: -0.6 } }]);
+    expect(planForGameEvent({ type: "MONSTER_STATE", state: "SEARCHING", previous: "DORMANT" }, threat)).toEqual([]);
+    expect(planForGameEvent({ type: "ESCAPED" }, null)).toEqual([]);
   });
   it("paces the creature's steps by distance, and is silent while it sleeps or is far", () => {
     const steps = new MonsterSteps();
@@ -140,12 +140,11 @@ async function ask(): Promise<void> {
   await click(byRole("button", "Investigate") as HTMLElement);
   await advance(100);
 }
-async function turnSoundOn(): Promise<void> {
-  await click(byRole("button", "Settings") as HTMLElement);
-  await advance(100);
-  await click(tid("sound-toggle")!);
-  await advance(100);
-  await click(byRole("button", "New Investigation") as HTMLElement);
+/** Sound is on by default and starts with the first click or key press in the page. A pointer press stands in for that gesture. */
+async function startSound(): Promise<void> {
+  await act(async () => {
+    document.dispatchEvent(new Event("pointerdown"));
+  });
   await advance(100);
 }
 
@@ -160,33 +159,39 @@ afterEach(() => {
 });
 
 describe("sound in the application", () => {
-  it("is off by default: no audio context exists until the user turns it on", async () => {
+  it("is on by default, and no audio context exists until the first click or key press", async () => {
     await render(<App {...appProps()} />);
     await advance(100);
     await ask();
     await advance(12000);
     expect(contexts).toHaveLength(0);
+    await startSound();
+    expect(contexts).toHaveLength(1);
   });
 
-  it("the settings page turns it on and off and shows the state", async () => {
+  it("the settings page shows the sound state, and the choice to turn it off and on is stored", async () => {
     await render(<App {...appProps()} />);
     await advance(100);
     await click(byRole("button", "Settings") as HTMLElement);
     await advance(100);
-    expect(tid("sound-status")!.textContent).toBe("Sound is off.");
-    await click(tid("sound-toggle")!);
-    await advance(100);
-    expect(contexts).toHaveLength(1);
+    expect(tid("sound-status")!.textContent).toBe("Sound starts with your first click or key press in Sean.");
+    await startSound();
     expect(tid("sound-status")!.textContent).toBe("Sound is on.");
     await click(tid("mute")!);
     expect(tid("sound-status")!.textContent).toBe("Sound is on but muted.");
     expect(JSON.parse(window.localStorage.getItem("sean.settings.v1")!).muted).toBe(true);
+    await click(tid("mute")!);
     await click(tid("sound-toggle")!);
     await advance(100);
     expect(contexts[0]!.liveNodes()).toEqual([]);
     expect(tid("sound-status")!.textContent).toBe("Sound is off.");
-    // "On" is never stored.
-    expect(window.localStorage.getItem("sean.settings.v1")).not.toMatch(/enabled/);
+    expect(JSON.parse(window.localStorage.getItem("sean.settings.v1")!).soundOn).toBe(false);
+    await click(tid("sound-toggle")!);
+    await advance(100);
+    expect(tid("sound-status")!.textContent).toBe("Sound is on.");
+    expect(JSON.parse(window.localStorage.getItem("sean.settings.v1")!).soundOn).toBe(true);
+    // The gesture is never stored; only the choice is.
+    expect(window.localStorage.getItem("sean.settings.v1")).not.toMatch(/"enabled"/);
   });
 
   it("volume levels are stored", async () => {
@@ -206,7 +211,7 @@ describe("sound in the application", () => {
   it("plays during the interlude and is completely silent afterwards", async () => {
     await render(<App {...appProps()} />);
     await advance(100);
-    await turnSoundOn();
+    await startSound();
     await ask();
     await advance(1700);
     const context = contexts[0]!;
@@ -221,7 +226,7 @@ describe("sound in the application", () => {
   it("the game receives the sound toggle, events, and the threat reports", async () => {
     await render(<App {...appProps({ renderGame: fakeGame })} />);
     await advance(100);
-    await turnSoundOn();
+    await startSound();
     await ask();
     await advance(1600 + 5 * 700 + 700 + 2000 + 2600 + 3000 + 200);
     expect(tid("fake-game")).not.toBeNull();
@@ -241,7 +246,7 @@ describe("sound in the application", () => {
   it("makes no sound for insufficient evidence", async () => {
     await render(<App {...appProps({ result: { kind: "result", result: clone(insufficient().body) } })} />);
     await advance(100);
-    await turnSoundOn();
+    await startSound();
     await ask();
     await advance(12000);
     expect(contexts[0]!.nodes.filter((n) => n.kind === "oscillator" || n.kind === "buffersource")).toEqual([]);
@@ -250,7 +255,7 @@ describe("sound in the application", () => {
   it("unmounting the application releases the sound", async () => {
     const view = await render(<App {...appProps()} />);
     await advance(100);
-    await turnSoundOn();
+    await startSound();
     await ask();
     await advance(1700);
     await view.unmount();

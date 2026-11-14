@@ -14,6 +14,7 @@ import type {
   OscillatorLike,
   PannerLike,
   ParamLike,
+  WaveShaperLike,
 } from "../src/features/audio/AudioController";
 
 export class FakeParam implements ParamLike {
@@ -128,9 +129,22 @@ class FakePanner extends FakeNode implements PannerLike {
   }
 }
 
+class FakeWaveShaper extends FakeNode implements WaveShaperLike {
+  curve: Float32Array | null = null;
+  oversample = "none";
+  constructor(owner: FakeContext) {
+    super("waveshaper", owner);
+  }
+}
+
 export class FakeContext implements AudioContextLike {
   createStereoPanner(): PannerLike {
     return new FakePanner(this);
+  }
+
+  /** Delete this property to test a browser without WaveShaper support. */
+  createWaveShaper(): WaveShaperLike {
+    return new FakeWaveShaper(this);
   }
 
   nodes: FakeNode[] = [];

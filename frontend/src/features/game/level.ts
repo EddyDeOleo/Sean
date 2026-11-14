@@ -6,25 +6,26 @@
  *
  *   #  wall          .  floor        P  player start     M  monster start
  *   C  clue spot     D  exit gate (a wall until the exit opens)   E  exit
+ *   H  hiding place (a locker or alcove the player can enter and the creature can search)
  */
 
 export const LEVEL_MAP: readonly string[] = [
   "#########################",
-  "#P..#.....#.......#.....#",
+  "#P..#.....#......H#.....#",
   "#...#.C...#...C...#..C..#",
-  "#...#.....#.......#.....#",
+  "#...#....H#.......#....H#",
   "#...##.####.#####.##.####",
   "#.......................#",
   "#.####.###.....###.####.#",
-  "#.#C...#.........#...#..#",
-  "#.#....#....M....#...#..#",
+  "#.#C...#........H#...#..#",
+  "#.#....#....M....#...#.H#",
   "#.#....#.........#...#C.#",
-  "#.##.###.........##.###.#",
+  "#.##.###H........##.###.#",
   "#.......................#",
   "###.#####.#####.#########",
   "#.C.#C....#.....#.......#",
   "#...#.....#..C..D.......#",
-  "#...#.....#.....#.....E.#",
+  "#H..#H....#....H#.....E.#",
   "#########################",
 ];
 
@@ -45,12 +46,22 @@ export interface Level {
   clueSpots: Point[];
   gate: Point;
   exit: Point;
+  /** Places the player can hide in. The creature checks them. */
+  hideSpots: Point[];
+  /** Where the creature walks when it patrols and searches, in a fixed order. */
+  patrol: Point[];
 }
+
+/** Rooms and corridor junctions. Points behind the gate are skipped while the gate is closed. */
+export const PATROL_POINTS: readonly Point[] = [
+  [7.5, 2.5], [14.5, 2.5], [21.5, 2.5], [2.5, 2.5], [3.5, 5.5], [11.5, 5.5], [19.5, 5.5],
+  [4.5, 8.5], [12.5, 8.5], [19.5, 8.5], [22.5, 8.5], [11.5, 11.5], [2.5, 13.5], [7.5, 14.5], [13.5, 14.5], [20.5, 14.5],
+].map(([x, y]) => ({ x: x!, y: y! }));
 
 /** The centre of a tile. */
 export const centre = (x: number, y: number): Point => ({ x: x + 0.5, y: y + 0.5 });
 
-export function parseLevel(rows: readonly string[]): Level {
+export function parseLevel(rows: readonly string[], patrol: readonly Point[] = []): Level {
   const height = rows.length;
   const width = rows[0]?.length ?? 0;
   if (height < 3 || width < 3) throw new Error("level too small");
@@ -60,6 +71,7 @@ export function parseLevel(rows: readonly string[]): Level {
   let gate: Point | null = null;
   let exit: Point | null = null;
   const clueSpots: Point[] = [];
+  const hideSpots: Point[] = [];
   rows.forEach((row, y) => {
     if (row.length !== width) throw new Error(`row ${y} has width ${row.length}, expected ${width}`);
     [...row].forEach((ch, x) => {
@@ -74,15 +86,16 @@ export function parseLevel(rows: readonly string[]): Level {
       } else if (ch === "P") playerStart = centre(x, y);
       else if (ch === "M") monsterStart = centre(x, y);
       else if (ch === "C") clueSpots.push(centre(x, y));
+      else if (ch === "H") hideSpots.push(centre(x, y));
       else if (ch !== ".") throw new Error(`unknown character '${ch}' at ${x},${y}`);
       tiles.push(tile);
     });
   });
   if (!playerStart || !monsterStart || !gate || !exit) throw new Error("level needs P, M, D and E");
-  return { width, height, tiles, playerStart, monsterStart, clueSpots, gate, exit };
+  return { width, height, tiles, playerStart, monsterStart, clueSpots, gate, exit, hideSpots, patrol: [...patrol] };
 }
 
-export const LEVEL: Level = parseLevel(LEVEL_MAP);
+export const LEVEL: Level = parseLevel(LEVEL_MAP, PATROL_POINTS);
 
 export function tileAt(level: Level, x: number, y: number): Tile {
   const tx = Math.floor(x);

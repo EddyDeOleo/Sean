@@ -94,7 +94,7 @@ export function RequestScreen(props: RequestScreenProps) {
           <select id={ids.repo} className="sx-select" value={selectedRepository} onChange={(event) => props.onSelectRepository(event.target.value)} disabled={repositories === null || available.length === 0}>
             <option value="">{repositories === null ? "Loading…" : available.length === 0 ? "None available" : "Choose in the request"}</option>
             {available.map((r) => (
-              <option key={r.repository_id} value={r.repository_id}>{r.repository_id}</option>
+              <option key={r.repository_id} value={r.repository_id}>{r.display_name === r.repository_id ? r.repository_id : `${r.display_name} (${r.repository_id})`}</option>
             ))}
           </select>
           <span className="sx-spacer" />

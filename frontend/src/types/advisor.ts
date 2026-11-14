@@ -138,6 +138,10 @@ export interface InterpretedRequest {
 
 export interface RepositoryListItem {
   repository_id: string;
+  /** The name shown to people. It is the identifier when no name was given. */
+  display_name: string;
+  /** The folder the repository is registered at. */
+  path: string;
   available: boolean;
   github: { owner: string; name: string } | null;
 }

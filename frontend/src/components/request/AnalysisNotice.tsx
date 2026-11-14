@@ -2,7 +2,7 @@
 
 import type { AnalysisError } from "../../features/analysis/analysisMachine";
 
-export function AnalysisNotice({ error, onDismiss }: { error: AnalysisError; onDismiss(): void }) {
+export function AnalysisNotice({ error, onDismiss, onRetry }: { error: AnalysisError; onDismiss(): void; onRetry?(): void }) {
   let title: string;
   let body: string;
   let tone: "danger" | "warn" = "danger";
@@ -34,7 +34,10 @@ export function AnalysisNotice({ error, onDismiss }: { error: AnalysisError; onD
     <div className="sx-notice" data-tone={tone} role="alert" data-testid="analysis-error" data-kind={error.kind}>
       <h3>{title}</h3>
       <p>{body}</p>
-      <p><button type="button" className="sx-btn sx-btn-small" onClick={onDismiss}>Dismiss</button></p>
+      <p className="sx-request-row">
+        {onRetry ? <button type="button" className="sx-btn sx-btn-small" onClick={onRetry} data-testid="retry-analysis">Try again</button> : null}
+        <button type="button" className="sx-btn sx-btn-small sx-btn-quiet" onClick={onDismiss}>Dismiss</button>
+      </p>
     </div>
   );
 }

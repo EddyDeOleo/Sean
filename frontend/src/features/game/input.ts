@@ -15,8 +15,8 @@ const FORWARD = ["KeyW", "ArrowUp"];
 const BACK = ["KeyS", "ArrowDown"];
 const STRAFE_LEFT = ["KeyA"];
 const STRAFE_RIGHT = ["KeyD"];
-const TURN_LEFT = ["KeyQ", "ArrowLeft"];
-const TURN_RIGHT = ["KeyE", "ArrowRight"];
+const TURN_LEFT = ["ArrowLeft"];
+const TURN_RIGHT = ["ArrowRight"];
 const SPRINT = ["ShiftLeft", "ShiftRight"];
 
 const any = (keys: ReadonlySet<string>, codes: readonly string[]): boolean => codes.some((c) => keys.has(c));
@@ -30,12 +30,14 @@ export function inputFromKeys(keys: ReadonlySet<string>): Input {
   };
 }
 
-const HANDLED = new Set([...FORWARD, ...BACK, ...STRAFE_LEFT, ...STRAFE_RIGHT, ...TURN_LEFT, ...TURN_RIGHT, ...SPRINT, "KeyF", "Space"]);
+const HANDLED = new Set([...FORWARD, ...BACK, ...STRAFE_LEFT, ...STRAFE_RIGHT, ...TURN_LEFT, ...TURN_RIGHT, ...SPRINT, "KeyF", "KeyE", "Space"]);
 
 export interface InputHandlers {
   /** While paused, only Escape is handled and no key is blocked, so the menu buttons work with Space and Enter. */
   isPaused(): boolean;
   onFlashlight(): void;
+  /** The interact key: hide in, or leave, a hiding place. */
+  onInteract(): void;
   onPause(): void;
   /** Mouse movement in pixels, only while the pointer is locked. */
   onLook(dx: number, dy: number): void;
@@ -88,6 +90,10 @@ export class GameInput {
     event.preventDefault();
     if (event.code === "KeyF") {
       if (!event.repeat) this.handlers.onFlashlight();
+      return;
+    }
+    if (event.code === "KeyE") {
+      if (!event.repeat) this.handlers.onInteract();
       return;
     }
     this.keys.add(event.code);

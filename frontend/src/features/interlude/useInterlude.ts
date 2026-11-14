@@ -17,6 +17,8 @@ export interface InterludeOptions {
 export interface Interlude {
   state: InterludeState;
   begin(snapshotId: string): void;
+  /** Start the game on its own. */
+  beginGame(id: string): void;
   skip(): void;
   gameReady(): void;
   gameFailed(): void;
@@ -83,6 +85,7 @@ export function useInterlude(options: InterludeOptions): Interlude {
   return {
     state,
     begin: useCallback((snapshotId: string) => dispatch({ type: "BEGIN", snapshotId }), []),
+    beginGame: useCallback((id: string) => dispatch({ type: "BEGIN_GAME", id }), []),
     skip: useCallback(() => dispatch({ type: "SKIP" }), []),
     gameReady: useCallback(() => dispatch({ type: "GAME_READY" }), []),
     gameFailed: useCallback(() => dispatch({ type: "GAME_FAILED" }), []),

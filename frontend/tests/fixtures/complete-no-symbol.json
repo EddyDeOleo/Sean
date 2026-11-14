@@ -14,7 +14,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -50,7 +50,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -86,7 +86,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -122,7 +122,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -158,7 +158,7 @@
         "file_path": null,
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -194,7 +194,7 @@
         "file_path": "docs/billing.md",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -230,7 +230,7 @@
         "file_path": "docs/billing.md",
         "integrity": {
           "content_digest": null,
-          "retrieved_at": "2026-11-13T03:04:34Z",
+          "retrieved_at": "2026-11-13T21:29:06Z",
           "served_from_cache": false,
           "source_verification": "VERIFIED_IN_REPOSITORY"
         },
@@ -258,7 +258,7 @@
       }
     ],
     "explanation": "Verified repository history records 5 commit(s) that changed src/billing.py. These records establish that the changes occurred. They do not state why. Documentation changed in 2 of these commits. That co-change does not establish a content relation or intent. Unknown: why these changes were made, and whether history outside the retrieved scope affects this answer. Limitations: Rename and copy detection is heuristic, so some history may be attributed to a different path. Pull request and issue evidence is not included, because the association step is not implemented. Evidence that would help: the diff of each listed commit, to see what each change did.",
-    "investigation_id": "12e9cfc1-d3ba-4203-8732-12a13640b72f",
+    "investigation_id": "bd792b4d-660d-4035-bd4c-5d2124a96f91",
     "limitations": [
       {
         "code": "HEURISTIC_RENAME_AND_COPY_DETECTION",

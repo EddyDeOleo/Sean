@@ -152,6 +152,10 @@ def main() -> int:
             for name, (method, path, document) in ADVISOR_CASES.items():
                 status, body = post(port, document, path, method)
                 payload = {"name": name, "method": method, "path": path, "request": document, "status": status, "body": body}
+                if name == "repositories":
+                    # The folders are temporary and machine-specific. Keep the fixture stable and free of local paths.
+                    for item in payload["body"]["repositories"]:
+                        item["path"] = "C:\\fixtures\\" + item["repository_id"]
                 (FIXTURE_DIRECTORY / f"advisor-{name}.json").write_text(
                     json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
                 )

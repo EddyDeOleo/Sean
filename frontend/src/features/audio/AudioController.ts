@@ -11,12 +11,31 @@
  * - Any failure inside audio is swallowed after cleanup. Audio never affects the investigation.
  *
  * The context is created through an injected factory, so tests drive the controller with a fake context.
+ * - Cues flagged intense (the scream, the caught impact) are skipped or softened while intense sound is not allowed.
+ * - Priority cues may exceed the concurrency cap by a few, so a jumpscare is never dropped.
+ *
+ * The synthesis of the one-shot cues is in cues.ts and of the Ouija room bed in beds.ts.
  */
 
-export type Mood = "silent" | "idle" | "search" | "tension" | "escape";
+import { buildOuijaBed, makeCrackleBuffer } from "./beds";
+import { PROCEDURAL_CUES, type CueDef, type ProceduralCue } from "./cues";
+import { FLOOR, Rig, hashString, makeDistortionCurve, makeLimiterCurve, mulberry32 } from "./synth";
+
+export type Mood = "silent" | "idle" | "search" | "ouija" | "tension" | "escape";
 export type Cue =
   | "settle" | "glitch" | "whisper" | "clue" | "caught" | "door" | "escape"
-  | "planchette" | "footstep" | "footstepRun" | "flashlight" | "growl" | "monsterStep";
+  | "planchette" | "footstep" | "footstepRun" | "flashlight" | "growl" | "monsterStep"
+  | "woodKnock" | "woodThud" | "planchetteTick" | "planchetteSlide" | "woodCreak" | "scream"
+  | "breath" | "heartbeat" | "drip" | "pipeTick" | "rumble" | "proximity";
+
+export interface CueOptions {
+  /** -1 (left) to 1 (right). Needs a stereo panner. */
+  pan?: number;
+  /** 0 to 1, scales the cue. */
+  gain?: number;
+  /** A priority cue may exceed MAX_CONCURRENT_CUES by PRIORITY_EXTRA_CUES, so the scream and the heartbeat are never dropped. */
+  priority?: boolean;
+}
 
 export interface AudioNodeLike {
   connect(destination: unknown): unknown;
@@ -53,7 +72,7 @@ export interface FilterLike extends AudioNodeLike {
 export interface BufferSourceLike extends AudioNodeLike {
   buffer: unknown;
   loop: boolean;
-  start(when?: number): void;
+  start(when?: number, offset?: number): void;
   stop(when?: number): void;
   onended: (() => void) | null;
 }
@@ -70,9 +89,16 @@ export interface PannerLike extends AudioNodeLike {
   pan: ParamLike;
 }
 
+export interface WaveShaperLike extends AudioNodeLike {
+  curve: Float32Array | null;
+  oversample: string;
+}
+
 export interface AudioContextLike {
   /** Optional: without it, cues play centred. */
   createStereoPanner?(): PannerLike;
+  /** Optional: without it, the scream is not distorted. */
+  createWaveShaper?(): WaveShaperLike;
   readonly currentTime: number;
   readonly sampleRate: number;
   readonly state: string;
@@ -93,7 +119,18 @@ export const DEFAULT_VOLUME = 0.35;
 /** The master gain ceiling. The slider value is scaled by this, so even full volume stays moderate. */
 export const MASTER_CEILING = 0.5;
 export const MAX_CONCURRENT_CUES = 6;
+/** Priority cues (the scream, the heartbeat) may play this many beyond MAX_CONCURRENT_CUES. */
+export const PRIORITY_EXTRA_CUES = 3;
+/** Cues that are skipped (scream) or softened (caught) when intense sound is not allowed. */
+export const INTENSE_CUES: readonly Cue[] = ["scream", "caught"];
 const FADE_SECONDS = 1.6;
+
+/** How long a cue may sound, in seconds. Every source of the cue stops by then. */
+export function cueDurationSeconds(cue: Cue): number {
+  const procedural = (PROCEDURAL_CUES as Partial<Record<Cue, CueDef>>)[cue];
+  if (procedural) return procedural.duration;
+  return legacySpec(cue as LegacyCue).duration + 0.05;
+}
 
 export interface AudioSnapshot {
   enabled: boolean;
@@ -105,6 +142,7 @@ export interface AudioSnapshot {
   failed: boolean;
   activeBeds: number;
   activeCues: number;
+  intenseAllowed: boolean;
 }
 
 interface Bed {
@@ -131,6 +169,7 @@ export class AudioController {
   private context: AudioContextLike | null = null;
   private master: GainLike | null = null;
   private compressor: CompressorLike | null = null;
+  private limiter: WaveShaperLike | null = null;
   /** Ambient beds and one-shot effects have their own level, so the user can balance them. Both feed the master. */
   private ambientBus: GainLike | null = null;
   private effectsBus: GainLike | null = null;
@@ -138,6 +177,11 @@ export class AudioController {
   private effectsVolume = 1;
   private tension = 0;
   private noiseBuffer: unknown = null;
+  private crackleBuffer: unknown = null;
+  private distortionCurve: Float32Array | null = null;
+  /** How many times each cue has played, so repeats vary a little but deterministically. */
+  private plays = new Map<Cue, number>();
+  private intenseAllowed = true;
   private starting: Promise<boolean> | null = null;
   private bed: Bed | null = null;
   private retiring: Bed[] = [];
@@ -174,6 +218,7 @@ export class AudioController {
         failed: this.failed,
         activeBeds: (this.bed ? 1 : 0) + this.retiring.length,
         activeCues: this.cues.size,
+        intenseAllowed: this.intenseAllowed,
       };
     }
     return this.cachedSnapshot;
@@ -210,7 +255,18 @@ export class AudioController {
       const master = context.createGain();
       master.gain.value = this.effectiveGain();
       master.connect(compressor);
-      compressor.connect(context.destination);
+      // The last stage is a soft limiter, so that no mix of cues can pass LIMITER_CEILING (about -3 dBFS). Without
+      // WaveShaper support the cues' own levels and the compressor are the only protection.
+      const limiter = context.createWaveShaper?.() ?? null;
+      if (limiter) {
+        limiter.curve = makeLimiterCurve();
+        limiter.oversample = "2x";
+        compressor.connect(limiter);
+        limiter.connect(context.destination);
+      } else {
+        compressor.connect(context.destination);
+      }
+      this.limiter = limiter;
       const ambientBus = context.createGain();
       ambientBus.gain.value = this.ambientBusGain();
       ambientBus.connect(master);
@@ -239,6 +295,8 @@ export class AudioController {
 
   /** Turn sound off and release everything. The user can enable it again. */
   disable(): void {
+    // A start that was still in progress belongs to the old request. A later enable must begin again.
+    this.starting = null;
     this.teardown();
     this.enabled = false;
     this.publish();
@@ -265,6 +323,13 @@ export class AudioController {
   setEffectsVolume(volume: number): void {
     this.effectsVolume = clamp01(volume);
     this.rampBus(this.effectsBus, this.effectsVolume);
+    this.publish();
+  }
+
+  /** When false, the scream is skipped and the caught impact is softened. Default true. Cues already playing are not cut. */
+  setIntenseAllowed(allowed: boolean): void {
+    if (this.intenseAllowed === allowed) return;
+    this.intenseAllowed = allowed;
     this.publish();
   }
 
@@ -340,6 +405,11 @@ export class AudioController {
     gain.gain.linearRampToValueAtTime(this.bedLevel(mood), now + FADE_SECONDS);
     gain.connect(bus);
 
+    if (mood === "ouija") {
+      const nodes = buildOuijaBed(context, { noise: () => this.noiseSource(context), crackle: () => this.crackleSource(context) }, gain, now);
+      return { mood, gain, nodes: [...nodes, gain] };
+    }
+
     const filter = context.createBiquadFilter();
     filter.type = "lowpass";
     filter.frequency.value = this.bedBrightness(mood);
@@ -387,6 +457,8 @@ export class AudioController {
       case "tension":
       case "escape":
         return 0.5;
+      case "ouija":
+        return 1;
       default:
         return 0.32;
     }
@@ -425,6 +497,16 @@ export class AudioController {
     source.loop = true;
     return source;
   }
+
+  private crackleSource(context: AudioContextLike): BufferSourceLike {
+    this.crackleBuffer ??= makeCrackleBuffer(context);
+    const source = context.createBufferSource();
+    source.buffer = this.crackleBuffer;
+    source.loop = true;
+    return source;
+  }
+
+  private getDistortionCurve = (): Float32Array => (this.distortionCurve ??= makeDistortionCurve());
 
   private retire(bed: Bed): void {
     const context = this.context;
@@ -472,15 +554,68 @@ export class AudioController {
     }
   }
 
-  /** Play one short cue. Nothing plays before sound has been enabled. */
-  cue(cue: Cue, options: { pan?: number; gain?: number } = {}): void {
+  /**
+   * Play one short cue. Nothing plays before sound has been enabled. At most MAX_CONCURRENT_CUES play together; priority
+   * cues may use PRIORITY_EXTRA_CUES more. The scream is skipped, and the caught impact softened, while intense sound
+   * is not allowed.
+   */
+  cue(cue: Cue, options: CueOptions = {}): void {
     if (!this.enabled || !this.context || !this.effectsBus) return;
-    if (this.cues.size >= MAX_CONCURRENT_CUES) return;
+    if (cue === "scream" && !this.intenseAllowed) return;
+    if (this.cues.size >= MAX_CONCURRENT_CUES + (options.priority ? PRIORITY_EXTRA_CUES : 0)) return;
     try {
-      const context = this.context;
-      const bus = this.effectsBus;
+      const definition = (PROCEDURAL_CUES as Partial<Record<Cue, CueDef>>)[cue];
+      if (definition) this.playProcedural(cue as ProceduralCue, definition, options);
+      else this.playLegacy(cue as LegacyCue, options);
+    } catch {
+      this.fail();
+    }
+  }
+
+  private playProcedural(cue: ProceduralCue, definition: CueDef, options: CueOptions): void {
+    const context = this.context as AudioContextLike;
+    const bus = this.effectsBus as GainLike;
+    const now = context.currentTime;
+    const soft = cue === "caught" && !this.intenseAllowed;
+    const index = this.plays.get(cue) ?? 0;
+    this.plays.set(cue, index + 1);
+    const rig = new Rig(context, () => this.noiseSource(context), now, now + definition.duration, this.getDistortionCurve);
+    const out = rig.gain(FLOOR);
+    const level = definition.level * clamp01(options.gain ?? 1) * (soft ? 0.35 : 1);
+    // A short fade at the very end, so a cue never ends on a click.
+    out.gain.setValueAtTime(level, now);
+    out.gain.setValueAtTime(level, now + definition.duration - 0.04);
+    out.gain.linearRampToValueAtTime(FLOOR, now + definition.duration - 0.005);
+    const panner = options.pan !== undefined && context.createStereoPanner ? context.createStereoPanner() : null;
+    if (panner) {
+      panner.pan.value = Math.min(1, Math.max(-1, Number.isFinite(options.pan) ? (options.pan as number) : 0));
+      panner.connect(bus);
+      out.connect(panner);
+      rig.adopt(panner);
+    } else {
+      out.connect(bus);
+    }
+    definition.build(rig, out, { rng: mulberry32(hashString(cue) + index * 7919), soft });
+
+    const handle = {
+      stop: (): void => {
+        rig.release();
+        this.cues.delete(handle);
+        this.publish();
+      },
+    };
+    this.cues.add(handle);
+    const first = rig.sources[0];
+    if (first) first.onended = handle.stop;
+    this.publish();
+  }
+
+  private playLegacy(cue: LegacyCue, options: CueOptions): void {
+    {
+      const context = this.context as AudioContextLike;
+      const bus = this.effectsBus as GainLike;
       const now = context.currentTime;
-      const spec = this.cueSpec(cue);
+      const spec = legacySpec(cue);
       const gain = context.createGain();
       gain.gain.setValueAtTime(0.0001, now);
       gain.gain.linearRampToValueAtTime(spec.level * clamp01(options.gain ?? 1), now + spec.attack);
@@ -550,47 +685,6 @@ export class AudioController {
       const first = sources[0];
       if (first && "onended" in first) first.onended = handle.stop;
       this.publish();
-    } catch {
-      this.fail();
-    }
-  }
-
-  private cueSpec(cue: Cue): {
-    level: number;
-    attack: number;
-    duration: number;
-    filter: "lowpass" | "bandpass" | "highpass";
-    cutoff: number;
-    noise: number;
-    voices: { type: "sine" | "triangle" | "sawtooth" | "square"; from: number; to: number }[];
-  } {
-    switch (cue) {
-      case "settle":
-        return { level: 0.3, attack: 0.02, duration: 0.7, filter: "lowpass", cutoff: 500, noise: 0.05, voices: [{ type: "triangle", from: 82, to: 62 }] };
-      case "glitch":
-        return { level: 0.22, attack: 0.005, duration: 0.5, filter: "bandpass", cutoff: 900, noise: 0.35, voices: [{ type: "sawtooth", from: 180, to: 60 }] };
-      case "whisper":
-        return { level: 0.16, attack: 0.3, duration: 2.4, filter: "bandpass", cutoff: 2200, noise: 0.5, voices: [] };
-      case "clue":
-        return { level: 0.2, attack: 0.01, duration: 0.6, filter: "lowpass", cutoff: 2400, noise: 0, voices: [{ type: "sine", from: 523, to: 784 }] };
-      case "caught":
-        return { level: 0.3, attack: 0.01, duration: 0.9, filter: "lowpass", cutoff: 400, noise: 0.2, voices: [{ type: "sawtooth", from: 70, to: 40 }] };
-      case "door":
-        return { level: 0.22, attack: 0.02, duration: 1.0, filter: "lowpass", cutoff: 600, noise: 0.15, voices: [{ type: "square", from: 90, to: 120 }] };
-      case "escape":
-        return { level: 0.26, attack: 0.1, duration: 2.2, filter: "lowpass", cutoff: 1800, noise: 0, voices: [{ type: "sine", from: 262, to: 392 }, { type: "sine", from: 330, to: 494 }] };
-      case "planchette":
-        return { level: 0.14, attack: 0.03, duration: 0.55, filter: "lowpass", cutoff: 380, noise: 0.25, voices: [] };
-      case "footstep":
-        return { level: 0.12, attack: 0.005, duration: 0.16, filter: "lowpass", cutoff: 300, noise: 0.5, voices: [{ type: "sine", from: 70, to: 50 }] };
-      case "footstepRun":
-        return { level: 0.2, attack: 0.005, duration: 0.14, filter: "lowpass", cutoff: 420, noise: 0.6, voices: [{ type: "sine", from: 85, to: 55 }] };
-      case "flashlight":
-        return { level: 0.12, attack: 0.002, duration: 0.07, filter: "highpass", cutoff: 1800, noise: 0.4, voices: [{ type: "square", from: 1400, to: 900 }] };
-      case "growl":
-        return { level: 0.3, attack: 0.15, duration: 1.4, filter: "lowpass", cutoff: 360, noise: 0.18, voices: [{ type: "sawtooth", from: 62, to: 44 }, { type: "sawtooth", from: 66, to: 47 }] };
-      case "monsterStep":
-        return { level: 0.22, attack: 0.005, duration: 0.2, filter: "lowpass", cutoff: 220, noise: 0.4, voices: [{ type: "sine", from: 48, to: 34 }] };
     }
   }
 
@@ -615,6 +709,7 @@ export class AudioController {
       this.effectsBus?.disconnect();
       this.master?.disconnect();
       this.compressor?.disconnect();
+      this.limiter?.disconnect();
     } catch {
       // Already disconnected.
     }
@@ -622,9 +717,12 @@ export class AudioController {
     this.context = null;
     this.master = null;
     this.compressor = null;
+    this.limiter = null;
     this.ambientBus = null;
     this.effectsBus = null;
     this.noiseBuffer = null;
+    this.crackleBuffer = null;
+    this.plays.clear();
     this.tension = 0;
     if (context && context.state !== "closed") {
       void context.close().catch(() => undefined);
@@ -639,5 +737,43 @@ export class AudioController {
     this.enabled = false;
     this.listeners.clear();
     this.cachedSnapshot = null;
+  }
+}
+
+/** The cues built from a single envelope shaped oscillator and noise pair. The richer cues are in cues.ts. */
+export type LegacyCue = Exclude<Cue, ProceduralCue>;
+
+function legacySpec(cue: LegacyCue): {
+  level: number;
+  attack: number;
+  duration: number;
+  filter: "lowpass" | "bandpass" | "highpass";
+  cutoff: number;
+  noise: number;
+  voices: { type: "sine" | "triangle" | "sawtooth" | "square"; from: number; to: number }[];
+} {
+  switch (cue) {
+    case "settle":
+      return { level: 0.3, attack: 0.02, duration: 0.7, filter: "lowpass", cutoff: 500, noise: 0.05, voices: [{ type: "triangle", from: 82, to: 62 }] };
+    case "glitch":
+      return { level: 0.22, attack: 0.005, duration: 0.5, filter: "bandpass", cutoff: 900, noise: 0.35, voices: [{ type: "sawtooth", from: 180, to: 60 }] };
+    case "whisper":
+      return { level: 0.16, attack: 0.3, duration: 2.4, filter: "bandpass", cutoff: 2200, noise: 0.5, voices: [] };
+    case "clue":
+      return { level: 0.2, attack: 0.01, duration: 0.6, filter: "lowpass", cutoff: 2400, noise: 0, voices: [{ type: "sine", from: 523, to: 784 }] };
+    case "door":
+      return { level: 0.22, attack: 0.02, duration: 1.0, filter: "lowpass", cutoff: 600, noise: 0.15, voices: [{ type: "square", from: 90, to: 120 }] };
+    case "escape":
+      return { level: 0.26, attack: 0.1, duration: 2.2, filter: "lowpass", cutoff: 1800, noise: 0, voices: [{ type: "sine", from: 262, to: 392 }, { type: "sine", from: 330, to: 494 }] };
+    case "planchette":
+      return { level: 0.14, attack: 0.03, duration: 0.55, filter: "lowpass", cutoff: 380, noise: 0.25, voices: [] };
+    case "footstep":
+      return { level: 0.12, attack: 0.005, duration: 0.16, filter: "lowpass", cutoff: 300, noise: 0.5, voices: [{ type: "sine", from: 70, to: 50 }] };
+    case "footstepRun":
+      return { level: 0.2, attack: 0.005, duration: 0.14, filter: "lowpass", cutoff: 420, noise: 0.6, voices: [{ type: "sine", from: 85, to: 55 }] };
+    case "flashlight":
+      return { level: 0.12, attack: 0.002, duration: 0.07, filter: "highpass", cutoff: 1800, noise: 0.4, voices: [{ type: "square", from: 1400, to: 900 }] };
+    case "growl":
+      return { level: 0.3, attack: 0.15, duration: 1.4, filter: "lowpass", cutoff: 360, noise: 0.18, voices: [{ type: "sawtooth", from: 62, to: 44 }, { type: "sawtooth", from: 66, to: 47 }] };
   }
 }

@@ -13,7 +13,9 @@ import {
   validateInterpreted,
   validatePreviewResponse,
   validateProfileResponse,
+  validateRemoved,
   validateRepositories,
+  validateRepositoryItem,
   type Validated,
 } from "../features/analysis/validateAdvisor";
 import { DEFAULT_BASE_URL, toBackendError } from "./investigationClient";
@@ -46,18 +48,25 @@ function isAbort(caught: unknown, signal?: AbortSignal): boolean {
 }
 
 async function call<T>(
-  method: "GET" | "POST",
+  method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
   body: unknown,
   validate: (raw: unknown) => Validated<T>,
   options: CallOptions,
+  successStatus = 200,
 ): Promise<CallOutcome<T>> {
   const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = fetch } = options;
   let response: Response;
   try {
     response = await fetchImpl(`${baseUrl}${path}`, {
       method,
-      headers: { Accept: "application/json", ...(body !== undefined ? { "Content-Type": "application/json" } : {}) },
+      headers: {
+        Accept: "application/json",
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+        // Every call that is not a read says it comes from the application. The backend refuses changes to the repository
+        // list without it, which keeps a web page on another origin from making them.
+        ...(method !== "GET" ? { "X-Sean-Client": "web" } : {}),
+      },
       body: body !== undefined ? JSON.stringify(body) : undefined,
       signal,
       credentials: "omit",
@@ -71,10 +80,10 @@ async function call<T>(
     parsed = await response.json();
   } catch (caught) {
     if (isAbort(caught, signal)) return { kind: "aborted" };
-    if (response.status === 200) return { kind: "invalid", reason: "body: not JSON" };
+    if (response.status === successStatus) return { kind: "invalid", reason: "body: not JSON" };
     return { kind: "rejected", status: response.status, error: toBackendError(response.status, null) };
   }
-  if (response.status !== 200) return { kind: "rejected", status: response.status, error: toBackendError(response.status, parsed) };
+  if (response.status !== successStatus) return { kind: "rejected", status: response.status, error: toBackendError(response.status, parsed) };
   const checked = validate(parsed);
   return checked.ok ? { kind: "ok", value: checked.value } : { kind: "invalid", reason: checked.reason };
 }
@@ -102,3 +111,27 @@ export const fetchProfile: ProfileFn = (repositoryId, options = {}) =>
   call("POST", `/repositories/${encodeURIComponent(repositoryId)}/profile`, undefined, validateProfileResponse, options);
 
 export const previewArtifacts: PreviewFn = (body, options = {}) => call("POST", "/artifacts/preview", body, validatePreviewResponse, options);
+
+// --- repository registration (the Repositories page) ---------------------------------------------------------------------
+
+/** What the user types to register a repository. The backend validates every field again. */
+export interface RepositoryInput {
+  repository_id: string;
+  display_name: string;
+  path: string;
+}
+export type EditableRepository = Pick<RepositoryInput, "display_name" | "path">;
+
+export type CreateRepositoryFn = (body: RepositoryInput, options?: CallOptions) => Promise<CallOutcome<RepositoryListItem>>;
+export type UpdateRepositoryFn = (repositoryId: string, body: EditableRepository, options?: CallOptions) => Promise<CallOutcome<RepositoryListItem>>;
+export type DeleteRepositoryFn = (repositoryId: string, options?: CallOptions) => Promise<CallOutcome<{ removed: string }>>;
+
+export const createRepository: CreateRepositoryFn = (body, options = {}) =>
+  call("POST", "/repositories", { repository_id: body.repository_id, display_name: body.display_name, path: body.path }, validateRepositoryItem, options, 201);
+
+export const updateRepository: UpdateRepositoryFn = (repositoryId, body, options = {}) =>
+  call("PUT", `/repositories/${encodeURIComponent(repositoryId)}`, { display_name: body.display_name, path: body.path }, validateRepositoryItem, options);
+
+/** Removes only the registration. The repository's folder is never touched. */
+export const deleteRepository: DeleteRepositoryFn = (repositoryId, options = {}) =>
+  call("DELETE", `/repositories/${encodeURIComponent(repositoryId)}`, undefined, validateRemoved, options);

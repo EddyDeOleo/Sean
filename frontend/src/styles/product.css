@@ -82,20 +82,12 @@ body {
   font-size: 1.05rem;
   color: var(--sx-text);
 }
-.sx-mark {
+/* The logo is the application's image (sean-favicon.jpg), the same file as the browser tab icon. */
+.sx-logo {
   flex: none;
   width: 1.5rem;
   height: 1.5rem;
-  border-radius: 6px;
-  border: 1.5px solid var(--sx-accent);
-  position: relative;
-}
-.sx-mark::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border-radius: 50%;
-  background: var(--sx-accent);
+  object-fit: contain;
 }
 .sx-nav {
   display: flex;
@@ -139,7 +131,7 @@ body {
 .sx-spacer {
   flex: 1;
 }
-.sx-shell[data-collapsed="true"] .sx-label,
+.sx-shell[data-collapsed="true"] .sx-sidebar .sx-label,
 .sx-shell[data-collapsed="true"] .sx-wordmark {
   display: none;
 }
@@ -827,7 +819,7 @@ body {
   .sx-shell[data-open="true"] .sx-sidebar {
     transform: none;
   }
-  .sx-shell[data-collapsed="true"] .sx-label,
+  .sx-shell[data-collapsed="true"] .sx-sidebar .sx-label,
   .sx-shell[data-collapsed="true"] .sx-wordmark {
     display: inline;
   }
@@ -864,4 +856,66 @@ body {
 }
 [data-motion="reduced"] .sx-sidebar {
   transition: none;
+}
+
+/* repository management */
+.sx-repo-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+.sx-repo {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--sx-line);
+  border-radius: 8px;
+  background: var(--sx-surface);
+}
+.sx-repo[data-selected="true"] {
+  border-color: var(--sx-accent);
+}
+.sx-repo-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.8rem;
+}
+.sx-repo-name {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.sx-repo-path {
+  margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
+  color: var(--sx-text-2);
+}
+.sx-repo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+.sx-form-grid {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 44rem;
+}
+.sx-field-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--sx-text-2);
+}
+.sx-field-hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: var(--sx-text-3);
+}
+.sx-confirm {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--sx-danger);
+  border-radius: 6px;
 }

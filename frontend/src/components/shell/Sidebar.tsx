@@ -9,6 +9,7 @@ const ICONS: Record<string, string> = {
   reports: "M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6",
   repositories: "M4 6h16M4 12h16M4 18h16",
   settings: "M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM19 12l2-1-1-3-2 .3-1.4-1.4.3-2-3-1-1 2h-2l-1-2-3 1 .3 2L6 7.3 4 7l-1 3 2 1v2l-2 1 1 3 2-.3 1.4 1.4-.3 2 3 1 1-2h2l1 2 3-1-.3-2 1.4-1.4 2 .3 1-3-2-1z",
+
   collapse: "M15 6l-6 6 6 6",
   expand: "M9 6l6 6-6 6",
 };
@@ -29,6 +30,7 @@ export interface SidebarProps {
   onNavigate(view: View): void;
   onToggle(): void;
   onOpenRecent(id: string): void;
+
 }
 
 export function Sidebar({ view, collapsed, recent, activeId, onNavigate, onToggle, onOpenRecent }: SidebarProps) {
@@ -48,7 +50,7 @@ export function Sidebar({ view, collapsed, recent, activeId, onNavigate, onToggl
   return (
     <aside className="sx-sidebar" id="app-sidebar" aria-label="Sean navigation" data-testid="sidebar">
       <div className="sx-brand">
-        <span className="sx-mark" aria-hidden="true" />
+        <img className="sx-logo" src="/sean-favicon.png" alt="" width={24} height={24} />
         <span className="sx-wordmark">Sean</span>
       </div>
       <nav className="sx-nav" aria-label="Main">
@@ -57,6 +59,7 @@ export function Sidebar({ view, collapsed, recent, activeId, onNavigate, onToggl
         {item("repositories", "repositories", "Repositories")}
         {item("settings", "settings", "Settings")}
       </nav>
+
       {!collapsed && recent.length > 0 ? (
         <>
           <p className="sx-nav-group" id="recent-heading">Recent investigations</p>

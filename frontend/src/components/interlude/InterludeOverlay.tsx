@@ -19,12 +19,14 @@ export interface InterludeOverlayProps {
   /** The user's original question. It informs the fiction and is shown as text only. */
   question: string;
   reducedMotion: boolean;
+  /** The game was started on its own, with no report behind it. */
+  standalone?: boolean;
   onSkip(): void;
   /** The game, rendered when the interlude is in a game phase. */
   children?: React.ReactNode;
 }
 
-export function InterludeOverlay({ state, question, reducedMotion, onSkip, children }: InterludeOverlayProps) {
+export function InterludeOverlay({ state, question, reducedMotion, standalone = false, onSkip, children }: InterludeOverlayProps) {
   const { phase } = state;
   const skipRef = useRef<HTMLButtonElement>(null);
   const inGame = isGamePhase(phase);
@@ -53,10 +55,10 @@ export function InterludeOverlay({ state, question, reducedMotion, onSkip, child
   return (
     <div className="il-overlay" role="dialog" aria-modal="true" aria-label="Narrative experience" data-phase={phase} data-reduced={reducedMotion} data-testid="interlude">
       <p className="il-fiction" role="note" data-testid="fiction-notice">
-        Fiction. What follows is part of the experience, not a finding. It cannot change your report.
+        {standalone ? "Fiction. This game is part of the experience, not a finding. It does not change any report." : "Fiction. What follows is part of the experience, not a finding. It cannot change your report."}
       </p>
       <button type="button" className="il-skip" onClick={onSkip} ref={skipRef} data-testid="skip-interlude">
-        Skip to the report
+        {standalone ? "Leave the game" : "Skip to the report"}
       </button>
 
       {!inGame && phase !== "GAME_COMPLETED" && phase !== "GAME_SKIPPED" ? (
@@ -74,7 +76,7 @@ export function InterludeOverlay({ state, question, reducedMotion, onSkip, child
 
       {inGame ? <div className="il-game">{children}</div> : null}
       {phase === "GAME_COMPLETED" || phase === "GAME_SKIPPED" ? (
-        <p className="il-closing" role="status" data-testid="closing">Returning to your report.</p>
+        <p className="il-closing" role="status" data-testid="closing">{standalone ? "Returning to Sean." : "Returning to your report."}</p>
       ) : null}
     </div>
   );

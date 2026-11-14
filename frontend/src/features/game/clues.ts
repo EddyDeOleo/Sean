@@ -31,9 +31,10 @@ function clip(value: string): string {
   return cleaned.length > MAX_LABEL ? `${cleaned.slice(0, MAX_LABEL)}…` : cleaned;
 }
 
-export function buildClues(snapshot: ReportSnapshot): ClueRecord[] {
+export function buildClues(snapshot: ReportSnapshot | null): ClueRecord[] {
   const clues: ClueRecord[] = [];
-  for (const finding of deriveFindings(snapshot)) {
+  // Without a report the game is still playable: it uses atmosphere items only, and says so.
+  for (const finding of snapshot ? deriveFindings(snapshot) : []) {
     if (finding.classification === "INSUFFICIENT_EVIDENCE") continue;
     for (const item of finding.evidence) {
       if (clues.length >= MAX_CLUES) break;

@@ -261,7 +261,7 @@ export function validateRepositories(raw: unknown): Validated<RepositoryListItem
     exact(top, "response", ["repositories"]);
     const items = list(top.repositories, "repositories", (v, p) => {
       const e = rec(v, p);
-      exact(e, p, ["repository_id", "available", "github"]);
+      exact(e, p, ["repository_id", "display_name", "path", "available", "github"]);
       let github: RepositoryListItem["github"] = null;
       if (e.github !== null) {
         const g = rec(e.github, `${p}.github`);
@@ -270,9 +270,24 @@ export function validateRepositories(raw: unknown): Validated<RepositoryListItem
       }
       const id = str(e.repository_id, `${p}.repository_id`, 64);
       if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(id)) fail(`${p}.repository_id`, "a valid repository ID");
-      return { repository_id: id, available: bool(e.available, `${p}.available`), github };
+      return { repository_id: id, display_name: str(e.display_name, `${p}.display_name`, 200), path: str(e.path, `${p}.path`, 1100), available: bool(e.available, `${p}.available`), github };
     }, 100);
     return items;
+  });
+}
+
+/** One registered repository, as returned by the add and edit calls. */
+export function validateRepositoryItem(raw: unknown): Validated<RepositoryListItem> {
+  const wrapped = validateRepositories({ repositories: [raw] });
+  return wrapped.ok ? { ok: true, value: wrapped.value[0]! } : wrapped;
+}
+
+/** The answer to a removal: only the identifier that was removed. */
+export function validateRemoved(raw: unknown): Validated<{ removed: string }> {
+  return guard(() => {
+    const top = rec(raw, "response");
+    exact(top, "response", ["removed"]);
+    return { removed: str(top.removed, "removed", 64) };
   });
 }
 
