@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { deriveUiState, isNarrativeEligible, validateResponse } from "../src/features/investigation/validateResponse";
+﻿import { describe, expect, it } from "vitest";
+import { deriveUiState, validateResponse } from "../src/features/investigation/validateResponse";
 import { CLASSIFICATIONS, RETRIEVAL_STATUSES, type Classification, type RetrievalStatus } from "../src/types/contract";
 import { clone, complete, failed, insufficient, partial } from "./fixtures";
 
@@ -156,26 +156,3 @@ describe("deriveUiState follows Spec 2 section 8.5 for every combination", () =>
   });
 });
 
-describe("narrative eligibility (one rule for the interruption, the game, and success cues)", () => {
-  it("is true for a complete documented result with evidence", () => {
-    expect(isNarrativeEligible(complete().body)).toBe(true);
-  });
-
-  it("is true for a partial result with evidence, because it stays labelled partial", () => {
-    expect(isNarrativeEligible(partial().body)).toBe(true);
-  });
-
-  it("is false for insufficient evidence", () => {
-    expect(isNarrativeEligible(insufficient().body)).toBe(false);
-  });
-
-  it("is false for a failed retrieval", () => {
-    expect(isNarrativeEligible(failed().body)).toBe(false);
-  });
-
-  it("is false for a successful presentation with no evidence", () => {
-    const body = clone(complete().body);
-    body.evidence = [];
-    expect(isNarrativeEligible(body)).toBe(false);
-  });
-});

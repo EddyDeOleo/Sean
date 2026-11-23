@@ -19,7 +19,11 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from app.modules.advisor.artifacts import ArtifactError, prepare_artifacts
 from app.modules.advisor.contract import ContractViolation
 from app.modules.advisor.roadmap import advise
-from app.modules.intent.gemini import MODEL, Transport, build_hint
+from app.core.git_runner import GitError, run_git
+from app.modules.answer.evidence import MAX_FILE_BYTES, retrieve
+from app.modules.answer.service import answer_question
+from app.modules.intent.groq import MODEL, Transport
+from app.modules.intent.sanitize import sanitize_for_provider
 from app.modules.intent.parser import RepositoryRef, interpret
 from app.api.repository_routes import repository_item
 from app.modules.repository.holder import RegistryHolder
@@ -55,8 +59,21 @@ class InterpretIn(BaseModel):
 
     text: str = Field(max_length=MAX_TEXT_LENGTH)
     selected_repository_id: str | None = Field(default=None, pattern=REPOSITORY_ID_PATTERN)
-    # Per-request consent (security review M1). Without it the sentence never leaves this machine.
-    allow_ai: StrictBool = False
+
+
+class AnswerIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    question: str = Field(min_length=1, max_length=MAX_TEXT_LENGTH)
+
+
+def _read_committed(repo_root, head: str, path: str) -> bytes | None:
+    """The committed bytes of one path at HEAD, through the guarded Git runner. None when it cannot be read."""
+    if not head:
+        return None
+    try:
+        return run_git(repo_root, "cat-file", options=["-p"], revisions=[f"{head}:{path}"], stdout_limit=MAX_FILE_BYTES + 1)
+    except GitError:
+        return None
 
 
 class VerifyIn(BaseModel):
@@ -80,7 +97,7 @@ def _error(code: str, status: int) -> JSONResponse:
 
 
 def create_advisor_router(
-    registry: LoadedRegistry | RegistryHolder, *, gemini_transport: Transport | None = None
+    registry: LoadedRegistry | RegistryHolder, *, groq_transport: Transport | None = None
 ) -> APIRouter:
     """`registry` may be a RegistryHolder. It is then read on every request, so repository changes need no restart."""
     router = APIRouter()
@@ -194,27 +211,67 @@ def create_advisor_router(
         """What optional services this backend can use. It never returns a key or any part of one."""
         return {
             "ai_interpreter": {
-                "available": gemini_transport is not None,
-                "provider": "Gemini",
+                "available": groq_transport is not None,
+                "provider": "Groq",
                 "model": MODEL,
-                "sends": "only the sentence you type, and only when you allow it for that request",
+                "sends": "your question, and up to six short excerpts of the repository's committed files that match it. Secrets and local folder paths are removed first.",
             }
         }
 
+    @router.post("/repositories/{repository_id}/answer", response_model=None)
+    def answer_repository(
+        repository_id: Annotated[str, Path(pattern=REPOSITORY_ID_PATTERN)], body: AnswerIn
+    ) -> Any:
+        """Retrieve evidence locally, then answer from it. Groq is the default answerer; any failure gives the local result."""
+        current = _now()
+        try:
+            resolved = resolve_repository(current, repository_id)
+        except RepositoryError as error:
+            return _error(error.code, _STATUS.get(error.code, 400))
+        head = current_head(resolved.root) or ""
+        if not slots.acquire(blocking=False):
+            return _error("BUSY", 429)
+        try:
+            evidence = retrieve(
+                body.question,
+                committed_paths(resolved.root),
+                lambda path: _read_committed(resolved.root, head, path),
+                head,
+                [entry.root for entry in current.entries.values()],
+            )
+            # The original question stays here. Only the sanitized text can reach the AI reader, and only the local
+            # registry knows which identifiers and folders to remove.
+            sanitized = sanitize_for_provider(
+                body.question, current.entries.keys(), [entry.root for entry in current.entries.values()]
+            )
+            result = answer_question(sanitized.text, sanitized.reason, evidence, groq_transport)
+        finally:
+            slots.release()
+        return {
+            "provider": result.provider,
+            "ai_status": result.ai_status,
+            "answer": result.answer,
+            "evidence": result.evidence,
+            "limitations": result.limitations,
+        }
     @router.post("/interpret")
     def interpret_request(body: InterpretIn) -> Any:
+        current = _now()
         refs = {
             repository_id: RepositoryRef(
                 repository_id=repository_id,
                 github=(entry.github.owner.lower(), entry.github.name.lower()) if entry.github else None,
             )
-            for repository_id, entry in _now().entries.items()
+            for repository_id, entry in current.entries.items()
         }
+        # Local folder roots are used only to recognize and remove them from the AI text. They are never sent.
+        local_roots = tuple(entry.root for entry in current.entries.values())
         if not slots.acquire(blocking=False):
             return _error("BUSY", 429)
         try:
             result = interpret(
-                body.text, refs, _tree_paths, selected_repository_id=body.selected_repository_id, hint=build_hint(gemini_transport) if body.allow_ai else None
+                body.text, refs, _tree_paths, selected_repository_id=body.selected_repository_id, hint=None,
+                local_roots=local_roots,
             )
         finally:
             slots.release()

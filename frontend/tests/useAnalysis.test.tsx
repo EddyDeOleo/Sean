@@ -7,7 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import { useAnalysis, type Analysis, type AnalysisDependencies } from "../src/features/analysis/useAnalysis";
 import type { CallOutcome } from "../src/services/advisorClient";
 import type { SubmitOutcome } from "../src/services/investigationClient";
-import type { InterpretedRequest, ProfileResponse } from "../src/types/advisor";
+import type { AnswerRecord, InterpretedRequest, ProfileResponse } from "../src/types/advisor";
 import type { ReportSnapshot } from "../src/features/report/reportSnapshot";
 import { act, render } from "./renderHelpers";
 import { clone, complete, failed, interpretAdvise, interpretInvestigate, interpretNeedsTarget, interpretUnresolved, notRegistered, profileRich } from "./fixtures";
@@ -15,6 +15,7 @@ import { clone, complete, failed, interpretAdvise, interpretInvestigate, interpr
 const plan = (fixtureBody: InterpretedRequest): CallOutcome<InterpretedRequest> => ({ kind: "ok", value: clone(fixtureBody) });
 const profile = (): CallOutcome<ProfileResponse> => ({ kind: "ok", value: clone(profileRich().body) });
 const result = (): SubmitOutcome => ({ kind: "result", result: clone(complete().body) });
+const answerLocal = async (): Promise<CallOutcome<AnswerRecord>> => ({ kind: "ok", value: { provider: "deterministic", ai_status: "NOT_REQUESTED", answer: null, evidence: [], limitations: ["test"] } });
 
 interface Deferred<T> {
   promise: Promise<T>;
@@ -29,7 +30,7 @@ function deferred<T>(): Deferred<T> {
 function mount(deps: Partial<AnalysisDependencies>, onSnapshot?: (s: ReportSnapshot) => void) {
   const ref: { current: Analysis | null } = { current: null };
   function Probe() {
-    const analysis = useAnalysis({ deps: { makeId: () => "snap-test", now: () => new Date("2026-11-12T10:00:00.000Z"), ...deps }, onSnapshot });
+    const analysis = useAnalysis({ deps: { makeId: () => "snap-test", now: () => new Date("2026-11-12T10:00:00.000Z"), answer: answerLocal, ...deps }, onSnapshot });
     useEffect(() => {
       ref.current = analysis;
     });
@@ -59,7 +60,7 @@ describe("a complete analysis", () => {
     expect(interpret).toHaveBeenCalledTimes(1);
     expect(investigate).toHaveBeenCalledTimes(1);
     expect(prof).toHaveBeenCalledTimes(1);
-    expect(interpret.mock.calls[0]![0]).toEqual({ text: "sample - Why does src/billing.py validate?", selected_repository_id: "sample", allow_ai: false });
+    expect(interpret.mock.calls[0]![0]).toEqual({ text: "sample - Why does src/billing.py validate?", selected_repository_id: "sample" });
     const body = investigate.mock.calls[0]![0];
     expect(body).toEqual({ repository_id: "sample", target: { path: "src/billing.py" }, question: expect.any(String) });
     expect(state.snapshot?.id).toBe("snap-test");
@@ -190,30 +191,50 @@ describe("independent failure of the parts", () => {
 });
 
 describe("interpretation outcomes", () => {
-  it("needs a target: no analysis runs, candidates are kept", async () => {
+  it("needs a target: the answer runs alone, no investigation or profile, candidates are kept", async () => {
     const investigate = vi.fn();
     const prof = vi.fn();
-    const { ref, ready } = mount({ interpret: async () => plan(interpretNeedsTarget().body), investigate, profile: prof });
+    const answer = vi.fn(async (_id: string, _question: string, _options?: unknown) => answerLocal());
+    const { ref, ready } = mount({ interpret: async () => plan(interpretNeedsTarget().body), investigate, profile: prof, answer });
     await ready;
     await act(async () => ref.current!.submit("x", null));
     await settle();
-    expect(ref.current!.state.phase).toBe("NEEDS_TARGET");
-    expect(ref.current!.state.plan?.candidates.length).toBeGreaterThan(0);
+    const { state } = ref.current!;
+    expect(state.phase).toBe("NEEDS_TARGET");
+    expect(state.plan?.candidates.length).toBeGreaterThan(0);
+    expect(answer).toHaveBeenCalledTimes(1);
+    expect(state.answer.status).toBe("DONE");
     expect(investigate).not.toHaveBeenCalled();
     expect(prof).not.toHaveBeenCalled();
   });
 
-  it("choosing a candidate runs the analysis once", async () => {
-    const investigate = vi.fn(async () => result());
-    const { ref, ready } = mount({ interpret: async () => plan(interpretNeedsTarget().body), investigate, profile: async () => profile() });
+  it("a needs-target answer that fails is recorded with its reason and keeps the chooser", async () => {
+    const answer = vi.fn(async (): Promise<CallOutcome<AnswerRecord>> => ({ kind: "network" }));
+    const { ref, ready } = mount({ interpret: async () => plan(interpretNeedsTarget().body), answer });
     await ready;
     await act(async () => ref.current!.submit("x", null));
     await settle();
+    expect(ref.current!.state.phase).toBe("NEEDS_TARGET");
+    expect(ref.current!.state.answer.status).toBe("FAILED");
+    expect(ref.current!.state.answer.note).toMatch(/could not be reached/);
+    expect(ref.current!.state.plan?.candidates.length).toBeGreaterThan(0);
+  });
+
+  it("choosing a candidate runs the analysis once and reuses the answer already produced", async () => {
+    const investigate = vi.fn(async () => result());
+    const answer = vi.fn(async () => answerLocal());
+    const { ref, ready } = mount({ interpret: async () => plan(interpretNeedsTarget().body), investigate, profile: async () => profile(), answer });
+    await ready;
+    await act(async () => ref.current!.submit("x", null));
+    await settle();
+    const carried = { value: ref.current!.state.answer.value, note: ref.current!.state.answer.note };
     const chosen: InterpretedRequest = { ...ref.current!.state.plan!, mode: "INVESTIGATE", target_path: "src/billing.py", candidates: [], message: null };
-    await act(async () => ref.current!.submitPlan(chosen, "x"));
+    await act(async () => ref.current!.submitPlan(chosen, "x", carried));
     await settle();
     expect(investigate).toHaveBeenCalledTimes(1);
+    expect(answer).toHaveBeenCalledTimes(1);
     expect(ref.current!.state.phase).toBe("READY");
+    expect(ref.current!.state.snapshot?.answer).toEqual(carried.value);
   });
 
   it("unresolved: an error with the message, no requests", async () => {

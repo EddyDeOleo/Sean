@@ -1,0 +1,74 @@
+[
+  {
+    "intensity": "low",
+    "policy": "careful",
+    "games": 400,
+    "escaped": 301,
+    "caught": 98,
+    "timeout": 1,
+    "winRate": 0.7525,
+    "meanSeconds": 74.51812499999795,
+    "meanChases": 1.85,
+    "meanHides": 0.2475
+  },
+  {
+    "intensity": "normal",
+    "policy": "careful",
+    "games": 400,
+    "escaped": 237,
+    "caught": 159,
+    "timeout": 4,
+    "winRate": 0.5925,
+    "meanSeconds": 80.76962499999837,
+    "meanChases": 2.9275,
+    "meanHides": 0.405
+  },
+  {
+    "intensity": "high",
+    "policy": "careful",
+    "games": 400,
+    "escaped": 231,
+    "caught": 162,
+    "timeout": 7,
+    "winRate": 0.5775,
+    "meanSeconds": 90.24599999999836,
+    "meanChases": 4.2,
+    "meanHides": 0.2675
+  },
+  {
+    "intensity": "low",
+    "policy": "reckless",
+    "games": 400,
+    "escaped": 184,
+    "caught": 216,
+    "timeout": 0,
+    "winRate": 0.46,
+    "meanSeconds": 23.744250000000225,
+    "meanChases": 1.0925,
+    "meanHides": 0
+  },
+  {
+    "intensity": "normal",
+    "policy": "reckless",
+    "games": 400,
+    "escaped": 125,
+    "caught": 275,
+    "timeout": 0,
+    "winRate": 0.3125,
+    "meanSeconds": 21.510375000000167,
+    "meanChases": 1.395,
+    "meanHides": 0
+  },
+  {
+    "intensity": "high",
+    "policy": "reckless",
+    "games": 400,
+    "escaped": 18,
+    "caught": 382,
+    "timeout": 0,
+    "winRate": 0.045,
+    "meanSeconds": 16.842375000000114,
+    "meanChases": 1.1775,
+    "meanHides": 0
+  }
+]

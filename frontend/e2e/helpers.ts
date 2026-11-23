@@ -26,7 +26,10 @@ export async function enterGame(page: Page, settings: Record<string, unknown> = 
   }, { horror: true, intensity: "low", quality: "low", ...settings });
   await page.goto("/");
   await ask(page);
-  await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 30_000 });
+  // Measured (investigation-startup.spec.ts): the intro appears 22.8 to 24.3 s after Investigate, because the interlude runs
+  // about 13 s of fixed beats after the investigation and the profile and answer take up to 5.7 s. The old 30 s budget left
+  // only a few seconds of margin, so a slower run timed out before any game code ran. This budget covers that path with room.
+  await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 60_000 });
 }
 
 export async function begin(page: Page): Promise<void> {
@@ -130,7 +133,12 @@ export async function walkTo(page: Page, target: { x: number; y: number }, opts:
       const wanted: string[] = [];
       if (Math.abs(diff) > 0.12) wanted.push(diff > 0 ? "ArrowRight" : "ArrowLeft");
       if (Math.abs(diff) < 1.3) wanted.push("KeyW");
-      if (opts.sprint && Math.abs(diff) < 1.3) wanted.push("ShiftLeft");
+      // Sprinting is loud (the creature hears it within HEARING.sprint, 7 tiles). A careful player walks quietly while the
+      // creature is nearby, and sprints only when it is well out of hearing.
+      // A hunting creature is outrun only by sprinting, so a player who is being chased always sprints.
+      const monsterFar = Math.hypot(s.x - s.monsterAt[0], s.y - s.monsterAt[1]) > 9;
+      const hunted = ["PURSUING", "ATTACKING"].includes(s.monster);
+      if (opts.sprint && (monsterFar || hunted) && Math.abs(diff) < 1.3) wanted.push("ShiftLeft");
       await keys.set(wanted);
       await page.waitForTimeout(25);
     }

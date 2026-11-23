@@ -1,0 +1,1 @@
+Diagnostic only (cycle 13). Frame 00 captured with the OLD seed formula and the candidate easing, to test the cause. Valid ANTICIPATION frame, creature upright. Shows the seed change, not the easing, breaks the caught close-up.

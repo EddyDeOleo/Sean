@@ -2,9 +2,9 @@
   "body": {
     "ai_interpreter": {
       "available": false,
-      "model": "gemini-3.6-flash",
-      "provider": "Gemini",
-      "sends": "only the sentence you type, and only when you allow it for that request"
+      "model": "openai/gpt-oss-20b",
+      "provider": "Groq",
+      "sends": "your question, and up to six short excerpts of the repository's committed files that match it. Secrets and local folder paths are removed first."
     }
   },
   "method": "GET",

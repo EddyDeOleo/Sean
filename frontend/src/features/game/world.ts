@@ -7,6 +7,7 @@
  * searches hiding places, so hiding is a gamble that running away is not.
  */
 
+import { overlapsSolid, solidAt } from "./archive/archiveLayout";
 import { buildClues, type ClueRecord } from "./clues";
 import {
   LEVEL, centre, findPath, hasLineOfSight, isBlocked, tileAt, type Level, type Point,
@@ -171,6 +172,21 @@ export function createWorld(snapshot: ReportSnapshot | null, intensity: Intensit
   return createWorldFromClues(buildClues(snapshot), intensity, level, seed);
 }
 
+/**
+ * The generator state for a seed. The seed is mixed with a 32-bit finalizer (MurmurHash3's fmix32). Without mixing, the state
+ * was the seed times a constant, so consecutive seeds gave nearly equal first draws (0.258, 0.280, 0.302 ...), and seeds 2 and 3
+ * sent the creature to the same waypoint. A zero state would stall the generator, so it is replaced by 1.
+ */
+export function initialRandomState(seed: number): number {
+  let h = seed >>> 0;
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13;
+  h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+  return h >>> 0 || 1;
+}
+
 export function createWorldFromClues(records: ClueRecord[], intensity: Intensity, level: Level = LEVEL, seed = 1): World {
   return {
     level,
@@ -181,7 +197,7 @@ export function createWorldFromClues(records: ClueRecord[], intensity: Intensity
     monster: {
       pos: { ...level.monsterStart }, yaw: 0, state: "DORMANT", clock: 0, target: null, goal: "PATROL", path: [], repath: 0, unseen: 0,
       noiseAt: null, noiseAge: 99, lastSeen: null, wait: 0, searchLeft: 0, focus: null, visited: [], checked: [], picks: 0, dwell: 0,
-      lunge: 0, lungeCooldown: 3, speedNow: 0, rng: (Math.imul(seed, 2654435761) >>> 0) || 1,
+      lunge: 0, lungeCooldown: 3, speedNow: 0, rng: initialRandomState(seed),
     },
     clues: placeClues(level, records),
     collected: 0,
@@ -190,14 +206,57 @@ export function createWorldFromClues(records: ClueRecord[], intensity: Intensity
   };
 }
 
-/** Move a circle through the grid, one axis at a time so it slides along walls. */
+/**
+ * How far sideways a walker steps to slide past the end of a solid item it grazes, in tiles. Solid items leave the line through
+ * the tile centres 0.01 tiles clear, so a walker drifting toward a wall caught an item's end face and stopped.
+ */
+export const FURNITURE_SLIDE = 0.08;
+
+/**
+ * Move a circle through the grid, one axis at a time so it slides along walls and solid furniture (archiveLayout.ts). Both are
+ * tested with the same square of half-width `radius`. A move that only a solid item blocks, and that overlaps the item sideways
+ * by at most FURNITURE_SLIDE, first steps aside by that overlap, so a walker who grazes an item's corner slides around it. A
+ * walker moving along the wall into an item's end steps around the end at walking speed; one moving into its front face stops.
+ */
 export function moveCircle(level: Level, from: Point, dx: number, dy: number, radius: number, gateOpen: boolean): Point {
-  const hits = (x: number, y: number): boolean =>
+  const hitsWall = (x: number, y: number): boolean =>
     isBlocked(level, x - radius, y - radius, gateOpen) || isBlocked(level, x + radius, y - radius, gateOpen) ||
     isBlocked(level, x - radius, y + radius, gateOpen) || isBlocked(level, x + radius, y + radius, gateOpen);
+  const hits = (x: number, y: number): boolean => hitsWall(x, y) || overlapsSolid(level, x, y, radius);
   let { x, y } = from;
-  if (!hits(x + dx, y)) x += dx;
-  if (!hits(x, y + dy)) y += dy;
+  // One axis move (mx or my is zero) from (px, py). Returns the new position.
+  const slide = (px: number, py: number, mx: number, my: number, main: boolean): Point => {
+    if (!hits(px + mx, py + my)) return { x: px + mx, y: py + my };
+    const item = hitsWall(px + mx, py + my) ? null : solidAt(level, px + mx, py + my, radius);
+    // Only the main direction of motion steps aside. A slight drift on the other axis that touches an item just stops, as on a
+    // wall: stepping it aside moved the walker against its own motion (a walker heading south along a crate was pushed north).
+    if (!item || !main) return { x: px, y: py };
+    // The sideways overlap with the item, and the step that clears it, across the direction of the move.
+    const across = mx !== 0
+      ? [item.minY - (py + radius), item.maxY - (py - radius)]
+      : [item.minX - (px + radius), item.maxX - (px - radius)];
+    const nearest = Math.abs(across[0]!) < Math.abs(across[1]!) ? across[0]! : across[1]!;
+    // A hair past the edge, so rounding does not leave the square touching the item.
+    const clear = nearest + Math.sign(nearest) * 1e-9;
+    if (Math.abs(nearest) <= FURNITURE_SLIDE) {
+      const sx = mx !== 0 ? px : px + clear;
+      const sy = mx !== 0 ? py + clear : py;
+      if (hits(sx, sy) || hits(sx + mx, sy + my)) return { x: px, y: py };
+      return { x: sx + mx, y: sy + my };
+    }
+    // A move along the item's wall meets its end face (a walker following the wall). The walker steps around the end,
+    // sideways by at most the length of the blocked move, so it rounds the item at walking speed. Into a front face, it stops.
+    // The wall's direction decides, not the footprint's shape: a waste bin is square.
+    if ((mx !== 0) !== item.alongX) return { x: px, y: py };
+    const reach = Math.abs(mx + my);
+    const step = Math.abs(clear) <= reach ? clear : Math.sign(nearest) * reach;
+    const sx = mx !== 0 ? px : px + step;
+    const sy = mx !== 0 ? py + step : py;
+    if (hits(sx, sy)) return { x: px, y: py };
+    return step === clear && !hits(sx + mx, sy + my) ? { x: sx + mx, y: sy + my } : { x: sx, y: sy };
+  };
+  if (dx !== 0) ({ x, y } = slide(x, y, dx, 0, Math.abs(dx) >= Math.abs(dy)));
+  if (dy !== 0) ({ x, y } = slide(x, y, 0, dy, Math.abs(dy) > Math.abs(dx)));
   return { x, y };
 }
 

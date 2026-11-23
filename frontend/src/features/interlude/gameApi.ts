@@ -16,6 +16,11 @@ export interface GameProps {
   /** 1 for the first run, then one more for each retry. */
   attempt: number;
   reducedMotion: boolean;
+  /**
+   * A technical note when the repository investigation did not complete (failed, cancelled, unavailable). It is shown apart
+   * from the fiction, and the game then uses atmosphere clues only. Null or absent when the investigation completed.
+   */
+  investigationNote?: string | null;
   /** The game was started on its own, not after an analysis. Its exits say "leave the game" instead of "open the report". */
   standalone: boolean;
   intensity: "low" | "normal" | "high";

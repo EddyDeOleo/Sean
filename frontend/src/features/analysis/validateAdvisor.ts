@@ -1,3 +1,4 @@
+import type { AnswerContent, AnswerRecord } from "../../types/advisor";
 /**
  * Validation of the repository-intelligence responses (Spec 4 section 4.2).
  *
@@ -240,7 +241,7 @@ export function validateInterpreted(raw: unknown): Validated<InterpretedRequest>
     exact(r, "interpretation", ["mode", "interpreter", "repository_id", "target_path", "symbol", "question", "candidates", "message", "ai_status"]);
     const out: InterpretedRequest = {
       mode: oneOf(r.mode, "mode", ["INVESTIGATE", "ADVISE", "NEEDS_TARGET", "UNRESOLVED"] as const),
-      interpreter: oneOf(r.interpreter, "interpreter", ["deterministic", "gemini"] as const),
+      interpreter: oneOf(r.interpreter, "interpreter", ["deterministic", "groq"] as const),
       repository_id: strOrNull(r.repository_id, "repository_id"),
       target_path: strOrNull(r.target_path, "target_path"),
       symbol: strOrNull(r.symbol, "symbol"),
@@ -370,6 +371,72 @@ export function validatePreviewResponse(raw: unknown): Validated<PreviewResponse
         exact(s, p, ["path", "status"]);
         return { path: str(s.path, `${p}.path`, 300), status: oneOf(s.status, `${p}.status`, ["ABSENT", "IDENTICAL", "DIFFERENT"] as const) };
       }, 20),
+    };
+  });
+}
+export function validateAnswer(raw: unknown): Validated<AnswerRecord> {
+  return guard(() => {
+    const r = rec(raw, "answer");
+    exact(r, "answer", ["provider", "ai_status", "answer", "evidence", "limitations"]);
+    const evidence = list(
+      r.evidence,
+      "evidence",
+      (v, p) => {
+        const e = rec(v, p);
+        exact(e, p, ["evidence_id", "path", "start_line", "end_line", "why", "commit", "classification", "excerpt"]);
+        const { start_line: start, end_line: end } = e;
+        if (typeof start !== "number" || typeof end !== "number" || !Number.isInteger(start) || !Number.isInteger(end) || start < 1 || end < start) {
+          fail(p, "a line range");
+        }
+        return {
+          evidence_id: str(e.evidence_id, `${p}.evidence_id`, 16),
+          path: str(e.path, `${p}.path`, 1024),
+          start_line: start,
+          end_line: end,
+          why: str(e.why, `${p}.why`, 300),
+          commit: str(e.commit, `${p}.commit`, 64),
+          classification: str(e.classification, `${p}.classification`, 32),
+          excerpt: str(e.excerpt, `${p}.excerpt`, 2000),
+        };
+      },
+      10,
+    );
+    const known = new Set(evidence.map((item) => item.evidence_id));
+    let answer: AnswerContent | null = null;
+    if (r.answer !== null) {
+      const a = rec(r.answer, "answer.answer");
+      exact(a, "answer.answer", ["answer", "summary", "claims", "limitations", "recommendations", "confidence", "answer_type"]);
+      const claims = list(
+        a.claims,
+        "answer.claims",
+        (v, p) => {
+          const c = rec(v, p);
+          exact(c, p, ["text", "basis", "evidence_ids"]);
+          const basis = oneOf(c.basis, `${p}.basis`, ["DOCUMENTED", "INFERRED", "UNKNOWN"] as const);
+          const cited = list(c.evidence_ids, `${p}.evidence_ids`, (x, q) => str(x, q, 16), 6);
+          // An answer may only cite evidence that was retrieved. A documented or inferred claim must cite some.
+          if (cited.some((id) => !known.has(id))) fail(p, "evidence that was retrieved");
+          if (basis !== "UNKNOWN" && cited.length === 0) fail(p, "evidence for a documented or inferred claim");
+          return { text: str(c.text, `${p}.text`, 400), basis, evidence_ids: cited };
+        },
+        8,
+      );
+      answer = {
+        answer: str(a.answer, "answer.answer.answer", 2000),
+        summary: str(a.summary, "answer.answer.summary", 300),
+        claims,
+        limitations: list(a.limitations, "answer.answer.limitations", (v, p) => str(v, p, 300), 6),
+        recommendations: list(a.recommendations, "answer.answer.recommendations", (v, p) => str(v, p, 300), 5),
+        confidence: oneOf(a.confidence, "answer.answer.confidence", ["LOW", "MEDIUM", "HIGH"] as const),
+        answer_type: oneOf(a.answer_type, "answer.answer.answer_type", ["explanation", "analysis", "recommendation", "investigation", "clarification"] as const),
+      };
+    }
+    return {
+      provider: oneOf(r.provider, "answer.provider", ["groq", "deterministic"] as const),
+      ai_status: oneOf(r.ai_status, "answer.ai_status", AI_STATUSES),
+      answer,
+      evidence,
+      limitations: list(r.limitations, "answer.limitations", (v, p) => str(v, p, 400), 10),
     };
   });
 }

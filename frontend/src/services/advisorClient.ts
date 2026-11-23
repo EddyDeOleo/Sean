@@ -6,7 +6,8 @@
  * is never shown as "nothing found".
  */
 
-import type { Capabilities, InterpretedRequest, PreviewResponse, ProfileResponse, RepositoryListItem } from "../types/advisor";
+import type { AnswerRecord, Capabilities, InterpretedRequest, PreviewResponse, ProfileResponse, RepositoryListItem } from "../types/advisor";
+import { validateAnswer } from "../features/analysis/validateAdvisor";
 import type { BackendError } from "../types/contract";
 import {
   validateCapabilities,
@@ -36,16 +37,23 @@ export interface CallOptions {
 export type ListRepositoriesFn = (options?: CallOptions) => Promise<CallOutcome<RepositoryListItem[]>>;
 export type CapabilitiesFn = (options?: CallOptions) => Promise<CallOutcome<Capabilities>>;
 export type InterpretFn = (
-  body: { text: string; selected_repository_id: string | null; allow_ai?: boolean },
+  body: { text: string; selected_repository_id: string | null },
   options?: CallOptions,
 ) => Promise<CallOutcome<InterpretedRequest>>;
 export type PreviewBody = { repository_id: string; capabilities: string[]; verify?: { path: string; content_sha256: string }[] };
 export type PreviewFn = (body: PreviewBody, options?: CallOptions) => Promise<CallOutcome<PreviewResponse>>;
 export type ProfileFn = (repositoryId: string, options?: CallOptions) => Promise<CallOutcome<ProfileResponse>>;
+export type AnswerFn = (repositoryId: string, question: string, options?: CallOptions) => Promise<CallOutcome<AnswerRecord>>;
+/** The AI advisor answers from local evidence. Groq is the default provider; the backend falls back to local results. */
+export const answerRequest: AnswerFn = (repositoryId, question, options = {}) =>
+  call("POST", `/repositories/${encodeURIComponent(repositoryId)}/answer`, { question }, validateAnswer, options);
 
-function isAbort(caught: unknown, signal?: AbortSignal): boolean {
-  return Boolean(signal?.aborted) || (caught instanceof DOMException && caught.name === "AbortError");
-}
+/**
+ * One deadline for each advisor request, covering the headers and the body. The backend bounds its Groq call at 15 seconds
+ * and a repository profile runs Git commands, so 30 seconds is well past any normal answer. A request that passes it is
+ * reported as `network`, so a silent backend can never hold the analysis (and the game that follows it) forever.
+ */
+export const ADVISOR_TIMEOUT_MS = 30_000;
 
 async function call<T>(
   method: "GET" | "POST" | "PUT" | "DELETE",
@@ -56,36 +64,48 @@ async function call<T>(
   successStatus = 200,
 ): Promise<CallOutcome<T>> {
   const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = fetch } = options;
-  let response: Response;
+  // The deadline is aborted by the timer or by the caller. Only the caller's own abort is reported as `aborted`.
+  const deadline = new AbortController();
+  const timer = setTimeout(() => deadline.abort(), ADVISOR_TIMEOUT_MS);
+  const cancel = (): void => deadline.abort();
+  if (signal?.aborted) deadline.abort();
+  signal?.addEventListener("abort", cancel);
   try {
-    response = await fetchImpl(`${baseUrl}${path}`, {
-      method,
-      headers: {
-        Accept: "application/json",
-        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-        // Every call that is not a read says it comes from the application. The backend refuses changes to the repository
-        // list without it, which keeps a web page on another origin from making them.
-        ...(method !== "GET" ? { "X-Sean-Client": "web" } : {}),
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-      signal,
-      credentials: "omit",
-      cache: "no-store",
-    });
-  } catch (caught) {
-    return isAbort(caught, signal) ? { kind: "aborted" } : { kind: "network" };
+    let response: Response;
+    try {
+      response = await fetchImpl(`${baseUrl}${path}`, {
+        method,
+        headers: {
+          Accept: "application/json",
+          ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+          // Every call that is not a read says it comes from the application. The backend refuses changes to the repository
+          // list without it, which keeps a web page on another origin from making them.
+          ...(method !== "GET" ? { "X-Sean-Client": "web" } : {}),
+        },
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+        signal: deadline.signal,
+        credentials: "omit",
+        cache: "no-store",
+      });
+    } catch {
+      return signal?.aborted ? { kind: "aborted" } : { kind: "network" };
+    }
+    let parsed: unknown;
+    try {
+      parsed = await response.json();
+    } catch {
+      if (signal?.aborted) return { kind: "aborted" };
+      if (deadline.signal.aborted) return { kind: "network" };
+      if (response.status === successStatus) return { kind: "invalid", reason: "body: not JSON" };
+      return { kind: "rejected", status: response.status, error: toBackendError(response.status, null) };
+    }
+    if (response.status !== successStatus) return { kind: "rejected", status: response.status, error: toBackendError(response.status, parsed) };
+    const checked = validate(parsed);
+    return checked.ok ? { kind: "ok", value: checked.value } : { kind: "invalid", reason: checked.reason };
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener("abort", cancel);
   }
-  let parsed: unknown;
-  try {
-    parsed = await response.json();
-  } catch (caught) {
-    if (isAbort(caught, signal)) return { kind: "aborted" };
-    if (response.status === successStatus) return { kind: "invalid", reason: "body: not JSON" };
-    return { kind: "rejected", status: response.status, error: toBackendError(response.status, null) };
-  }
-  if (response.status !== successStatus) return { kind: "rejected", status: response.status, error: toBackendError(response.status, parsed) };
-  const checked = validate(parsed);
-  return checked.ok ? { kind: "ok", value: checked.value } : { kind: "invalid", reason: checked.reason };
 }
 
 export const listRepositories: ListRepositoriesFn = (options = {}) =>
@@ -101,7 +121,6 @@ export const interpretRequest: InterpretFn = (body, options = {}) =>
       text: body.text,
       ...(body.selected_repository_id ? { selected_repository_id: body.selected_repository_id } : {}),
       // Consent is explicit and per request. Absent means no.
-      ...(body.allow_ai === true ? { allow_ai: true } : {}),
     },
     validateInterpreted,
     options,

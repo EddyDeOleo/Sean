@@ -126,7 +126,7 @@ These sections describe the behavior and interfaces of the components named abov
 ### Explanation design
 
 - The default explanation is built from templates over verified fields. Each template states what the evidence establishes, what can be inferred, and what remains unknown (Spec 1 §11.1).
-- Optional AI wording is deferred by owner decision (2026-11-10; E-D13 decision record). The provider (Google Gemini API, Free Tier) and model (`gemini-3.6-flash`) were approved on 2026-11-10 and are not implemented. The deterministic explanation is the only active explanation engine. Any future provider design must define its input (verified fields only), its output checks (Requirement 11.2), and the privacy gate (E-D13 AI-3). No provider interface is added without a concrete requirement (Architecture §2.7 and §7).
+- Optional AI wording is deferred by owner decision (2026-11-10; E-D13 decision record). The provider (Google Gemini API, Free Tier) and model (`gemini-3.6-flash`) were approved on 2026-11-10. That provider decision is superseded on 2026-11-14 by Groq (`openai/gpt-oss-20b`, phase-status section 45). Neither is implemented in this Native Spec scope. The deterministic explanation is the only active explanation engine. Any future provider design must define its input (verified fields only), its output checks (Requirement 11.2), and the privacy gate (E-D13 AI-3). No provider interface is added without a concrete requirement (Architecture §2.7 and §7).
 
 ### API and MCP
 

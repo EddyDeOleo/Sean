@@ -12,7 +12,7 @@ Sean adds repository engineering intelligence to the Phase 3 investigation backe
 
 ```
 natural-language request
-  -> POST /interpret            (deterministic; optional Gemini, text + IDs only)
+  -> POST /interpret            (deterministic; optional Groq, text + IDs only)
   -> POST /investigations       (Phase 3, unchanged; only when a target is resolved)
   -> POST /repositories/{id}/profile   (observations + Advisor output)
   -> frontend assembles an immutable report snapshot
@@ -38,7 +38,7 @@ backend/app/
     artifacts.py                     templates, validators, conflict and diff (stage 4)
   modules/intent/
     parser.py                        deterministic interpretation
-    gemini.py                        optional adapter, injected transport (stage 2, not live)
+    groq.py                        optional adapter, injected transport (stage 2, not live)
 ```
 
 Registry access reuses `resolve_repository` from the Phase 3 registry module. No existing module is modified.
@@ -101,7 +101,7 @@ Stored in `%LOCALAPPDATA%\Sean\config\repositories.json`. Entry fields: `reposit
 
 ### Interpretation result
 
-`{mode, repository_id, target?, question, unresolved?}`, with `mode` as `INVESTIGATE`, `ADVISE`, or `NEEDS_TARGET`. The response also states which interpreter answered (`deterministic` or `gemini`).
+`{mode, repository_id, target?, question, unresolved?}`, with `mode` as `INVESTIGATE`, `ADVISE`, or `NEEDS_TARGET`. The response also states which interpreter answered (`deterministic` or `groq`).
 
 ## Correctness Properties
 

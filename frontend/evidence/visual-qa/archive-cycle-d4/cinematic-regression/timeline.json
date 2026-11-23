@@ -1,0 +1,53 @@
+{
+ "attemptOutcome": "CAUGHT",
+ "moments": [
+  {
+   "index": 0,
+   "file": "00-ANTICIPATION-0.120s.png",
+   "phase": "ANTICIPATION",
+   "elapsedSeconds": 0.12,
+   "defeatCardVisible": false,
+   "monsterDistance": 0
+  },
+  {
+   "index": 1,
+   "file": "01-ACCELERATION-0.400s.png",
+   "phase": "ACCELERATION",
+   "elapsedSeconds": 0.4,
+   "defeatCardVisible": false,
+   "monsterDistance": 0
+  },
+  {
+   "index": 2,
+   "file": "02-LUNGE-0.550s.png",
+   "phase": "LUNGE",
+   "elapsedSeconds": 0.55,
+   "defeatCardVisible": false,
+   "monsterDistance": 0
+  },
+  {
+   "index": 3,
+   "file": "03-IMPACT-0.700s.png",
+   "phase": "IMPACT",
+   "elapsedSeconds": 0.7,
+   "defeatCardVisible": false,
+   "monsterDistance": 0
+  },
+  {
+   "index": 4,
+   "file": "04-HOLD-0.950s.png",
+   "phase": "HOLD",
+   "elapsedSeconds": 0.95,
+   "defeatCardVisible": false,
+   "monsterDistance": 0
+  },
+  {
+   "index": 5,
+   "file": "05-DEFEAT_CARD-1.600s.png",
+   "phase": "DEFEAT_CARD",
+   "elapsedSeconds": 1.6,
+   "defeatCardVisible": true,
+   "monsterDistance": 0
+  }
+ ]
+}

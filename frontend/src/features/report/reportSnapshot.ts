@@ -10,10 +10,10 @@
  * reason, so the report can say what is absent instead of hiding it.
  */
 
-import { AI_STATUSES, type AIStatus, type InterpretMode, type ProfileResponse } from "../../types/advisor";
+import { AI_STATUSES, type AIStatus, type AnswerRecord, type InterpretMode, type ProfileResponse } from "../../types/advisor";
 import type { InvestigationResult } from "../../types/contract";
-import { isNarrativeEligible, validateResponse } from "../investigation/validateResponse";
-import { ALLOWED_ARTIFACT_PATH, validateProfileResponse } from "../analysis/validateAdvisor";
+import { validateResponse } from "../investigation/validateResponse";
+import { ALLOWED_ARTIFACT_PATH, validateAnswer, validateProfileResponse } from "../analysis/validateAdvisor";
 
 export const SNAPSHOT_SCHEMA = 1;
 /** The most artifact records one snapshot keeps. The store refuses more, so a saved report can never become unreadable. */
@@ -26,7 +26,7 @@ export interface SnapshotInput {
   text: string;
   repository_id: string;
   mode: InterpretMode;
-  interpreter: "deterministic" | "gemini";
+  interpreter: "deterministic" | "groq";
   question: string;
   target_path: string | null;
   symbol: string | null;
@@ -52,6 +52,9 @@ export interface ReportSnapshot {
   investigationNote: string | null;
   analysis: ProfileResponse | null;
   analysisNote: string | null;
+  /** The AI advisor answer, or null when none was produced. Saved snapshots from before this feature have none. */
+  answer?: AnswerRecord | null;
+  answerNote?: string | null;
   artifacts: ArtifactRecord[];
 }
 
@@ -79,9 +82,11 @@ export function buildSnapshot(parts: {
   investigationNote: string | null;
   analysis: ProfileResponse | null;
   analysisNote: string | null;
+  answer?: AnswerRecord | null;
+  answerNote?: string | null;
 }): ReportSnapshot {
   if (parts.investigation === null && parts.analysis === null) throw new Error("a snapshot needs at least one result");
-  return Object.freeze({ schema: SNAPSHOT_SCHEMA, ...parts, artifacts: [] });
+  return Object.freeze({ schema: SNAPSHOT_SCHEMA, ...parts, answer: parts.answer ?? null, answerNote: parts.answerNote ?? null, artifacts: [] });
 }
 
 export function summarize(snapshot: ReportSnapshot): SnapshotSummary {
@@ -100,18 +105,13 @@ export function summarize(snapshot: ReportSnapshot): SnapshotSummary {
   };
 }
 
-/** Whether the Ouija interlude may run (Spec 4 section 10): a usable result exists and nothing failed outright. */
-export function isInterludeEligible(snapshot: ReportSnapshot): boolean {
-  if (snapshot.investigation) return isNarrativeEligible(snapshot.investigation);
-  return snapshot.input.mode === "ADVISE" && snapshot.analysis !== null;
-}
 
 function text(value: unknown, max: number): string | null {
   return typeof value === "string" && value.length <= max ? value : null;
 }
 
 /** Revalidate stored data. Returns null for anything that does not satisfy the contract; the caller discards it. */
-export function parseSnapshot(raw: unknown): ReportSnapshot | null {
+function parseSnapshotCore(raw: unknown): ReportSnapshot | null {
   if (!isRecord(raw) || raw.schema !== SNAPSHOT_SCHEMA) return null;
   const id = text(raw.id, 100);
   const createdAt = text(raw.createdAt, 40);
@@ -124,7 +124,7 @@ export function parseSnapshot(raw: unknown): ReportSnapshot | null {
   const mode = input.mode as InterpretMode;
   if (inputText === null || !repository || question === null) return null;
   if (mode !== "INVESTIGATE" && mode !== "ADVISE") return null;
-  if (input.interpreter !== "deterministic" && input.interpreter !== "gemini") return null;
+  if (input.interpreter !== "deterministic" && input.interpreter !== "groq") return null;
   if (input.ai_status !== undefined && !(AI_STATUSES as readonly unknown[]).includes(input.ai_status)) return null;
   const interpreter = input.interpreter as SnapshotInput["interpreter"];
   const targetPath = input.target_path === null ? null : text(input.target_path, 1024);
@@ -181,4 +181,19 @@ export function parseSnapshot(raw: unknown): ReportSnapshot | null {
     analysisNote,
     artifacts,
   });
+}
+
+/** Re-validate a stored snapshot. A stored answer must pass the same checks as a fresh one, or the whole snapshot is discarded. */
+export function parseSnapshot(raw: unknown): ReportSnapshot | null {
+  const core = parseSnapshotCore(raw);
+  if (core === null || !isRecord(raw)) return null;
+  let answer: AnswerRecord | null = null;
+  if (raw.answer !== undefined && raw.answer !== null) {
+    const checked = validateAnswer(raw.answer);
+    if (!checked.ok) return null;
+    answer = checked.value;
+  }
+  const answerNote = raw.answerNote === undefined || raw.answerNote === null ? null : text(raw.answerNote, 400);
+  if (raw.answerNote !== undefined && raw.answerNote !== null && answerNote === null) return null;
+  return Object.freeze({ ...core, answer, answerNote });
 }

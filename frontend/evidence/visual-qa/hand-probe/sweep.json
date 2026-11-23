@@ -1,0 +1,1226 @@
+[
+ {
+  "pose": "baseline (no override)",
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10069,
+     "minX": -1.1704578929427365,
+     "maxX": -0.4236679457126954,
+     "minY": -3.0555851661091338,
+     "maxY": -1.2709797516669095,
+     "marginLeft": -81.81978861251352,
+     "marginRight": 683.3606139420938,
+     "marginTop": 613.1645329500656,
+     "marginBottom": -555.0079948494662
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": -0.2353006753292425,
+     "maxX": -0.11601096143666745,
+     "minY": -0.8684295845119107,
+     "maxY": -0.6634120753107703,
+     "marginLeft": 367.0556758419636,
+     "marginRight": 535.6852614896003,
+     "marginTop": 449.12126033390797,
+     "marginBottom": 35.52401218178412
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.28433557306734847,
+     "maxX": -0.15787350396888714,
+     "minY": -0.6471852693609713,
+     "maxY": -0.36834977668288105,
+     "marginLeft": 343.51892492767274,
+     "marginRight": 555.7792819050659,
+     "marginTop": 369.4544397043779,
+     "marginBottom": 95.25997727253774
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": -0.059689231374302446,
+     "maxX": 0.040776268941463994,
+     "minY": -0.7298534526253622,
+     "maxY": -0.5330864244466139,
+     "marginLeft": 451.34916894033483,
+     "marginRight": 460.42739090809727,
+     "marginTop": 413.93333460058574,
+     "marginBottom": 72.93956779115221
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.11667246742788091,
+     "maxX": -0.020002381845558283,
+     "minY": -0.5411533972017484,
+     "maxY": -0.2637224328771484,
+     "marginLeft": 423.99721563461713,
+     "marginRight": 489.60114328586803,
+     "marginTop": 341.20505687683004,
+     "marginBottom": 123.88858275552793
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": 0.09746829902918817,
+     "maxX": 0.20473663009974696,
+     "minY": -0.6068881001324594,
+     "maxY": -0.392940756345852,
+     "marginLeft": 526.7847835340103,
+     "marginRight": 381.72641755212146,
+     "marginTop": 376.09400421338006,
+     "marginBottom": 106.14021296423596
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": 0.029494898486836306,
+     "maxX": 0.12984792784260643,
+     "minY": -0.4311129189322968,
+     "maxY": -0.1345657704589646,
+     "marginLeft": 494.15755127368146,
+     "marginRight": 417.6729946355489,
+     "marginTop": 306.33275802392046,
+     "marginBottom": 153.59951188827984
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": -0.18429819971299133,
+     "maxX": -0.06547132299133787,
+     "minY": -1.1469450417261784,
+     "maxY": -0.8674251058063006,
+     "marginLeft": 391.53686413776416,
+     "marginRight": 511.42623503584224,
+     "marginTop": 504.2047785677011,
+     "marginBottom": -39.675161266068166
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.24630495829712373,
+     "maxX": -0.11411352362259795,
+     "minY": -0.8637513683084862,
+     "maxY": -0.6039863607386463,
+     "marginLeft": 361.7736200173806,
+     "marginRight": 534.7744913388469,
+     "marginTop": 433.0763173994345,
+     "marginBottom": 36.787130556708725
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": -0.004092621968924895,
+     "maxX": 0.11100657565359023,
+     "minY": -0.9461122144765639,
+     "maxY": -0.7286410146463478,
+     "marginLeft": 478.03554145491603,
+     "marginRight": 426.71684368627666,
+     "marginTop": 466.7330739545139,
+     "marginBottom": 14.549702091327745
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.07827126109932164,
+     "maxX": 0.026412306767279386,
+     "minY": -0.712306538035791,
+     "maxY": -0.46637005058665615,
+     "marginLeft": 442.42979467232556,
+     "marginRight": 467.3220927517059,
+     "marginTop": 395.91991365839715,
+     "marginBottom": 77.67723473033642
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": 0.1526757581927141,
+     "maxX": 0.2732776307585692,
+     "minY": -0.741383622583676,
+     "maxY": -0.5436174666171121,
+     "marginLeft": 553.2843639325027,
+     "marginRight": 348.8267372358868,
+     "marginTop": 416.7767159866203,
+     "marginBottom": 69.82642190240749
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.3,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": 0.06202525851623278,
+     "maxX": 0.17230604928596183,
+     "minY": -0.540468726887151,
+     "maxY": -0.2961783497965472,
+     "marginLeft": 509.7721240877918,
+     "marginRight": 397.2930963427383,
+     "marginTop": 349.96815444506774,
+     "marginBottom": 124.07344374046923
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": -0.1310116610350447,
+     "maxX": 0.005186972467295724,
+     "minY": -1.4137702349786911,
+     "maxY": -1.012937478739575,
+     "marginLeft": 417.11440270317854,
+     "marginRight": 477.51025321569807,
+     "marginTop": 543.4931192596853,
+     "marginBottom": -111.7179634442466
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    0.2
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.20541389927471942,
+     "maxX": -0.06736677558858524,
+     "minY": -1.0673277225310989,
+     "maxY": -0.8166447345604816,
+     "marginLeft": 381.40132834813465,
+     "marginRight": 512.3360522825209,
+     "marginTop": 490.49407833133,
+     "marginBottom": -18.178485083396694
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": 0.05807659709136253,
+     "maxX": 0.1890251707140837,
+     "minY": -1.1460315218579527,
+     "maxY": -0.8364433888123142,
+     "marginLeft": 507.87676660385404,
+     "marginRight": 389.2679180572398,
+     "marginTop": 495.8397149793248,
+     "marginBottom": -39.428510901647215
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    0.6
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": -0.03489683785022695,
+     "maxX": 0.07991118611165617,
+     "minY": -0.8745731646769902,
+     "maxY": -0.6439795218177112,
+     "marginLeft": 463.24951783189107,
+     "marginRight": 441.64263066640507,
+     "marginTop": 443.874470890782,
+     "marginBottom": 33.865245537212644
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.2,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10070,
+     "minX": 0.20308428114345814,
+     "maxX": 0.34694727252633073,
+     "minY": -0.8653857429745425,
+     "maxY": -0.6353134194578839,
+     "marginLeft": 577.4804549488599,
+     "marginRight": 313.46530918736124,
+     "marginTop": 441.5346232536287,
+     "marginBottom": 36.34584939687352
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "pose": {
+   "upperArm.R": [
+    0.56,
+    0,
+    1
+   ],
+   "lowerArm.R": [
+    -1.8,
+    0,
+    0
+   ]
+  },
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.31295391857671634,
+     "maxX": 0.40521003238772507,
+     "minY": -0.6900480800044467,
+     "maxY": -0.429457681463708,
+     "marginLeft": 630.2178809168238,
+     "marginRight": 285.499184453892,
+     "marginTop": 385.9535739952011,
+     "marginBottom": 83.68701839879938
+    },
+    {
+     "side": "R",
+     "vertices": 10076,
+     "minX": 0.1007304892290862,
+     "maxX": 0.22059090793582747,
+     "minY": -0.6528067134768394,
+     "maxY": -0.4337439141256988,
+     "marginLeft": 528.3506348299613,
+     "marginRight": 374.1163641908028,
+     "marginTop": 387.1108568139387,
+     "marginBottom": 93.74218736125337
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ }
+]

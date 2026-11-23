@@ -1,0 +1,9587 @@
+{
+ "requestedSeed": 3,
+ "fixedStep": 0.016666666666666666,
+ "maxAttempts": 1,
+ "attempts": [
+  {
+   "requestedSeed": 3,
+   "worldSeed": 3,
+   "worldFingerprint": "bd15891506d1e66e",
+   "trajectoryHash": "075ea5578b0d5c1e",
+   "attempt": 1,
+   "outcome": "ESCAPED",
+   "frames": 8937,
+   "seconds": 148.95,
+   "collectedAtEnd": 5,
+   "events": [
+    {
+     "frame": 19,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 37,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 58,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 77,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 96,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 116,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 135,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 153,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 172,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 190,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 208,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 227,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 249,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 267,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 284,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 306,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 328,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 349,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 371,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 393,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 415,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 437,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 458,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 480,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 502,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 524,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 546,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 562,
+     "text": "CLUE_COLLECTED:1"
+    },
+    {
+     "frame": 568,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 589,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 605,
+     "text": "HIDING:true"
+    },
+    {
+     "frame": 1162,
+     "text": "MONSTER_STATE:SEARCHING"
+    },
+    {
+     "frame": 1485,
+     "text": "HIDING:false"
+    },
+    {
+     "frame": 1500,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1520,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1538,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1557,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1577,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1596,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1614,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1628,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1649,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1672,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1690,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1709,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1727,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1748,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1767,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1789,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1795,
+     "text": "CLUE_COLLECTED:2"
+    },
+    {
+     "frame": 1825,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1858,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1890,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1909,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1927,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1948,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1966,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1984,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 1997,
+     "text": "HIDING:true"
+    },
+    {
+     "frame": 2117,
+     "text": "HIDING:false"
+    },
+    {
+     "frame": 2124,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2142,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2162,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2185,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2306,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2328,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2350,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2375,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2396,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2418,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2440,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2467,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2489,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2541,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2563,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2585,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2607,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2629,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2651,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2672,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2694,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2716,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2738,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2760,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2782,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2804,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2825,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2828,
+     "text": "CLUE_COLLECTED:3"
+    },
+    {
+     "frame": 2876,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2898,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2921,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 2929,
+     "text": "HIDING:true"
+    },
+    {
+     "frame": 3049,
+     "text": "HIDING:false"
+    },
+    {
+     "frame": 3078,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3096,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3115,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3133,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3156,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3184,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3202,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3220,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3239,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3258,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3279,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3297,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3315,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3320,
+     "text": "CLUE_COLLECTED:4"
+    },
+    {
+     "frame": 3352,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3362,
+     "text": "HIDING:true"
+    },
+    {
+     "frame": 3482,
+     "text": "HIDING:false"
+    },
+    {
+     "frame": 3511,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3529,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3548,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3568,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3586,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3604,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3623,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3641,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 3938,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4019,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4059,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4103,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4163,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4659,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4677,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4694,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4715,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4737,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4759,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4781,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 4859,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5091,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5132,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5154,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5175,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5200,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5358,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5409,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5431,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5453,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5475,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5496,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5518,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5540,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5562,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5584,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5605,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5627,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5649,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5671,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5693,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5720,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5738,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5758,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5785,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5803,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5821,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5835,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5857,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5879,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5901,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5921,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5939,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 5957,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6007,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6026,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6035,
+     "text": "CLUE_COLLECTED:5"
+    },
+    {
+     "frame": 6035,
+     "text": "GATE_OPENED"
+    },
+    {
+     "frame": 6035,
+     "text": "MONSTER_STATE:INVESTIGATING"
+    },
+    {
+     "frame": 6060,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6078,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6097,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6104,
+     "text": "HIDING:true"
+    },
+    {
+     "frame": 6224,
+     "text": "HIDING:false"
+    },
+    {
+     "frame": 6482,
+     "text": "MONSTER_STATE:SEARCHING"
+    },
+    {
+     "frame": 6761,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6780,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6800,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 6822,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8010,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8049,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8075,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8097,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8119,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8181,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8203,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8225,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8247,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8269,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8291,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8314,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8336,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8361,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8383,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8405,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8426,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8448,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8471,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8491,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8511,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8533,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8555,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8577,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8598,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8620,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8642,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8664,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8686,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8708,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8729,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8756,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8775,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8795,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8817,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8836,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8854,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8872,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8891,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8909,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8928,
+     "text": "FOOTSTEP"
+    },
+    {
+     "frame": 8937,
+     "text": "ESCAPED"
+    }
+   ],
+   "samples": [
+    {
+     "frame": 0,
+     "time": 0,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.5,
+      1.5
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "NO_TARGET"
+    },
+    {
+     "frame": 19,
+     "time": 0.31666666666666665,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      2.640000000000001,
+      1.5
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 30,
+     "time": 0.49999999999999994,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.2958902701896564,
+      1.5447194405064415
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 37,
+     "time": 0.6166666666666669,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.672189870020943,
+      1.7264928683944356
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 58,
+     "time": 0.966666666666668,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.719954897933887,
+      2.7854436680105543
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 60,
+     "time": 1.0000000000000013,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.7152789212642516,
+      2.905339189513767
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 77,
+     "time": 1.2833333333333337,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.588837006066085,
+      3.9173873547258378
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 90,
+     "time": 1.4999999999999996,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.36153403320404,
+      4.653878171175249
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 96,
+     "time": 1.5999999999999992,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.157214764265643,
+      4.871782126220868
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 116,
+     "time": 1.9333333333333313,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      2.1562414255328357,
+      5.269413632289079
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 120,
+     "time": 1.9999999999999978,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.931102000191713,
+      5.352393216110567
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 135,
+     "time": 2.249999999999997,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.3125476403920688,
+      5.977123212525223
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 150,
+     "time": 2.499999999999996,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.2928514226272565,
+      6.862194272407822
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 153,
+     "time": 2.549999999999996,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.3165104712998448,
+      7.040602212106779
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 172,
+     "time": 2.8666666666666614,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.4658562825676444,
+      8.170692178321369
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 180,
+     "time": 2.9999999999999942,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.5005770437746802,
+      8.64938514529559
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 190,
+     "time": 3.1666666666666603,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.5163705635898794,
+      9.249137100505955
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 208,
+     "time": 3.4666666666666592,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.510219013181251,
+      10.329092786928255
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 210,
+     "time": 3.4999999999999925,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.5088731892055955,
+      10.449085238698771
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 227,
+     "time": 3.7833333333333248,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      1.582420572422439,
+      11.45934453596666
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 240,
+     "time": 3.9999999999999907,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      2.0044328550509225,
+      11.718391584604516
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 249,
+     "time": 4.149999999999991,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      2.5107733812081063,
+      11.718391584604516
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 267,
+     "time": 4.4499999999999895,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.584434406344535,
+      11.627000147438517
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 270,
+     "time": 4.499999999999989,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      3.762810414539546,
+      11.602875549203588
+     ],
+     "collected": 0,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 284,
+     "time": 4.733333333333322,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      4.38865379342506,
+      11.53216376958114
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 300,
+     "time": 4.999999999999988,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      4.97469450410798,
+      11.505977755425079
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 306,
+     "time": 5.099999999999987,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.194644401274788,
+      11.501341075265795
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 328,
+     "time": 5.466666666666653,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.0012914900442125,
+      11.497298438528482
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 330,
+     "time": 5.499999999999986,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.074624741014199,
+      11.497408340761696
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 349,
+     "time": 5.816666666666651,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.771290376841274,
+      11.498605277155173
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 360,
+     "time": 5.999999999999984,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      7.1746230781066025,
+      11.499316756908515
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 371,
+     "time": 6.183333333333317,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      7.577956203296816,
+      11.499718783585525
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 390,
+     "time": 6.499999999999982,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      8.274622804743101,
+      11.500001438851335
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 393,
+     "time": 6.549999999999982,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      8.384622803597566,
+      11.500017248588678
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 415,
+     "time": 6.916666666666647,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.188778636513536,
+      11.527362831969388
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 420,
+     "time": 6.9999999999999805,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.357219707402919,
+      11.59857371573493
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 437,
+     "time": 7.283333333333313,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.70970072831315,
+      12.090355680140469
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 450,
+     "time": 7.499999999999979,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.710350104355594,
+      12.564925377765993
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 458,
+     "time": 7.6333333333333115,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.670377002121198,
+      12.855430832994234
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 480,
+     "time": 7.999999999999977,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      9.262867683478069,
+      13.51233568194203
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 502,
+     "time": 8.366666666666662,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      8.471832857623442,
+      13.616523311454918
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 510,
+     "time": 8.500000000000002,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      8.179277831157965,
+      13.595567903949085
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 524,
+     "time": 8.733333333333347,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      7.668255780297821,
+      13.547364803106005
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 540,
+     "time": 9.000000000000027,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      7.08241329516129,
+      13.516692520920904
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 546,
+     "time": 9.100000000000032,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.862547389262321,
+      13.50905352774949
+     ],
+     "collected": 0,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 562,
+     "time": 9.366666666666712,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.275960943741643,
+      13.500000017438941
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 568,
+     "time": 9.466666666666717,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      6.055963755123726,
+      13.49891257987895
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 570,
+     "time": 9.500000000000052,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.982630680094183,
+      13.498718876734078
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 589,
+     "time": 9.816666666666734,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.393155176167368,
+      13.81893045221581
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 600,
+     "time": 10.000000000000076,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.282254092405021,
+      14.354144377259683
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 605,
+     "time": 10.083333333333414,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDE"
+    },
+    {
+     "frame": 630,
+     "time": 10.500000000000101,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 660,
+     "time": 11.000000000000126,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 690,
+     "time": 11.500000000000151,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 720,
+     "time": 12.000000000000176,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 750,
+     "time": 12.5000000000002,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 780,
+     "time": 13.000000000000226,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 810,
+     "time": 13.50000000000025,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 840,
+     "time": 14.000000000000275,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 870,
+     "time": 14.5000000000003,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 900,
+     "time": 15.000000000000325,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 930,
+     "time": 15.50000000000035,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 960,
+     "time": 16.000000000000373,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 990,
+     "time": 16.500000000000345,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1020,
+     "time": 17.000000000000316,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1050,
+     "time": 17.500000000000288,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1080,
+     "time": 18.00000000000026,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1110,
+     "time": 18.50000000000023,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1140,
+     "time": 19.000000000000203,
+     "monster": "DORMANT",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1162,
+     "time": 19.36666666666685,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1170,
+     "time": 19.500000000000174,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1200,
+     "time": 20.000000000000146,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1230,
+     "time": 20.500000000000117,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1260,
+     "time": 21.00000000000009,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.5,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1290,
+     "time": 21.50000000000006,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.926249999999978,
+      8.5
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1320,
+     "time": 22.000000000000032,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      8.352499999999957
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1350,
+     "time": 22.500000000000004,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.778749999999945
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1380,
+     "time": 22.999999999999975,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.20499999999995
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1410,
+     "time": 23.499999999999947,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.631249999999955
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1440,
+     "time": 23.99999999999992,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.05749999999996
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1470,
+     "time": 24.49999999999989,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.483749999999965
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 1485,
+     "time": 24.749999999999876,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.1968749999999675
+     ],
+     "player": [
+      5.5,
+      15.5
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "LEAVE_HIDING"
+    },
+    {
+     "frame": 1500,
+     "time": 24.99999999999986,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.90999999999997
+     ],
+     "player": [
+      5.699153042517262,
+      15.706801292861991
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1520,
+     "time": 25.333333333333176,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.527499999999973
+     ],
+     "player": [
+      6.796886222750037,
+      15.716548565588033
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1530,
+     "time": 25.499999999999833,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.336249999999975
+     ],
+     "player": [
+      7.392460007559144,
+      15.645509836340421
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1538,
+     "time": 25.63333333333316,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.183249999999976
+     ],
+     "player": [
+      7.868277271398439,
+      15.582281061437122
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1557,
+     "time": 25.949999999999807,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.8198749999999793
+     ],
+     "player": [
+      9.003923075468945,
+      15.49039841543403
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1560,
+     "time": 25.999999999999805,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.7624999999999797
+     ],
+     "player": [
+      9.182259689711003,
+      15.467115680191608
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 1577,
+     "time": 26.283333333333122,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.56262500000002,
+      3.5
+     ],
+     "player": [
+      9.715722029563224,
+      14.884198406956719
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1590,
+     "time": 26.499999999999776,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.81125000000003,
+      3.5
+     ],
+     "player": [
+      9.718472037429283,
+      14.131905693103118
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1596,
+     "time": 26.59999999999977,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.926000000000034,
+      3.5
+     ],
+     "player": [
+      9.683187078077166,
+      13.773758262558793
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1614,
+     "time": 26.899999999999753,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.270250000000047,
+      3.5
+     ],
+     "player": [
+      9.542018505548103,
+      12.703068641888457
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1620,
+     "time": 26.999999999999748,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.385000000000051,
+      3.5
+     ],
+     "player": [
+      9.511251469148156,
+      12.344407629874842
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1628,
+     "time": 27.133333333333074,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.538000000000057,
+      3.5
+     ],
+     "player": [
+      9.48261638848153,
+      11.888801894896156
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1649,
+     "time": 27.483333333333054,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.939625000000072,
+      3.5
+     ],
+     "player": [
+      9.015864137722712,
+      11.32078324863542
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1650,
+     "time": 27.49999999999972,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.958750000000073,
+      3.5
+     ],
+     "player": [
+      8.981211133359507,
+      11.308799353899229
+     ],
+     "collected": 1,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1672,
+     "time": 27.866666666666365,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.379500000000089,
+      3.5
+     ],
+     "player": [
+      7.928017216716601,
+      11.341776213004508
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1680,
+     "time": 27.99999999999969,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.532500000000095,
+      3.5
+     ],
+     "player": [
+      7.453541292257701,
+      11.414147070792591
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1690,
+     "time": 28.166666666666348,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.723750000000102,
+      3.5
+     ],
+     "player": [
+      6.857232214721158,
+      11.48013955235556
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1709,
+     "time": 28.483333333332997,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.087125000000116,
+      3.5
+     ],
+     "player": [
+      5.718182958869438,
+      11.51728414296064
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1710,
+     "time": 28.499999999999662,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.106250000000117,
+      3.5
+     ],
+     "player": [
+      5.658182978072962,
+      11.51723613855876
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1727,
+     "time": 28.78333333333298,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.431375000000129,
+      3.5
+     ],
+     "player": [
+      4.645876334435989,
+      11.444637365843477
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1740,
+     "time": 28.999999999999634,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      3.3199999999998706
+     ],
+     "player": [
+      4.281877723089913,
+      10.972592830276191
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1748,
+     "time": 29.13333333333296,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      3.166999999999872
+     ],
+     "player": [
+      4.281877723089913,
+      10.530223103597544
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1767,
+     "time": 29.44999999999961,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.803624999999875
+     ],
+     "player": [
+      4.214213357191556,
+      9.465300024793631
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1770,
+     "time": 29.499999999999606,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.7462499999998755
+     ],
+     "player": [
+      4.153739735131892,
+      9.36169528112893
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1789,
+     "time": 29.816666666666254,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      3.5414445709095324,
+      8.634694347342059
+     ],
+     "collected": 1,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1795,
+     "time": 29.91666666666625,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      3.4337469732340002,
+      8.291828667706131
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 1800,
+     "time": 29.999999999999577,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      3.4337469732340002,
+      8.291828667706131
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1825,
+     "time": 30.41666666666622,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      4.030761072358339,
+      7.7999851193856475
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1830,
+     "time": 30.49999999999955,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      4.030761072358339,
+      7.7999851193856475
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1858,
+     "time": 30.96666666666619,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      4.912737083011331,
+      8.267363602671294
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1860,
+     "time": 30.99999999999952,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      4.962603056381199,
+      8.376470827797402
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1890,
+     "time": 31.499999999999492,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.672125000000007,
+      2.5
+     ],
+     "player": [
+      4.6481602928164945,
+      9.251655158814943
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1909,
+     "time": 31.81666666666614,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.03550000000002,
+      2.5
+     ],
+     "player": [
+      4.454939463270028,
+      10.371023392012368
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1920,
+     "time": 31.999999999999464,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.245875000000028,
+      2.5
+     ],
+     "player": [
+      4.452991862771731,
+      11.030846236765202
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1927,
+     "time": 32.11666666666613,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.379750000000033,
+      2.5
+     ],
+     "player": [
+      4.549105942086842,
+      11.437546435531747
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1948,
+     "time": 32.46666666666611,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.781375000000049,
+      2.5
+     ],
+     "player": [
+      5.514666382953719,
+      11.718169064133367
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1950,
+     "time": 32.49999999999944,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.81962500000005,
+      2.5
+     ],
+     "player": [
+      5.634021730946583,
+      11.718169064133367
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1966,
+     "time": 32.76666666666609,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.12562500000005,
+      2.5
+     ],
+     "player": [
+      6.588310472429407,
+      11.627929496968797
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1980,
+     "time": 32.99999999999941,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.393375000000034,
+      2.5
+     ],
+     "player": [
+      7.422056617486085,
+      11.526795237846166
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1984,
+     "time": 33.06666666666607,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.46987500000003,
+      2.5
+     ],
+     "player": [
+      7.661458277247535,
+      11.509922219447922
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 1997,
+     "time": 33.28333333333273,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.718500000000017,
+      2.5
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDE"
+    },
+    {
+     "frame": 2010,
+     "time": 33.49999999999938,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.967125000000003,
+      2.5
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 2040,
+     "time": 33.99999999999935,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      2.459125000000026
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 2070,
+     "time": 34.499999999999325,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.8853750000000296
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 2100,
+     "time": 34.9999999999993,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 2117,
+     "time": 35.283333333332614,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      8.5,
+      10.5
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "LEAVE_HIDING"
+    },
+    {
+     "frame": 2124,
+     "time": 35.399999999999274,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      8.91007059831532,
+      10.4126071181615
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2130,
+     "time": 35.49999999999927,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      9.269446878824041,
+      10.393492632830002
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2142,
+     "time": 35.69999999999926,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      9.988629576539283,
+      10.42111845671064
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2160,
+     "time": 35.99999999999924,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      10.924388707854002,
+      10.247133164717718
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2162,
+     "time": 36.03333333333257,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      11.044351365809339,
+      10.248083075843061
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2185,
+     "time": 36.41666666666588,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.5,
+      1.5
+     ],
+     "player": [
+      11.94725871100614,
+      9.678408482427171
+     ],
+     "collected": 2,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2190,
+     "time": 36.49999999999921,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.480875,
+      1.5
+     ],
+     "player": [
+      12.009329595347213,
+      9.509609077639102
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2220,
+     "time": 36.99999999999918,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.907125000000033,
+      1.5
+     ],
+     "player": [
+      12.009329595347213,
+      9.509609077639102
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 2250,
+     "time": 37.499999999999154,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.333375000000064,
+      1.5
+     ],
+     "player": [
+      12.009329595347213,
+      9.509609077639102
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 2280,
+     "time": 37.999999999999126,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.759625000000073,
+      1.5
+     ],
+     "player": [
+      12.009329595347213,
+      9.509609077639102
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 2306,
+     "time": 38.433333333332435,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.262375000000054,
+      1.5
+     ],
+     "player": [
+      12.429826499406225,
+      9.123009664731754
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2310,
+     "time": 38.4999999999991,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.18587500000005,
+      1.5
+     ],
+     "player": [
+      12.571946897921368,
+      9.087714305384194
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2328,
+     "time": 38.79999999999908,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.841625000000038,
+      1.5
+     ],
+     "player": [
+      13.214070311547259,
+      9.20815427446082
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2340,
+     "time": 38.99999999999907,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.61212500000003,
+      1.5
+     ],
+     "player": [
+      13.64001356665393,
+      9.318318181637487
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2350,
+     "time": 39.166666666665726,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.420875000000022,
+      1.5
+     ],
+     "player": [
+      13.997685911104984,
+      9.399007461285922
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2370,
+     "time": 39.49999999999904,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.038375000000007,
+      1.5
+     ],
+     "player": [
+      14.567554682887032,
+      9.2040119206876
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2375,
+     "time": 39.58333333333237,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.942750000000004,
+      1.5
+     ],
+     "player": [
+      14.682970822468103,
+      9.062158126049482
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2396,
+     "time": 39.93333333333235,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.541124999999989,
+      1.5
+     ],
+     "player": [
+      14.772891709645721,
+      8.315025263284145
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2400,
+     "time": 39.99999999999901,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.464624999999986,
+      1.5
+     ],
+     "player": [
+      14.743762932391219,
+      8.171299360056716
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2418,
+     "time": 40.299999999998995,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.120374999999973,
+      1.5
+     ],
+     "player": [
+      14.601991347714819,
+      7.52722442609048
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2430,
+     "time": 40.499999999998984,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.890874999999964,
+      1.5
+     ],
+     "player": [
+      14.547026867393614,
+      7.090708944846446
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2440,
+     "time": 40.66666666666564,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.699624999999957,
+      1.5
+     ],
+     "player": [
+      14.517195609190995,
+      6.725305284429459
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2460,
+     "time": 40.999999999998956,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.317124999999942,
+      1.5
+     ],
+     "player": [
+      14.259938088687914,
+      6.262656212746639
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2467,
+     "time": 41.116666666665616,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.183249999999937,
+      1.5
+     ],
+     "player": [
+      14.032912049236026,
+      6.145691347818835
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2489,
+     "time": 41.48333333333226,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.762499999999921,
+      1.5
+     ],
+     "player": [
+      13.238838059943005,
+      6.198892970882443
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2490,
+     "time": 41.49999999999893,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.74337499999992,
+      1.5
+     ],
+     "player": [
+      13.20367647563968,
+      6.209290443350531
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2520,
+     "time": 41.9999999999989,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      1.8303750000000893
+     ],
+     "player": [
+      12.748047283063002,
+      6.348437721212542
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2541,
+     "time": 42.34999999999888,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      2.2320000000000877
+     ],
+     "player": [
+      12.85047026507236,
+      6.5823845847801055
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2550,
+     "time": 42.49999999999887,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      2.404125000000086
+     ],
+     "player": [
+      13.088098847316344,
+      6.8073948935417
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2563,
+     "time": 42.716666666665525,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      2.652750000000084
+     ],
+     "player": [
+      13.546462249427547,
+      6.9067430813740565
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2580,
+     "time": 42.99999999999884,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      2.9778750000000813
+     ],
+     "player": [
+      14.13562395130384,
+      6.720676502786714
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2585,
+     "time": 43.08333333333217,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.0735000000000805
+     ],
+     "player": [
+      14.27289850033635,
+      6.599849839682282
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2607,
+     "time": 43.449999999998816,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.494250000000077
+     ],
+     "player": [
+      14.558156356345679,
+      5.855631423430784
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2610,
+     "time": 43.49999999999881,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.5516250000000764
+     ],
+     "player": [
+      14.606658277561833,
+      5.757003792555905
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2629,
+     "time": 43.81666666666546,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.9150000000000733
+     ],
+     "player": [
+      15.172533028507873,
+      5.392482712689862
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2640,
+     "time": 43.999999999998785,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.125375000000072
+     ],
+     "player": [
+      15.574525621714123,
+      5.368886515119446
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2651,
+     "time": 44.18333333333211,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.33575000000007
+     ],
+     "player": [
+      15.976399344519049,
+      5.401333143533297
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2670,
+     "time": 44.49999999999876,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.699125000000067
+     ],
+     "player": [
+      16.67023570192694,
+      5.4625827021497635
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2672,
+     "time": 44.53333333333209,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.737375000000067
+     ],
+     "player": [
+      16.743438113279005,
+      5.466962338231933
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2694,
+     "time": 44.899999999998734,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.158125000000063
+     ],
+     "player": [
+      17.512774838501958,
+      5.321175342571241
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2700,
+     "time": 44.99999999999873,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.272875000000062
+     ],
+     "player": [
+      17.66128786328882,
+      5.159955064981267
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2716,
+     "time": 45.26666666666538,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.421124999999936,
+      5.5
+     ],
+     "player": [
+      17.719353730059545,
+      4.5994175738401974
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2730,
+     "time": 45.4999999999987,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.153374999999926,
+      5.5
+     ],
+     "player": [
+      17.661764306230353,
+      4.0899932630887
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2738,
+     "time": 45.633333333332025,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.00037499999992,
+      5.5
+     ],
+     "player": [
+      17.57562537521608,
+      3.810967502712883
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2760,
+     "time": 45.99999999999867,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.579624999999904,
+      5.5
+     ],
+     "player": [
+      16.918989473351672,
+      3.4044400089650155
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2782,
+     "time": 46.36666666666532,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.158874999999888,
+      5.5
+     ],
+     "player": [
+      16.113839167139773,
+      3.415692870349421
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2790,
+     "time": 46.49999999999864,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.005874999999882,
+      5.5
+     ],
+     "player": [
+      15.82193681442833,
+      3.4445653845371953
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2804,
+     "time": 46.73333333333196,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.738124999999872,
+      5.5
+     ],
+     "player": [
+      15.30961200607141,
+      3.47621391755676
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 2820,
+     "time": 46.999999999998614,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.43212499999986,
+      5.5
+     ],
+     "player": [
+      14.727995778365665,
+      3.4467870446065607
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2825,
+     "time": 47.08333333333194,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.336499999999857,
+      5.5
+     ],
+     "player": [
+      14.564634396795851,
+      3.364589457411843
+     ],
+     "collected": 2,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2828,
+     "time": 47.13333333333194,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.279124999999855,
+      5.5
+     ],
+     "player": [
+      14.478225465577486,
+      3.296667866298642
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 2850,
+     "time": 47.499999999998586,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.858374999999839,
+      5.5
+     ],
+     "player": [
+      14.478225465577486,
+      3.296667866298642
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2876,
+     "time": 47.933333333331895,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.36112499999982,
+      5.5
+     ],
+     "player": [
+      15.072062475735443,
+      2.9723749133211266
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2880,
+     "time": 47.99999999999856,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.284624999999817,
+      5.5
+     ],
+     "player": [
+      15.21377624362639,
+      2.934597066992875
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2898,
+     "time": 48.29999999999854,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.940374999999808,
+      5.5
+     ],
+     "player": [
+      15.842938809419637,
+      2.735482957763628
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2910,
+     "time": 48.49999999999853,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.71087499999981,
+      5.5
+     ],
+     "player": [
+      16.264109136521757,
+      2.609597923141656
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2921,
+     "time": 48.68333333333185,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.500499999999811,
+      5.5
+     ],
+     "player": [
+      16.91643981645124,
+      2.5113583205376835
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 2929,
+     "time": 48.81666666666518,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.347499999999813,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDE"
+    },
+    {
+     "frame": 2940,
+     "time": 48.9999999999985,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.1371249999998145,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 2970,
+     "time": 49.49999999999847,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.563374999999819,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3000,
+     "time": 49.999999999998444,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      5.989624999999824,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3030,
+     "time": 50.499999999998415,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      5.415874999999829,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3049,
+     "time": 50.816666666665064,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      5.052499999999832,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "LEAVE_HIDING"
+    },
+    {
+     "frame": 3060,
+     "time": 50.99999999999839,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.842124999999834,
+      5.5
+     ],
+     "player": [
+      17.5,
+      1.5
+     ],
+     "collected": 3,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3078,
+     "time": 51.29999999999837,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.497874999999837,
+      5.5
+     ],
+     "player": [
+      17.705714985296634,
+      2.0837712223168383
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3090,
+     "time": 51.49999999999836,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.268374999999839,
+      5.5
+     ],
+     "player": [
+      17.718105153352045,
+      2.7867984760038893
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3096,
+     "time": 51.59999999999835,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.15362499999984,
+      5.5
+     ],
+     "player": [
+      17.681950431911623,
+      3.144802174291021
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3115,
+     "time": 51.916666666665,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.790249999999843,
+      5.5
+     ],
+     "player": [
+      17.53688057961452,
+      4.275489330316213
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3120,
+     "time": 51.99999999999833,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.694624999999844,
+      5.5
+     ],
+     "player": [
+      17.512570565161976,
+      4.574491082217912
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3133,
+     "time": 52.216666666664985,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.445999999999846,
+      5.5
+     ],
+     "player": [
+      17.52690435057272,
+      5.351004482028985
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3150,
+     "time": 52.4999999999983,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.120874999999849,
+      5.5
+     ],
+     "player": [
+      18.0887244939118,
+      5.718423403965975
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3156,
+     "time": 52.599999999998296,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.00612499999985,
+      5.5
+     ],
+     "player": [
+      18.42866306235486,
+      5.76304111043749
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3180,
+     "time": 52.99999999999827,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5471249999998538,
+      5.5
+     ],
+     "player": [
+      19.1958361526066,
+      5.59884080564667
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3184,
+     "time": 53.066666666664936,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      5.470624999999854
+     ],
+     "player": [
+      19.43277640928841,
+      5.560730608342456
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3202,
+     "time": 53.36666666666492,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      5.126374999999857
+     ],
+     "player": [
+      20.50907581559801,
+      5.479579424087786
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3210,
+     "time": 53.499999999998245,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      4.973374999999859
+     ],
+     "player": [
+      20.98904956767625,
+      5.47696567953303
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3220,
+     "time": 53.6666666666649,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      4.78212499999986
+     ],
+     "player": [
+      21.588998028502168,
+      5.484812595266557
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3239,
+     "time": 53.98333333333155,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      4.418749999999863
+     ],
+     "player": [
+      22.728906964158284,
+      5.498813745880803
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3240,
+     "time": 53.99999999999822,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      4.399624999999864
+     ],
+     "player": [
+      22.78890572529267,
+      5.499199313435153
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3258,
+     "time": 54.2999999999982,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      4.0553749999998665
+     ],
+     "player": [
+      23.698337137387536,
+      5.7711134610769115
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3270,
+     "time": 54.49999999999819,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      3.8258749999998685
+     ],
+     "player": [
+      23.71983561884274,
+      6.378974176865949
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3279,
+     "time": 54.64999999999818,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      3.65374999999987
+     ],
+     "player": [
+      23.714747624823126,
+      6.915394051166944
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3297,
+     "time": 54.94999999999816,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      3.309499999999873
+     ],
+     "player": [
+      23.221117882597365,
+      7.835918990838512
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3300,
+     "time": 54.99999999999816,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      3.2521249999998734
+     ],
+     "player": [
+      23.068231101225717,
+      7.930637868690329
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3315,
+     "time": 55.249999999998145,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.965249999999876
+     ],
+     "player": [
+      22.397806057119993,
+      8.502403676434023
+     ],
+     "collected": 3,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3320,
+     "time": 55.333333333331474,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.8696249999998766
+     ],
+     "player": [
+      22.289058070367577,
+      8.781195275535241
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 3330,
+     "time": 55.49999999999813,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.6783749999998783
+     ],
+     "player": [
+      22.289058070367577,
+      8.781195275535241
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 3352,
+     "time": 55.86666666666478,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.5
+     ],
+     "player": [
+      22.95174970953885,
+      9.287955528712756
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 3360,
+     "time": 55.9999999999981,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.5
+     ],
+     "player": [
+      23.00443436275097,
+      9.316666629630667
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 3362,
+     "time": 56.033333333331434,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDE"
+    },
+    {
+     "frame": 3390,
+     "time": 56.499999999998074,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3420,
+     "time": 56.999999999998046,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.5,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3450,
+     "time": 57.49999999999802,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      2.729499999999998,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3480,
+     "time": 57.99999999999799,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.303249999999993,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 3482,
+     "time": 58.03333333333132,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.341499999999993,
+      2.5
+     ],
+     "player": [
+      23.5,
+      8.5
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "LEAVE_HIDING"
+    },
+    {
+     "frame": 3510,
+     "time": 58.49999999999796,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      2.8769999999999882
+     ],
+     "player": [
+      23.707229157156963,
+      7.7343680164279505
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3511,
+     "time": 58.51666666666463,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      2.896124999999988
+     ],
+     "player": [
+      23.707229157156963,
+      7.675921646727417
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3529,
+     "time": 58.81666666666461,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      3.240374999999985
+     ],
+     "player": [
+      23.644088775830017,
+      6.6030293024412545
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3540,
+     "time": 58.99999999999793,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      3.4507499999999833
+     ],
+     "player": [
+      23.556968451674216,
+      5.948805142381767
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3548,
+     "time": 59.13333333333126,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      3.603749999999982
+     ],
+     "player": [
+      23.391075757784662,
+      5.501735437849722
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3568,
+     "time": 59.46666666666457,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      3.9862499999999788
+     ],
+     "player": [
+      22.390562052665942,
+      5.280874832332971
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3570,
+     "time": 59.499999999997904,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      4.024499999999978
+     ],
+     "player": [
+      22.270667049445528,
+      5.280874832332971
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3586,
+     "time": 59.766666666664555,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      4.330499999999976
+     ],
+     "player": [
+      21.316907737835642,
+      5.38417047773406
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3600,
+     "time": 59.999999999997875,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      4.5982499999999735
+     ],
+     "player": [
+      20.482736217767435,
+      5.481363681872986
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3604,
+     "time": 60.06666666666454,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      4.674749999999973
+     ],
+     "player": [
+      20.243222881609405,
+      5.4965707844187035
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3623,
+     "time": 60.38333333333119,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      5.03812499999997
+     ],
+     "player": [
+      19.103551880136312,
+      5.516024409825082
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3630,
+     "time": 60.49999999999785,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      5.171999999999969
+     ],
+     "player": [
+      18.6835734765359,
+      5.511774466849566
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3641,
+     "time": 60.68333333333117,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.5,
+      5.382374999999967
+     ],
+     "player": [
+      18.02360723026355,
+      5.505099846606408
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3660,
+     "time": 60.99999999999782,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      3.7457499999999637,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3690,
+     "time": 61.49999999999779,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.319499999999959,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3720,
+     "time": 61.99999999999776,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      4.893249999999954,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3750,
+     "time": 62.49999999999773,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      5.466999999999949,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3780,
+     "time": 62.999999999997705,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.040749999999944,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3810,
+     "time": 63.49999999999768,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.614499999999939,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3840,
+     "time": 63.99999999999765,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.188249999999934,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3870,
+     "time": 64.49999999999763,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.761999999999929,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 3900,
+     "time": 64.9999999999976,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.33574999999994,
+      5.5
+     ],
+     "player": [
+      17.603621263611462,
+      5.501702936767722
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3930,
+     "time": 65.49999999999757,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.909499999999962,
+      5.5
+     ],
+     "player": [
+      17.65491955417452,
+      5.404500409439685
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3938,
+     "time": 65.6333333333309,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.062499999999968,
+      5.5
+     ],
+     "player": [
+      17.855805751497737,
+      5.288869520386729
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3960,
+     "time": 65.99999999999754,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.483249999999984,
+      5.5
+     ],
+     "player": [
+      18.33342408847582,
+      5.3745183324143175
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 3990,
+     "time": 66.49999999999751,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.057000000000006,
+      5.5
+     ],
+     "player": [
+      18.455121233364736,
+      5.455966321901238
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4019,
+     "time": 66.98333333333082,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.611625000000027,
+      5.5
+     ],
+     "player": [
+      18.614292362938404,
+      5.5460113195456895
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4020,
+     "time": 66.99999999999748,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.630750000000027,
+      5.5
+     ],
+     "player": [
+      18.614292362938404,
+      5.5460113195456895
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4050,
+     "time": 67.49999999999746,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.20450000000005,
+      5.5
+     ],
+     "player": [
+      19.191909496146696,
+      5.6182739894706515
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4059,
+     "time": 67.64999999999745,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.376625000000056,
+      5.5
+     ],
+     "player": [
+      19.37509704822406,
+      5.611122322791562
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4080,
+     "time": 67.99999999999743,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.5
+     ],
+     "player": [
+      19.521484935753147,
+      5.602109769382437
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4103,
+     "time": 68.38333333333074,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.5
+     ],
+     "player": [
+      20.17886259493534,
+      5.5436424317216435
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4110,
+     "time": 68.4999999999974,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.5
+     ],
+     "player": [
+      20.43500083583966,
+      5.527287176883506
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4140,
+     "time": 68.99999999999737,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.5
+     ],
+     "player": [
+      20.807988196413977,
+      5.5113001737341865
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4163,
+     "time": 69.38333333333068,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.5
+     ],
+     "player": [
+      20.54225389382398,
+      5.115349435607196
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4170,
+     "time": 69.49999999999734,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.385249999999996,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4200,
+     "time": 69.99999999999731,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.811499999999974,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4230,
+     "time": 70.49999999999729,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.237749999999952,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4260,
+     "time": 70.99999999999726,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.66399999999993,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4290,
+     "time": 71.49999999999723,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.090249999999909,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4320,
+     "time": 71.9999999999972,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.516499999999887,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4350,
+     "time": 72.49999999999717,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.942749999999868,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4380,
+     "time": 72.99999999999714,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.368999999999873,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4410,
+     "time": 73.49999999999712,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.795249999999878,
+      5.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4440,
+     "time": 73.99999999999709,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      5.221499999999883
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4470,
+     "time": 74.49999999999706,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      4.6477499999998875
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4500,
+     "time": 74.99999999999703,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      4.073999999999892
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4530,
+     "time": 75.499999999997,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      3.5002499999998973
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4560,
+     "time": 75.99999999999697,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.073500000000098,
+      3.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4590,
+     "time": 76.49999999999694,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.647250000000093,
+      3.5
+     ],
+     "player": [
+      20.452837735093603,
+      5.035375987308728
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4620,
+     "time": 76.99999999999692,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.221000000000098,
+      3.5
+     ],
+     "player": [
+      20.405244272553638,
+      4.998840219580965
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4650,
+     "time": 77.49999999999689,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.79475000000012,
+      3.5
+     ],
+     "player": [
+      20.25537090304027,
+      5.320228038332021
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4659,
+     "time": 77.64999999999688,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.966875000000126,
+      3.5
+     ],
+     "player": [
+      19.74900166690581,
+      5.50430330675088
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4677,
+     "time": 77.94999999999686,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.311125000000139,
+      3.5
+     ],
+     "player": [
+      18.674701022746344,
+      5.57520984058375
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4680,
+     "time": 77.99999999999686,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.368500000000141,
+      3.5
+     ],
+     "player": [
+      18.4948090854439,
+      5.568993297581649
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4694,
+     "time": 78.23333333333018,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      17.865744541012983,
+      5.53502864395949
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4710,
+     "time": 78.49999999999683,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      17.279510332307023,
+      5.5130063642488025
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4715,
+     "time": 78.58333333333016,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      17.096228921008375,
+      5.508649097270458
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4737,
+     "time": 78.9499999999968,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      16.289623983335076,
+      5.499751857938278
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4740,
+     "time": 78.9999999999968,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      16.17962444786315,
+      5.499433859034332
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4759,
+     "time": 79.31666666666345,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      15.482958068155916,
+      5.499077167850761
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4770,
+     "time": 79.49999999999677,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      15.079624826232124,
+      5.499344067840048
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4781,
+     "time": 79.6833333333301,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.5,
+      3.5
+     ],
+     "player": [
+      14.676291614234449,
+      5.499653592589576
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 4800,
+     "time": 79.99999999999675,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.21312499999999,
+      3.5
+     ],
+     "player": [
+      14.492958304659505,
+      5.499746709728438
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4830,
+     "time": 80.49999999999672,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.639374999999967,
+      3.5
+     ],
+     "player": [
+      14.585354888444135,
+      5.6575638685989516
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4859,
+     "time": 80.98333333333002,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.084749999999946,
+      3.5
+     ],
+     "player": [
+      14.713923676139556,
+      5.86752862358673
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4860,
+     "time": 80.99999999999669,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.065624999999946,
+      3.5
+     ],
+     "player": [
+      14.713923676139556,
+      5.855684872588401
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 4890,
+     "time": 81.49999999999666,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.491874999999948,
+      3.5
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4920,
+     "time": 81.99999999999663,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.918124999999953,
+      3.5
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4950,
+     "time": 82.4999999999966,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      3.6556250000000423
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 4980,
+     "time": 82.99999999999658,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      4.229375000000037
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5010,
+     "time": 83.49999999999655,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      4.8031250000000325
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5040,
+     "time": 83.99999999999652,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.5,
+      5.376875000000028
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5070,
+     "time": 84.49999999999649,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      6.950625000000023,
+      5.5
+     ],
+     "player": [
+      15.278890433931947,
+      5.562581835386214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5091,
+     "time": 84.84999999999647,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.352250000000019,
+      5.5
+     ],
+     "player": [
+      15.351353721227497,
+      5.551326540967614
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 5100,
+     "time": 84.99999999999646,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      7.524375000000018,
+      5.5
+     ],
+     "player": [
+      15.533352776661841,
+      5.5293638428657
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 5130,
+     "time": 85.49999999999643,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.098125000000017,
+      5.5
+     ],
+     "player": [
+      16.082297905050837,
+      5.497269378776664
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5132,
+     "time": 85.53333333332976,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.136375000000019,
+      5.5
+     ],
+     "player": [
+      16.155609804416603,
+      5.4954994930324785
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5154,
+     "time": 85.89999999999641,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.557125000000035,
+      5.5
+     ],
+     "player": [
+      16.962245013862894,
+      5.492665361371192
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5160,
+     "time": 85.9999999999964,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.671875000000039,
+      5.5
+     ],
+     "player": [
+      17.182238335973732,
+      5.4943766480420555
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5175,
+     "time": 86.24999999999639,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      8.95875000000005,
+      5.5
+     ],
+     "player": [
+      17.732230045907027,
+      5.497369455487907
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5190,
+     "time": 86.49999999999638,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.24562500000006,
+      5.5
+     ],
+     "player": [
+      18.297551888617736,
+      5.558309538062446
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5200,
+     "time": 86.66666666666303,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.436875000000068,
+      5.5
+     ],
+     "player": [
+      18.696749976481357,
+      5.907563116717002
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5220,
+     "time": 86.99999999999635,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      9.819375000000083,
+      5.5
+     ],
+     "player": [
+      18.718281462754558,
+      6.270839583081611
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5250,
+     "time": 87.49999999999632,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.393125000000104,
+      5.5
+     ],
+     "player": [
+      18.718281462754558,
+      6.270839583081611
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5280,
+     "time": 87.99999999999629,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      10.966875000000126,
+      5.5
+     ],
+     "player": [
+      18.718281462754558,
+      6.34104372684916
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 5310,
+     "time": 88.49999999999626,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.540625000000148,
+      5.5
+     ],
+     "player": [
+      18.718281462754558,
+      6.485629484456666
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 5340,
+     "time": 88.99999999999623,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.11437500000017,
+      5.5
+     ],
+     "player": [
+      18.719981205868194,
+      6.595477957089855
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5358,
+     "time": 89.29999999999622,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.458625000000183,
+      5.5
+     ],
+     "player": [
+      18.718587331808433,
+      6.668792716744645
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 5370,
+     "time": 89.4999999999962,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.688125000000191,
+      5.5
+     ],
+     "player": [
+      18.71662038367216,
+      6.705406587879416
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 5400,
+     "time": 89.99999999999618,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.261875000000213,
+      5.5
+     ],
+     "player": [
+      18.667725235797583,
+      7.141503527212976
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5409,
+     "time": 90.14999999999617,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.43400000000022,
+      5.5
+     ],
+     "player": [
+      18.761630577235213,
+      7.454997975326105
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5430,
+     "time": 90.49999999999615,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.835625000000235,
+      5.5
+     ],
+     "player": [
+      19.294262058341886,
+      8.003017134889243
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5431,
+     "time": 90.51666666666281,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.854750000000235,
+      5.5
+     ],
+     "player": [
+      19.314392014961268,
+      8.033663982866583
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5453,
+     "time": 90.88333333332946,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.275500000000251,
+      5.5
+     ],
+     "player": [
+      19.514045213332214,
+      8.807535604486414
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5460,
+     "time": 90.99999999999612,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.409375000000257,
+      5.5
+     ],
+     "player": [
+      19.52472465867549,
+      9.063947693231963
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5475,
+     "time": 91.2499999999961,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.696250000000267,
+      5.5
+     ],
+     "player": [
+      19.52400361514701,
+      9.613921960140377
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5490,
+     "time": 91.49999999999609,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.983125000000278,
+      5.5
+     ],
+     "player": [
+      19.512438792090215,
+      10.163798420650744
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5496,
+     "time": 91.59999999999609,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.097875000000283,
+      5.5
+     ],
+     "player": [
+      19.508782108162336,
+      10.383767798603152
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5518,
+     "time": 91.96666666666273,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.518625000000299,
+      5.5
+     ],
+     "player": [
+      19.473741022072517,
+      11.18768074793068
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5520,
+     "time": 91.99999999999606,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5568750000003,
+      5.5
+     ],
+     "player": [
+      19.449815733112786,
+      11.25697719744314
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5540,
+     "time": 92.33333333332938,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.939375000000314,
+      5.5
+     ],
+     "player": [
+      18.90689922172399,
+      11.704490973005337
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5550,
+     "time": 92.49999999999604,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.13062500000031,
+      5.5
+     ],
+     "player": [
+      18.54197902943713,
+      11.717777152751214
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5562,
+     "time": 92.69999999999602,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.3601250000003,
+      5.5
+     ],
+     "player": [
+      18.105728539163444,
+      11.663237643793373
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5580,
+     "time": 92.999999999996,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.70437500000028,
+      5.5
+     ],
+     "player": [
+      17.45357143810797,
+      11.564172740950495
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5584,
+     "time": 93.06666666666267,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.780875000000275,
+      5.5
+     ],
+     "player": [
+      17.307563538989644,
+      11.550297038288894
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5605,
+     "time": 93.41666666666265,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.182500000000253,
+      5.5
+     ],
+     "player": [
+      16.539011052824918,
+      11.505621351338338
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5610,
+     "time": 93.49999999999598,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.278125000000248,
+      5.5
+     ],
+     "player": [
+      16.35571817276748,
+      11.501798652133978
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5627,
+     "time": 93.7833333333293,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.60325000000023,
+      5.5
+     ],
+     "player": [
+      15.732407395697425,
+      11.49726774210486
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5640,
+     "time": 93.99999999999595,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.851875000000216,
+      5.5
+     ],
+     "player": [
+      15.25574097962502,
+      11.497478466434686
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5649,
+     "time": 94.14999999999594,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.024000000000207,
+      5.5
+     ],
+     "player": [
+      14.925741909995681,
+      11.498257777882976
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5670,
+     "time": 94.49999999999592,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.425625000000185,
+      5.5
+     ],
+     "player": [
+      14.155742913852327,
+      11.4994695088462
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5671,
+     "time": 94.51666666666259,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.444750000000184,
+      5.5
+     ],
+     "player": [
+      14.11907626811322,
+      11.499508683930829
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 5693,
+     "time": 94.88333333332923,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.86550000000016,
+      5.5
+     ],
+     "player": [
+      13.312409768916229,
+      11.49998112600273
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5700,
+     "time": 94.9999999999959,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.999375000000153,
+      5.5
+     ],
+     "player": [
+      13.055743105303849,
+      11.500019810676543
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5720,
+     "time": 95.33333333332921,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.381875000000132,
+      5.5
+     ],
+     "player": [
+      12.182409772539986,
+      11.500034515896044
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5730,
+     "time": 95.49999999999586,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      11.582409772775486,
+      11.50001777584147
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5738,
+     "time": 95.63333333332919,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      11.102409772890178,
+      11.500007317330484
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5758,
+     "time": 95.9666666666625,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.143539524818845,
+      11.10186954815674
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5760,
+     "time": 95.99999999999584,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.111122283319991,
+      11.051380713216677
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5785,
+     "time": 96.41666666666248,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.179329772555397,
+      10.029038474370301
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5790,
+     "time": 96.49999999999581,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.286988832372227,
+      9.749136185384055
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5803,
+     "time": 96.71666666666246,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.469529961988743,
+      8.991616128613517
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5820,
+     "time": 96.99999999999578,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.537947682615227,
+      7.975038283053651
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5821,
+     "time": 97.01666666666245,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.5,
+      5.5
+     ],
+     "player": [
+      10.537664227826744,
+      7.91503895261253
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5835,
+     "time": 97.24999999999577,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.30875000000001,
+      5.5
+     ],
+     "player": [
+      10.523892038870038,
+      7.121839413197199
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5850,
+     "time": 97.49999999999575,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.021875000000026,
+      5.5
+     ],
+     "player": [
+      10.510342372081729,
+      6.572011962338324
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5857,
+     "time": 97.61666666666241,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.888000000000034,
+      5.5
+     ],
+     "player": [
+      10.50656707270524,
+      6.315373258484589
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5879,
+     "time": 97.98333333332906,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      5.532749999999945
+     ],
+     "player": [
+      10.338280637769802,
+      5.546942951516366
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5880,
+     "time": 97.99999999999572,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      5.551874999999945
+     ],
+     "player": [
+      10.314397844150221,
+      5.51912107858572
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5901,
+     "time": 98.3499999999957,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      5.953499999999941
+     ],
+     "player": [
+      9.614456289511459,
+      5.280682282217337
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5910,
+     "time": 98.4999999999957,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      6.12562499999994
+     ],
+     "player": [
+      9.146658107094817,
+      5.322802440701761
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5921,
+     "time": 98.68333333332902,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      6.335999999999938
+     ],
+     "player": [
+      8.494357117779126,
+      5.422804952158836
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5939,
+     "time": 98.983333333329,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      6.680249999999935
+     ],
+     "player": [
+      7.418234541230672,
+      5.509325542573471
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5940,
+     "time": 98.99999999999567,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      6.699374999999935
+     ],
+     "player": [
+      7.3582621924763645,
+      5.5111469115343645
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5957,
+     "time": 99.28333333332898,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      7.024499999999932
+     ],
+     "player": [
+      6.374526200274511,
+      5.327892625751354
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 5970,
+     "time": 99.49999999999564,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.5,
+      7.27312499999993
+     ],
+     "player": [
+      5.9876117104357505,
+      5.2943053443394845
+     ],
+     "collected": 4,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6000,
+     "time": 99.99999999999561,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.84687499999991,
+      7.5
+     ],
+     "player": [
+      6.267324907059217,
+      5.2943053443394845
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6007,
+     "time": 100.11666666666227,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.9807499999999,
+      7.5
+     ],
+     "player": [
+      6.467808239885609,
+      4.926295179452817
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6026,
+     "time": 100.43333333332892,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.34412499999988,
+      7.5
+     ],
+     "player": [
+      6.604590256356981,
+      3.8034302664992174
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6030,
+     "time": 100.49999999999558,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.420624999999877,
+      7.5
+     ],
+     "player": [
+      6.593412939305075,
+      3.5636929892135325
+     ],
+     "collected": 4,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6035,
+     "time": 100.58333333332891,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.497124999999873,
+      7.5
+     ],
+     "player": [
+      6.5747256600736526,
+      3.2642785817067663
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 6060,
+     "time": 100.99999999999555,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.499059627421182,
+      8.172913885645492
+     ],
+     "player": [
+      6.9984316289082615,
+      2.9375984748454633
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 6078,
+     "time": 101.29999999999553,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      8.657412533862695
+     ],
+     "player": [
+      8.00041565632271,
+      2.5475671564808593
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 6090,
+     "time": 101.49999999999552,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      8.980412533862696
+     ],
+     "player": [
+      8.713761661319825,
+      2.4567043546774854
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 6097,
+     "time": 101.61666666666218,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      9.168829200529363
+     ],
+     "player": [
+      9.133294009517302,
+      2.45885696997865
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SEEK_HIDING"
+    },
+    {
+     "frame": 6104,
+     "time": 101.73333333332884,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      9.35724586719603
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDE"
+    },
+    {
+     "frame": 6120,
+     "time": 101.9999999999955,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      9.787912533862697
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 6150,
+     "time": 102.49999999999547,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      10.595412533862698
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 6180,
+     "time": 102.99999999999544,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      19.5,
+      11.402912533862699
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 6210,
+     "time": 103.49999999999541,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      18.78958746613735,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HIDDEN_WAIT"
+    },
+    {
+     "frame": 6224,
+     "time": 103.73333333332873,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      18.41275413280404,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "LEAVE_HIDING"
+    },
+    {
+     "frame": 6240,
+     "time": 103.99999999999538,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      17.9820874661374,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6270,
+     "time": 104.49999999999535,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      17.174587466137453,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6300,
+     "time": 104.99999999999532,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      16.367087466137505,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6330,
+     "time": 105.4999999999953,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      15.559587466137527,
+      11.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6360,
+     "time": 105.99999999999527,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      15.5,
+      12.247912533862474
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6390,
+     "time": 106.49999999999524,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      15.5,
+      13.055412533862475
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6420,
+     "time": 106.99999999999521,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      15.5,
+      13.862912533862476
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6450,
+     "time": 107.49999999999518,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      15.670412533862477,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6480,
+     "time": 107.99999999999515,
+     "monster": "INVESTIGATING",
+     "monsterAt": [
+      16.477912533862447,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6482,
+     "time": 108.03333333332849,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.5,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6510,
+     "time": 108.49999999999513,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.5,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6540,
+     "time": 108.9999999999951,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.5,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6570,
+     "time": 109.49999999999507,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.5,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6600,
+     "time": 109.99999999999504,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.098375000000022,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6630,
+     "time": 110.49999999999501,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.52462500000001,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6660,
+     "time": 110.99999999999498,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.950874999999987,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6690,
+     "time": 111.49999999999496,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.377124999999966,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6720,
+     "time": 111.99999999999493,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.803374999999944,
+      14.5
+     ],
+     "player": [
+      9.5,
+      3.5
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6750,
+     "time": 112.4999999999949,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      9.414762649649399,
+      3.658141638195618
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6761,
+     "time": 112.68333333332822,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      8.913365429404148,
+      3.70670436967755
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6780,
+     "time": 112.99999999999487,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      7.791513333230249,
+      3.671938874845775
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6800,
+     "time": 113.33333333332818,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      6.720255756060817,
+      3.580457713730017
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6810,
+     "time": 113.49999999999484,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      6.287407498693444,
+      3.7757156757634966
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6822,
+     "time": 113.69999999999483,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.5,
+      14.5
+     ],
+     "player": [
+      6.287407498693444,
+      4.369741632769369
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 6840,
+     "time": 113.99999999999481,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.614750000000004,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6870,
+     "time": 114.49999999999478,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.188500000000026,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6900,
+     "time": 114.99999999999476,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.762250000000048,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6930,
+     "time": 115.49999999999473,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.33600000000007,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6960,
+     "time": 115.9999999999947,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.909750000000091,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 6990,
+     "time": 116.49999999999467,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.483500000000067,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7020,
+     "time": 116.99999999999464,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.057250000000035,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7050,
+     "time": 117.49999999999461,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.631000000000004,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7080,
+     "time": 117.99999999999459,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.204749999999972,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7110,
+     "time": 118.49999999999456,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.77849999999994,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7140,
+     "time": 118.99999999999453,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.35224999999991,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7170,
+     "time": 119.4999999999945,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.925999999999878,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7200,
+     "time": 119.99999999999447,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      20.499749999999846,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7230,
+     "time": 120.49999999999444,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      20.5,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7260,
+     "time": 120.99999999999442,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      20.5,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7290,
+     "time": 121.49999999999439,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      20.5,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7320,
+     "time": 121.99999999999436,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      20.098375000000022,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7350,
+     "time": 122.49999999999433,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      19.524625000000054,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7380,
+     "time": 122.9999999999943,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.950875000000085,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7410,
+     "time": 123.49999999999427,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      18.377125000000117,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7440,
+     "time": 123.99999999999424,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.80337500000015,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7470,
+     "time": 124.49999999999422,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      17.22962500000018,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7500,
+     "time": 124.99999999999419,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.65587500000021,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7530,
+     "time": 125.49999999999416,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      16.082125000000243,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7560,
+     "time": 125.99999999999413,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.508375000000228,
+      14.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7590,
+     "time": 126.4999999999941,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      15.065374999999793
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7620,
+     "time": 126.99999999999407,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      15.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7650,
+     "time": 127.49999999999405,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      15.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7680,
+     "time": 127.99999999999402,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      15.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7710,
+     "time": 128.4999999999944,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      15.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7740,
+     "time": 128.9999999999948,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      14.945374999999979
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7770,
+     "time": 129.4999999999952,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      14.371624999999957
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7800,
+     "time": 129.9999999999956,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      13.797874999999935
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7830,
+     "time": 130.499999999996,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      13.224124999999914
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7860,
+     "time": 130.9999999999964,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      12.650374999999892
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7890,
+     "time": 131.4999999999968,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      12.07662499999987
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7920,
+     "time": 131.9999999999972,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      15.5,
+      11.502874999999849
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7950,
+     "time": 132.49999999999758,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.929124999999827,
+      11.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 7980,
+     "time": 132.99999999999798,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.355374999999805,
+      11.5
+     ],
+     "player": [
+      6.314405036918235,
+      5.142397850176427
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "HOLD_CLEAR"
+    },
+    {
+     "frame": 8010,
+     "time": 133.49999999999838,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.781624999999783,
+      11.5
+     ],
+     "player": [
+      6.446083516530858,
+      5.476042108004705
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8040,
+     "time": 133.99999999999878,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.207874999999762,
+      11.5
+     ],
+     "player": [
+      6.715591869293183,
+      5.904400819879655
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8049,
+     "time": 134.1499999999989,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.035749999999755,
+      11.5
+     ],
+     "player": [
+      6.715591869293183,
+      5.789330831545845
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8070,
+     "time": 134.49999999999918,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.63412499999974,
+      11.5
+     ],
+     "player": [
+      7.2445004683277405,
+      5.563686032512456
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8075,
+     "time": 134.58333333333258,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.538499999999736,
+      11.5
+     ],
+     "player": [
+      7.425869123879215,
+      5.537067007011184
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8097,
+     "time": 134.94999999999953,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.11774999999972,
+      11.5
+     ],
+     "player": [
+      8.23094137765518,
+      5.492667995471812
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8100,
+     "time": 134.99999999999957,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.060374999999718,
+      11.5
+     ],
+     "player": [
+      8.340934682439372,
+      5.491465715225851
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8119,
+     "time": 135.3166666666665,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.696999999999704,
+      11.5
+     ],
+     "player": [
+      9.037590901293129,
+      5.493062034922398
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8130,
+     "time": 135.49999999999997,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      11.486624999999696
+     ],
+     "player": [
+      9.440915158224323,
+      5.495750166758312
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8160,
+     "time": 136.00000000000037,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      10.912874999999675
+     ],
+     "player": [
+      9.440915158224323,
+      5.495750166758312
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 8181,
+     "time": 136.35000000000065,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      10.51124999999966
+     ],
+     "player": [
+      9.158430020005175,
+      5.708697219758861
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 8190,
+     "time": 136.50000000000077,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      10.339124999999653
+     ],
+     "player": [
+      8.84989350962156,
+      5.719129854433047
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 8203,
+     "time": 136.7166666666676,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      10.090499999999643
+     ],
+     "player": [
+      8.37456341118711,
+      5.703611938716722
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "RETREATING"
+    },
+    {
+     "frame": 8220,
+     "time": 137.00000000000117,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      9.765374999999631
+     ],
+     "player": [
+      7.76032230110456,
+      5.598683489773221
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8225,
+     "time": 137.08333333333456,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      9.669749999999627
+     ],
+     "player": [
+      7.578569692761137,
+      5.574712029841526
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8247,
+     "time": 137.45000000000152,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      9.248999999999612
+     ],
+     "player": [
+      6.776288798037994,
+      5.546815632866588
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8250,
+     "time": 137.50000000000156,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      9.19162499999961
+     ],
+     "player": [
+      6.672401628098636,
+      5.58269462192203
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8269,
+     "time": 137.81666666666848,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      8.828249999999596
+     ],
+     "player": [
+      6.280923407390853,
+      6.100724313472773
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8280,
+     "time": 138.00000000000196,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      8.617874999999588
+     ],
+     "player": [
+      6.2841532727546765,
+      6.501968306430416
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8291,
+     "time": 138.18333333333544,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      8.40749999999958
+     ],
+     "player": [
+      6.336233476794702,
+      6.901650270337454
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8310,
+     "time": 138.50000000000236,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      8.044124999999566
+     ],
+     "player": [
+      6.224753441179683,
+      7.4944791307099745
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8314,
+     "time": 138.56666666666908,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.967624999999565
+     ],
+     "player": [
+      6.128405584923528,
+      7.604756329896476
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8336,
+     "time": 138.93333333333604,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.546874999999568
+     ],
+     "player": [
+      5.373274094814105,
+      7.793727830974715
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8340,
+     "time": 139.00000000000276,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.470374999999569
+     ],
+     "player": [
+      5.228732623877341,
+      7.769023997770108
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8361,
+     "time": 139.35000000000304,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      7.068749999999572
+     ],
+     "player": [
+      4.587037988880161,
+      7.768164908830679
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8370,
+     "time": 139.50000000000315,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.896624999999574
+     ],
+     "player": [
+      4.328402615576564,
+      7.968676070176828
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8383,
+     "time": 139.71666666667,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.647999999999576
+     ],
+     "player": [
+      4.161788531755868,
+      8.406706666952449
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8400,
+     "time": 140.00000000000355,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.322874999999579
+     ],
+     "player": [
+      4.264304413045948,
+      9.01781421960238
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8405,
+     "time": 140.08333333333695,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      6.22724999999958
+     ],
+     "player": [
+      4.314049497659429,
+      9.194236476218101
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8426,
+     "time": 140.43333333333723,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.825624999999583
+     ],
+     "player": [
+      4.445558412912587,
+      9.952495199296783
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8430,
+     "time": 140.50000000000395,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.749124999999584
+     ],
+     "player": [
+      4.462521697442094,
+      10.098172887365289
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8448,
+     "time": 140.8000000000042,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.404874999999587
+     ],
+     "player": [
+      4.49807662426651,
+      10.757058369086462
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8460,
+     "time": 141.00000000000435,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      5.175374999999589
+     ],
+     "player": [
+      4.550654383996371,
+      11.332387436709297
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8471,
+     "time": 141.18333333333783,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.96499999999959
+     ],
+     "player": [
+      4.863135157245877,
+      11.704833166416718
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8490,
+     "time": 141.50000000000475,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.6016249999995935
+     ],
+     "player": [
+      5.925125822846913,
+      11.71433792232915
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8491,
+     "time": 141.51666666667143,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.582499999999594
+     ],
+     "player": [
+      5.984884627577291,
+      11.708963421682897
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8511,
+     "time": 141.85000000000502,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.199999999999597
+     ],
+     "player": [
+      6.7350909469854665,
+      11.610403686125863
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8520,
+     "time": 142.00000000000514,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      4.027874999999598
+     ],
+     "player": [
+      7.061880212903545,
+      11.564490953381485
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8533,
+     "time": 142.21666666667198,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.5,
+      3.7792499999996005
+     ],
+     "player": [
+      7.536680738075037,
+      11.523498772384439
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SIGHT_AVOIDING"
+    },
+    {
+     "frame": 8550,
+     "time": 142.50000000000554,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.545875000000398,
+      3.5
+     ],
+     "player": [
+      8.159598336047802,
+      11.501736714752704
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8555,
+     "time": 142.58333333333894,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      11.641500000000402,
+      3.5
+     ],
+     "player": [
+      8.34291408076843,
+      11.49922380106934
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8577,
+     "time": 142.9500000000059,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.062250000000418,
+      3.5
+     ],
+     "player": [
+      9.149573275539003,
+      11.49739470383882
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8580,
+     "time": 143.00000000000594,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.11962500000042,
+      3.5
+     ],
+     "player": [
+      9.259573098811588,
+      11.497591879329438
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8598,
+     "time": 143.30000000000618,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.463875000000433,
+      3.5
+     ],
+     "player": [
+      9.919571911759082,
+      11.498843378012744
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8610,
+     "time": 143.50000000000634,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.693375000000442,
+      3.5
+     ],
+     "player": [
+      10.359571358995602,
+      11.499526949793665
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8620,
+     "time": 143.66666666667314,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.88462500000045,
+      3.5
+     ],
+     "player": [
+      10.726237911620824,
+      11.49981181550522
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8640,
+     "time": 144.00000000000674,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.267125000000464,
+      3.5
+     ],
+     "player": [
+      11.459571205498227,
+      11.500029359623447
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8642,
+     "time": 144.0333333333401,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.305375000000465,
+      3.5
+     ],
+     "player": [
+      11.532904538595586,
+      11.500035226595339
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8664,
+     "time": 144.40000000000705,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.726125000000481,
+      3.5
+     ],
+     "player": [
+      12.339571204899942,
+      11.500031906769514
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8670,
+     "time": 144.50000000000713,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.840875000000485,
+      3.5
+     ],
+     "player": [
+      12.559571204814658,
+      11.500025781014457
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8686,
+     "time": 144.766666666674,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.146875000000497,
+      3.5
+     ],
+     "player": [
+      13.146237871268863,
+      11.500010018729677
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8700,
+     "time": 145.00000000000753,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.414625000000507,
+      3.5
+     ],
+     "player": [
+      13.65957120454878,
+      11.500002856090891
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8708,
+     "time": 145.13333333334097,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      3.4323749999994906
+     ],
+     "player": [
+      13.952904537875389,
+      11.500000891882156
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8729,
+     "time": 145.48333333334125,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      3.030749999999494
+     ],
+     "player": [
+      14.722904537873017,
+      11.499999321257487
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8730,
+     "time": 145.50000000000793,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      3.011624999999494
+     ],
+     "player": [
+      14.759571204539684,
+      11.499999318111472
+     ],
+     "collected": 5,
+     "sprinting": false,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8756,
+     "time": 145.9333333333416,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5143749999994984
+     ],
+     "player": [
+      15.718176205820164,
+      11.938197372152118
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8760,
+     "time": 146.00000000000833,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      15.718176205820164,
+      12.148969362576238
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8775,
+     "time": 146.25000000000853,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      15.697584904021904,
+      13.034873018413174
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8790,
+     "time": 146.50000000000873,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      15.579753784308945,
+      13.927124163146347
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8795,
+     "time": 146.58333333334213,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      15.564483338025994,
+      14.106025066804529
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8817,
+     "time": 146.95000000000908,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      16.20871780703699,
+      14.715286743210626
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8820,
+     "time": 147.00000000000912,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      16.377288785355532,
+      14.715286743210626
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8836,
+     "time": 147.266666666676,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      17.329863988736157,
+      14.671950935387793
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8850,
+     "time": 147.50000000000952,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      18.162382625935813,
+      14.56025056652595
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8854,
+     "time": 147.56666666667624,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.5,
+      2.5
+     ],
+     "player": [
+      18.400985329523397,
+      14.53446487300468
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8872,
+     "time": 147.86666666667648,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.174874999999988,
+      2.5
+     ],
+     "player": [
+      19.479501318617444,
+      14.484238849673314
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8880,
+     "time": 148.00000000000992,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      14.021874999999982,
+      2.5
+     ],
+     "player": [
+      19.95949393415855,
+      14.48386033975516
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8891,
+     "time": 148.1833333333434,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.811499999999974,
+      2.5
+     ],
+     "player": [
+      20.619460882280936,
+      14.490463928078977
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8909,
+     "time": 148.48333333334364,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.46724999999996,
+      2.5
+     ],
+     "player": [
+      21.69942019191949,
+      14.499555298571174
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8910,
+     "time": 148.50000000001032,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.44812499999996,
+      2.5
+     ],
+     "player": [
+      21.75941965338581,
+      14.499809510592293
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8928,
+     "time": 148.80000000001056,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      13.103874999999947,
+      2.5
+     ],
+     "player": [
+      22.726179286926254,
+      14.736298532859607
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    },
+    {
+     "frame": 8937,
+     "time": 148.95000000001068,
+     "monster": "SEARCHING",
+     "monsterAt": [
+      12.93174999999994,
+      2.5
+     ],
+     "player": [
+      22.9428022135352,
+      15.020135692783478
+     ],
+     "collected": 5,
+     "sprinting": true,
+     "noiseAt": null,
+     "mode": "SAFETY_AVOIDING"
+    }
+   ],
+   "catchDistance": null,
+   "routeModes": {
+    "SIGHT_AVOIDING": 2473,
+    "SAFETY_AVOIDING": 1471,
+    "SEEK_HIDING": 452,
+    "HIDE": 5,
+    "HIDDEN_WAIT": 1355,
+    "LEAVE_HIDING": 5,
+    "HOLD_CLEAR": 2924,
+    "RETREATING": 252
+   }
+  }
+ ]
+}

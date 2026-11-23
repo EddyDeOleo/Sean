@@ -7,10 +7,15 @@
  */
 
 import * as THREE from "three";
-import { Creature } from "./creature";
+import { MODEL_HEIGHT, MonsterVisual } from "./monsterVisual";
+import { CAMERA_NEAR, CREATURE_DEPTH, cinematicAt, enclosedCamera, fitReach, framingFor, type CinematicFrame } from "./cinematic";
+import { planFurniture, type FurnitureItem } from "./archive/archiveLayout";
+import { ARCHIVE_LIGHTING, buildArchiveDecor, type ArchiveDecor } from "./archive/archiveScene";
 import { FLICKER_HOLD, flickerFactor, hash } from "./flicker";
-import { tileAt, type Level, type Point } from "./level";
+import { isBlocked, tileAt, type Level, type Point } from "./level";
 import { monsterSeesPlayer, type World } from "./world";
+
+
 
 export type Quality = "low" | "medium" | "high";
 
@@ -31,6 +36,16 @@ export const QUALITY: Record<Quality, QualityProfile> = {
 const WALL_HEIGHT = 1.15;
 const EYE_HEIGHT = 0.55;
 const BASE_FOV = 72;
+/**
+ * Without the cinematic, a caught camera backs off until the whole creature fits. The head top must sit within CATCH_HEAD_ANGLE
+ * of the view axis (the vertical half field of view is 36 degrees), which leaves the skull clear of the frame edge.
+ */
+const CATCH_HEAD_ANGLE = (28 * Math.PI) / 180;
+const CATCH_TOP_CLEARANCE = 0.1;
+/** The camera's distance from the creature's centre at which the head top sits at CATCH_HEAD_ANGLE. */
+const CATCH_HEAD_DISTANCE = (MODEL_HEIGHT + CATCH_TOP_CLEARANCE - EYE_HEIGHT) / Math.tan(CATCH_HEAD_ANGLE);
+/** The most the caught camera may back off, in tiles, even where the room behind is open. */
+const CATCH_PULL_MAX = 1.2;
 /** Flashlight brightness. With decay 2 the light falls off faster, so the near pool would clip to white at the old 14. */
 const FLASHLIGHT_INTENSITY = 9;
 const CLUE_COLOUR: Record<string, number> = { DOCUMENTED: 0xf2c14e, INFERRED: 0x6fa8dc, PARTIAL_EVIDENCE: 0xe69138, NONE: 0x9a9a9a };
@@ -117,7 +132,16 @@ export class GameRenderer {
   private readonly scene = new THREE.Scene();
   private readonly camera: THREE.PerspectiveCamera;
   private readonly flashlight: THREE.SpotLight;
-  private readonly creature: Creature;
+  private readonly creature: MonsterVisual;
+  private archiveDecor: ArchiveDecor | null = null;
+  /** The cinematic phase of the frame drawn last (ANTICIPATION, LUNGE, IMPACT, HOLD, DEFEAT_CARD), or null outside the catch. */
+  get cinematicPhase(): string | null {
+    return this.drawnCinematicPhase;
+  }
+  /** Seconds since the catch as the last drawn frame measured them (null outside the catch). */
+  get cinematicElapsed(): number | null {
+    return this.drawnCinematicPhase === null ? null : this.caughtFor;
+  }
   private readonly lockers: { mesh: THREE.Mesh; camera: { x: number; z: number }; spot: Point }[] = [];
   private jumpscare = true;
   private readonly scratch = new THREE.Vector3();
@@ -132,6 +156,8 @@ export class GameRenderer {
   private pitch = 0;
   private viewYawOffset = 0;
   private caughtFor = 0;
+  /** The cinematic phase of the last drawn frame, from the simulation's time since the catch. Null when not caught. */
+  private drawnCinematicPhase: string | null = null;
 
   readonly canvas: HTMLCanvasElement;
 
@@ -146,15 +172,15 @@ export class GameRenderer {
     this.canvas.dataset.testid = "game-canvas";
     this.container.appendChild(this.canvas);
 
-    this.scene.background = new THREE.Color(0x050507);
-    this.scene.fog = new THREE.FogExp2(0x050507, 0.085);
-    this.camera = new THREE.PerspectiveCamera(BASE_FOV, 1, 0.05, 40);
+    this.scene.background = new THREE.Color(ARCHIVE_LIGHTING.background);
+    this.scene.fog = new THREE.FogExp2(ARCHIVE_LIGHTING.background, ARCHIVE_LIGHTING.fogDensity);
+    this.camera = new THREE.PerspectiveCamera(BASE_FOV, 1, CAMERA_NEAR, 40);
     this.camera.rotation.order = "YXZ";
     this.scene.add(this.camera);
 
-    this.scene.add(new THREE.AmbientLight(0x323a46, 1.1));
-    // A faint cool sky and dark floor, so walls keep a silhouette even outside the flashlight.
-    this.scene.add(new THREE.HemisphereLight(0x0a0c12, 0x050507, 0.15));
+    this.scene.add(new THREE.AmbientLight(ARCHIVE_LIGHTING.ambient, ARCHIVE_LIGHTING.ambientIntensity));
+    // The corridor fill (ARCHIVE_LIGHTING): floor, walls and ceiling stay readable outside the flashlight.
+    this.scene.add(new THREE.HemisphereLight(ARCHIVE_LIGHTING.hemisphereSky, ARCHIVE_LIGHTING.hemisphereGround, ARCHIVE_LIGHTING.hemisphereIntensity));
     this.flashlight = new THREE.SpotLight(0xfff1d0, FLASHLIGHT_INTENSITY, 11, 0.5, 0.65, 2);
     this.flashlight.position.set(0.12, -0.08, 0);
     this.flashlight.target.position.set(0, 0, -3);
@@ -165,7 +191,8 @@ export class GameRenderer {
 
     try {
       this.buildLevel();
-      this.creature = new Creature(this.profile.textureSize);
+      this.archiveDecor = buildArchiveDecor(this.scene, this.level, { textureSize: this.profile.textureSize, quality });
+      this.creature = new MonsterVisual(this.profile.textureSize);
       this.buildMonster();
       this.buildHidingPlaces();
       this.resize();
@@ -247,66 +274,61 @@ export class GameRenderer {
 
   private buildExit(): void {
     const { exit } = this.level;
-    const pad = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshBasicMaterial({ color: 0x1f6b3a }));
+    const pad = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshBasicMaterial({ color: 0x4c544b }));
     pad.rotation.x = -Math.PI / 2;
     pad.position.set(exit.x, 0.01, exit.y);
     this.scene.add(pad);
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.3), new THREE.MeshBasicMaterial({ map: signTexture("EXIT", "#5dff8f") }));
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.3), new THREE.MeshBasicMaterial({ map: signTexture("EXIT", "#b8d9c4") }));
     // The exit stands against the south wall; the sign hangs on that wall, facing the room.
     sign.position.set(exit.x, WALL_HEIGHT - 0.25, exit.y + 0.49);
     sign.rotation.y = Math.PI;
     this.scene.add(sign);
     if (this.profile.pointLights > 0) {
-      const glow = new THREE.PointLight(0x3dff80, 1.5, 4);
+      const glow = new THREE.PointLight(0xc9e7d6, 1.1, 4);
       glow.position.set(exit.x, 0.6, exit.y);
       this.scene.add(glow);
     }
   }
 
-  /** Shelves, lockers and terminals standing against walls. They are scenery only: thin enough not to matter for collision. */
+  /**
+   * Bookshelves, storage lockers and terminals standing against walls, where planFurniture (archiveLayout.ts) puts them.
+   * Bookshelves and lockers are solid: world.ts stops movement at the same footprints.
+   */
   private buildFurniture(): void {
-    const { level } = this;
     const shelfMaterial = new THREE.MeshLambertMaterial({ color: 0x3a2c20 });
-    const bookMaterials = [0x6b2e2e, 0x2e4a6b, 0x4a5a2e, 0x6b5a2e].map((color) => new THREE.MeshLambertMaterial({ color }));
+    const bookMaterials = [0x6e6244, 0x595b59, 0x4c544b, 0x8f171d].map((color) => new THREE.MeshLambertMaterial({ color }));
     const lockerMaterial = new THREE.MeshLambertMaterial({ color: 0x3a4650 });
+    // Bookshelves come in two lengths (planFurniture); each mesh is as long as the item's footprint along the wall.
+    const shelfGeometries = new Map<number, { shelf: THREE.BoxGeometry; books: THREE.BoxGeometry }>();
+    const shelfGeometry = (span: number) => {
+      let geometry = shelfGeometries.get(span);
+      if (!geometry) {
+        geometry = { shelf: new THREE.BoxGeometry(span, 0.95, 0.18), books: new THREE.BoxGeometry(span - 0.1, 0.16, 0.1) };
+        shelfGeometries.set(span, geometry);
+      }
+      return geometry;
+    };
+    const lockerGeometry = new THREE.BoxGeometry(0.5, 0.85, 0.2);
     const screenGeometry = new THREE.PlaneGeometry(0.34, 0.24);
-    const reserved = new Set<string>([level.playerStart, level.monsterStart, level.exit, ...level.clueSpots].map((p) => `${Math.floor(p.x)},${Math.floor(p.y)}`));
-    for (let y = 1; y < level.height - 1; y += 1) {
-      for (let x = 1; x < level.width - 1; x += 1) {
-        if (tileAt(level, x + 0.5, y + 0.5) !== "FLOOR" || reserved.has(`${x},${y}`)) continue;
-        const roll = hash(x, y);
-        if (roll > 0.22) continue;
-        // Find a wall side to stand against.
-        const sides: [number, number][] = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-        const side = sides.find(([dx, dy]) => tileAt(level, x + 0.5 + dx, y + 0.5 + dy) === "WALL");
-        // Corridors stay clear: only furnish tiles that have open floor on at least three sides.
-        const open = sides.filter(([dx, dy]) => tileAt(level, x + 0.5 + dx, y + 0.5 + dy) === "FLOOR").length;
-        if (!side || open < 3) continue;
-        const [dx, dy] = side;
-        const cx = x + 0.5 + dx * 0.4;
-        const cz = y + 0.5 + dy * 0.4;
-        const alongX = dy !== 0;
-        if (roll < 0.12) {
-          const shelf = new THREE.Mesh(new THREE.BoxGeometry(alongX ? 0.9 : 0.18, 0.95, alongX ? 0.18 : 0.9), shelfMaterial);
-          shelf.position.set(cx, 0.475, cz);
-          this.scene.add(shelf);
-          for (let row = 0; row < 3; row += 1) {
-            const books = new THREE.Mesh(new THREE.BoxGeometry(alongX ? 0.8 : 0.1, 0.16, alongX ? 0.1 : 0.8), bookMaterials[(x + y + row) % bookMaterials.length]);
-            books.position.set(cx - dx * 0.0 - (alongX ? 0 : dx * 0.06), 0.2 + row * 0.3, cz - (alongX ? dy * 0.06 : 0));
-            this.scene.add(books);
-          }
-        } else if (roll < 0.18) {
-          const locker = new THREE.Mesh(new THREE.BoxGeometry(alongX ? 0.5 : 0.2, 0.85, alongX ? 0.2 : 0.5), lockerMaterial);
-          locker.position.set(cx, 0.425, cz);
-          this.scene.add(locker);
-        } else {
-          const material = new THREE.MeshBasicMaterial({ color: 0x1e8a4c });
-          this.screens.push(material);
-          const screen = new THREE.Mesh(screenGeometry, material);
-          screen.position.set(x + 0.5 + dx * 0.49, 0.6, y + 0.5 + dy * 0.49);
-          screen.rotation.y = dx !== 0 ? (dx > 0 ? -Math.PI / 2 : Math.PI / 2) : dy > 0 ? Math.PI : 0;
-          this.scene.add(screen);
+    // A mesh `w` tiles out from the item's wall, turned so its local +z faces the room.
+    const place = (mesh: THREE.Mesh, item: FurnitureItem, w: number, y: number): void => {
+      mesh.position.set(item.origin.x + w * Math.sin(item.yaw), y, item.origin.y + w * Math.cos(item.yaw));
+      mesh.rotation.y = item.yaw;
+      this.scene.add(mesh);
+    };
+    for (const item of planFurniture(this.level)) {
+      if (item.kind === "bookshelf") {
+        const geometry = shelfGeometry(item.span);
+        place(new THREE.Mesh(geometry.shelf, shelfMaterial), item, 0.1, 0.475);
+        for (let row = 0; row < 3; row += 1) {
+          place(new THREE.Mesh(geometry.books, bookMaterials[(item.tileX + item.tileY + row) % bookMaterials.length]), item, 0.16, 0.2 + row * 0.3);
         }
+      } else if (item.kind === "storageLocker") {
+        place(new THREE.Mesh(lockerGeometry, lockerMaterial), item, 0.1, 0.425);
+      } else {
+        const material = new THREE.MeshBasicMaterial({ color: 0x6f8576 });
+        this.screens.push(material);
+        place(new THREE.Mesh(screenGeometry, material), item, 0.01, 0.6);
       }
     }
   }
@@ -315,7 +337,7 @@ export class GameRenderer {
     const count = this.profile.pointLights;
     const spots = [{ x: 8.5, y: 8.5 }, { x: 12.5, y: 5.5 }, { x: 3.5, y: 5.5 }, { x: 20.5, y: 2.5 }, { x: 12.5, y: 14.5 }];
     for (let i = 0; i < count; i += 1) {
-      const light = new THREE.PointLight(0xffb066, 1.6, 7);
+      const light = new THREE.PointLight(ARCHIVE_LIGHTING.fluorescent, 1.6, 7);
       light.position.set(spots[i]!.x, WALL_HEIGHT - 0.1, spots[i]!.y);
       this.scene.add(light);
       this.flickering.push(light);
@@ -336,6 +358,8 @@ export class GameRenderer {
   }
 
   private buildMonster(): void {
+    // Hidden from the first frame. render() shows it once the first evidence fragment is collected.
+    this.creature.group.visible = false;
     this.scene.add(this.creature.group);
   }
 
@@ -374,6 +398,7 @@ export class GameRenderer {
     this.camera.rotation.z = 0;
     this.camera.updateProjectionMatrix();
     this.creature.clearScarePose();
+    this.creature.resetAnimation();
     this.creature.group.scale.setScalar(1);
     this.creature.light.intensity = 0.55;
   }
@@ -407,6 +432,7 @@ export class GameRenderer {
     let eyeX = player.pos.x;
     let eyeZ = player.pos.y;
     let eyeY = EYE_HEIGHT + (player.moving && !reducedMotion ? Math.sin(t * (player.sprinting ? 14 : 9)) * 0.012 : 0);
+    let hidingLocker: (typeof this.lockers)[number] | null = null;
     for (const locker of this.lockers) {
       const inside = player.hidden && player.hideSpot !== null && Math.hypot(locker.spot.x - player.hideSpot.x, locker.spot.y - player.hideSpot.y) < 0.1;
       locker.mesh.visible = !inside;
@@ -414,6 +440,7 @@ export class GameRenderer {
         eyeX = locker.camera.x;
         eyeZ = locker.camera.z;
         eyeY = 0.5;
+        hidingLocker = locker;
       }
     }
 
@@ -429,8 +456,9 @@ export class GameRenderer {
     }
 
     let yaw = player.yaw;
-    let scareProgress = 0;
     const scaring = world.status === "CAUGHT";
+    // The caught close-up with the cinematic, read from the time since the catch. Null when the cinematic is off.
+    let cinematic: CinematicFrame | null = null;
     if (scaring) {
       this.caughtFor += dt;
       const bearing = Math.atan2(monster.pos.y - player.pos.y, monster.pos.x - player.pos.x);
@@ -440,24 +468,55 @@ export class GameRenderer {
       this.viewYawOffset += (diff - this.viewYawOffset) * Math.min(1, dt * 18);
       this.pitch += ((this.jumpscare ? 0 : 0.05) - this.pitch) * Math.min(1, dt * 10);
       yaw += this.viewYawOffset;
-      scareProgress = Math.min(1, this.caughtFor / 0.14);
-      fov = BASE_FOV - (reducedMotion ? 6 : Math.min(this.caughtFor * 55, 26));
-      // The picture shakes hard for the first moments, then settles. Reduced motion keeps it still.
-      shake = reducedMotion || !this.jumpscare ? 0 : 0.03 * Math.exp(-this.caughtFor * 3.2);
+      if (this.jumpscare) {
+        // The cinematic sets the field of view and the shake. Reduced motion gets the final framing with no shake.
+        cinematic = cinematicAt(this.caughtFor, reducedMotion);
+        fov = cinematic.fov;
+        shake = cinematic.shake;
+      } else {
+        // Without the cinematic the camera only backs off a little, and does not shake.
+        fov = BASE_FOV - (reducedMotion ? 6 : Math.min(this.caughtFor * 55, 26));
+        shake = 0;
+      }
     } else {
       this.caughtFor = 0;
       this.viewYawOffset = 0;
+      this.drawnCinematicPhase = null;
     }
+    // The attack's impact shakes the picture a little. The caught close-up has its own shake, so this is only outside it.
+    if (!scaring) shake += 0.01 * this.creature.impactIntensity;
     if (Math.abs(this.camera.fov - fov) > 0.01) {
       this.camera.fov = fov;
       this.camera.updateProjectionMatrix();
     }
     const sx = Math.sin(t * 47 + this.caughtFor * 61) * shake;
     const sy = Math.sin(t * 53 + 1 + this.caughtFor * 67) * shake;
-    this.camera.position.set(eyeX + sx, eyeY + sy, eyeZ + sx * 0.6);
+    // Without the cinematic, a caught player is drawn a little further back, so the whole creature fits in the frame.
+    // How far in front of the eye the creature stands, along the view. The pull adds the room needed for the head to fit.
+    // Enclosed catch (cinematic only): a locker corner leaves no room in front of the eye, so the eye steps back out of the locker
+    // along the view (enclosedCamera, cinematic.ts). The head stays at the creature's tile. Open catches keep the normal eye.
+    if (cinematic && hidingLocker) {
+      const forward = { x: Math.cos(yaw), y: Math.sin(yaw) };
+      const lockerEye = { x: hidingLocker.camera.x, y: hidingLocker.camera.z };
+      const openAhead = this.openDistance(lockerEye.x, lockerEye.y, yaw, cinematic.reach + CREATURE_DEPTH, world.gateOpen);
+      if (framingFor(openAhead, cinematic.reach) === "ENCLOSED") {
+        const back = this.clearanceAlong(lockerEye.x, lockerEye.y, -forward.x, -forward.y, 4, world.gateOpen);
+        const cam = enclosedCamera(hidingLocker.spot, forward, lockerEye, cinematic.reach, back);
+        eyeX = cam.eye.x;
+        eyeZ = cam.eye.y;
+      }
+    }
+    const ahead = (monster.pos.x - eyeX) * Math.cos(yaw) + (monster.pos.y - eyeZ) * Math.sin(yaw);
+    const pull = scaring && !this.jumpscare ? this.catchPull(eyeX, eyeZ, yaw, ahead) : 0;
+    const cx = eyeX - Math.cos(yaw) * pull;
+    if (import.meta.env.DEV) this.canvas.dataset.cameraPull = pull.toFixed(2);
+    const cz = eyeZ - Math.sin(yaw) * pull;
+    this.camera.position.set(cx + sx, eyeY + sy, cz + sx * 0.6);
     this.camera.rotation.y = -yaw - Math.PI / 2;
-    this.camera.rotation.x = this.pitch;
-    this.camera.rotation.z = Math.sin(t * 31) * shake * 4;
+    // The impact's pitch kick comes from the cinematic, so it is computed from the time since the catch and never builds up.
+    // The close-up has no roll, and nothing outside the cinematic rolls the picture while the player is caught.
+    this.camera.rotation.x = this.pitch + (cinematic ? cinematic.kick + cinematic.tilt : 0);
+    this.camera.rotation.z = cinematic ? 0 : Math.sin(t * 31) * shake * 4;
 
     // --- flashlight: it stutters when the creature is close. Reduced motion dims it steadily instead.
     if (player.flashlight) {
@@ -471,36 +530,51 @@ export class GameRenderer {
     }
 
     // --- the creature
+    // Visibility only: the creature keeps its state, position and AI. It is drawn from the first collected fragment on.
     const group = this.creature.group;
-    if (scaring && this.jumpscare) {
-      // It is suddenly there, in the camera's face: thrown forward in a fraction of a second.
-      const ease = 1 - Math.pow(1 - scareProgress, 3);
-      // Its head ends about half a tile from the eye, at eye height, with the arms thrown wide on either side. The body is
-      // placed by where its head ends up after posing, so the face is in front of the camera whatever the pose does.
-      const scale = 0.8 + ease * 0.45;
-      const reach = 1.55 - ease * 1.15;
-      group.scale.setScalar(scale);
+    this.creature.setShown(world.collected > 0);
+    this.canvas.dataset.creatureVisible = String(group.visible);
+    if (cinematic) {
+      // The creature is placed by where its head is after posing: the head is put on the view line at the cinematic's reach,
+      // whatever the grasp does. The reach is pulled in only where a wall would pass through the body.
+      const openAhead = this.openDistance(eyeX, eyeZ, yaw, cinematic.reach + CREATURE_DEPTH, world.gateOpen);
+      const reach = fitReach(cinematic.reach, openAhead);
+      group.scale.setScalar(1);
       group.rotation.y = -(yaw + Math.PI);
-      group.position.set(eyeX + Math.cos(yaw) * reach, 0, eyeZ + Math.sin(yaw) * reach);
-      this.creature.poseForScare(scareProgress, t);
+      group.position.set(0, 0, 0);
+      this.creature.poseForScare(cinematic, t);
       const head = this.creature.headWorld(this.scratch);
-      group.position.x += eyeX + Math.cos(yaw) * reach - head.x;
-      group.position.y += EYE_HEIGHT - 0.03 - head.y;
-      group.position.z += eyeZ + Math.sin(yaw) * reach - head.z;
-      this.creature.light.intensity = 1.8;
+      group.position.set(
+        eyeX + Math.cos(yaw) * reach - head.x,
+        EYE_HEIGHT - 0.03 - head.y,
+        eyeZ + Math.sin(yaw) * reach - head.z,
+      );
+      // The crimson light is brightest at the impact and eases back as the close-up settles, so the scene does not turn
+      // uniformly red and the face stays readable.
+      this.creature.light.intensity = 0.5 + 0.6 * cinematic.flash;
+      // Development builds only: the browser capture waits for each phase by name.
+      if (import.meta.env.DEV) {
+        this.canvas.dataset.cinematicPhase = cinematic.phase;
+    this.drawnCinematicPhase = cinematic.phase;
+        this.canvas.dataset.cinematicElapsed = this.caughtFor.toFixed(3);
+      }
     } else {
       group.position.set(monster.pos.x, 0, monster.pos.y);
       group.rotation.y = -monster.yaw;
       group.scale.setScalar(1);
-      this.creature.update({
+      const view = {
         state: monster.state,
         speed: monster.speedNow,
         lunging: monster.lunge > 0,
         playerBearing: Math.atan2(player.pos.y - monster.pos.y, player.pos.x - monster.pos.x) - monster.yaw,
         watching: awake && monsterSeesPlayer(world),
+        distance: toMonster,
         time: t,
         reducedMotion,
-      }, dt);
+      };
+      // Caught without the cinematic: the creature holds a clean pose (no lunge layer), so it does not lean into the camera.
+      if (world.status === "CAUGHT") this.creature.holdCaughtPose(view);
+      else this.creature.update(view, dt);
     }
 
     world.clues.forEach((clue, i) => {
@@ -520,9 +594,57 @@ export class GameRenderer {
       light.intensity = base * disturbed;
     });
     if (!reducedMotion) {
-      this.screens.forEach((material, i) => material.color.setHex(Math.sin(t * 2 + i) > 0.6 ? 0x2bd16d : 0x1e8a4c));
+      this.screens.forEach((material, i) => material.color.setHex(Math.sin(t * 2 + i) > 0.6 ? 0x9fb8a6 : 0x6f8576));
     }
+    this.canvas.dataset.monsterAnimation = this.creature.animationPhase;
     this.renderer.render(this.scene, this.camera);
+    // Development builds only: the benchmark reads what the renderer drew this frame.
+    if (import.meta.env.DEV) {
+      this.canvas.dataset.drawCalls = String(this.renderer.info.render.calls);
+      this.canvas.dataset.triangles = String(this.renderer.info.render.triangles);
+      const loadMs = this.creature.loadMilliseconds;
+      if (loadMs !== null) this.canvas.dataset.monsterLoadMs = String(Math.round(loadMs));
+      // Measurements for the browser validation of the attack, the impact and the recovery. Not read by the game.
+      this.canvas.dataset.monsterClip = this.creature.clipName ?? "";
+      this.canvas.dataset.cameraShake = shake.toFixed(4);
+      this.canvas.dataset.auraOpacity = this.creature.auraOpacity.toFixed(3);
+      this.canvas.dataset.cameraRoll = this.camera.rotation.z.toFixed(4);
+    }
+  }
+  /** How far ahead of the eye, along the view, the floor stays open, up to `limit` tiles. Stops at the first blocked tile. */
+  /** Clear floor from (x, y) along the unit direction (dx, dy), up to `limit` tiles, sampled every 0.05. */
+  private clearanceAlong(x: number, y: number, dx: number, dy: number, limit: number, gateOpen: boolean): number {
+    const step = 0.05;
+    let clear = 0;
+    for (let d = step; d <= limit; d += step) {
+      if (isBlocked(this.level, x + dx * d, y + dy * d, gateOpen)) break;
+      clear = d;
+    }
+    return clear;
+  }
+  private openDistance(x: number, y: number, yaw: number, limit: number, gateOpen: boolean): number {
+    const step = 0.05;
+    let open = 0;
+    for (let d = step; d <= limit; d += step) {
+      if (isBlocked(this.level, x + Math.cos(yaw) * d, y + Math.sin(yaw) * d, gateOpen)) break;
+      open = d;
+    }
+    return open;
+  }
+
+  /**
+   * How far back the caught camera may step: CATCH_PULL where the tiles behind are open, less where a wall is near, 0 when
+   * boxed in. A margin past the camera keeps the near plane from reaching a wall.
+   */
+  private catchPull(x: number, y: number, yaw: number, ahead: number): number {
+    const margin = 0.25;
+    const wanted = Math.min(CATCH_PULL_MAX, Math.max(0, CATCH_HEAD_DISTANCE - ahead));
+    for (let pull = wanted; pull > 0.05; pull -= 0.1) {
+      const bx = x - Math.cos(yaw) * (pull + margin);
+      const by = y - Math.sin(yaw) * (pull + margin);
+      if (!isBlocked(this.level, bx, by, false)) return pull;
+    }
+    return 0;
   }
   /** A grain map tiled over a surface. Kept so dispose() can free it. */
   private grain(canvas: HTMLCanvasElement, repeatX: number, repeatY: number): THREE.CanvasTexture {
@@ -538,6 +660,8 @@ export class GameRenderer {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.creature.dispose();
+    this.archiveDecor?.dispose();
     this.scene.traverse((object) => {
       if ((object as THREE.InstancedMesh).isInstancedMesh) (object as THREE.InstancedMesh).dispose();
       const mesh = object as THREE.Mesh;

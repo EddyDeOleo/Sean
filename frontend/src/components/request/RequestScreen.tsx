@@ -16,7 +16,7 @@ export interface RequestScreenProps {
   repositoriesProblem: string | null;
   selectedRepository: string;
   onSelectRepository(id: string): void;
-  onSubmitText(text: string, allowAi: boolean): void;
+  onSubmitText(text: string): void;
   /** Whether the backend can use an AI provider to read a request. Without it there is nothing to consent to. */
   aiAvailable: boolean;
   onSubmitStructured(request: InvestigationRequest): void;
@@ -38,8 +38,7 @@ const EXAMPLES = [
 
 export function RequestScreen(props: RequestScreenProps) {
   const { repositories, selectedRepository } = props;
-  const ids = { text: useId(), repo: useId(), ai: useId() };
-  const [allowAi, setAllowAi] = useState(false);
+  const ids = { text: useId(), repo: useId() };
   const [text, setText] = useState(props.initialText ?? "");
   const [error, setError] = useState<string | null>(null);
   const available = (repositories ?? []).filter((r) => r.available);
@@ -52,9 +51,8 @@ export function RequestScreen(props: RequestScreenProps) {
       return;
     }
     setError(null);
-    props.onSubmitText(trimmed, props.aiAvailable && allowAi);
+    props.onSubmitText(trimmed);
     // Consent is for this request only.
-    setAllowAi(false);
   }
 
   function fillExample(example: string) {
@@ -100,17 +98,7 @@ export function RequestScreen(props: RequestScreenProps) {
           <span className="sx-spacer" />
           <button type="submit" className="sx-btn sx-btn-primary">Investigate</button>
         </div>
-        {props.aiAvailable ? (
-          <div style={{ marginTop: "0.75rem" }}>
-            <label htmlFor={ids.ai} style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
-              <input id={ids.ai} type="checkbox" checked={allowAi} onChange={(event) => setAllowAi(event.target.checked)} data-testid="allow-ai" style={{ marginTop: "0.3rem" }} />
-              <span>Let Gemini help read this request</span>
-            </label>
-            <p className="sx-faint" style={{ margin: "0.2rem 0 0 1.5rem", fontSize: "0.86rem" }} data-testid="ai-disclosure">
-              Only used if Sean cannot tell which file you mean. It sends the sentence you typed, and nothing from the repository, to Google. On the free tier Google may keep it. This applies to this request only.
-            </p>
-          </div>
-        ) : null}
+        {props.aiAvailable ? (<p className="sx-faint" style={{ marginTop: "0.6rem", fontSize: "0.86rem" }} data-testid="ai-provider-note">AI-assisted answers are on. Repository retrieval stays on this machine. The transparency section of each report says what is sent.</p>) : (<p className="sx-faint" style={{ marginTop: "0.6rem", fontSize: "0.86rem" }} data-testid="ai-provider-note">AI-assisted answers are not configured on this machine. Sean will answer from the local evidence only.</p>)}
         {props.repositoriesProblem ? <p className="sx-field-error" role="alert" data-testid="repositories-problem">{props.repositoriesProblem}</p> : null}
         {repositories !== null && repositories.length === 0 ? (
           <p className="sx-faint" style={{ marginBottom: 0 }} data-testid="no-repositories">

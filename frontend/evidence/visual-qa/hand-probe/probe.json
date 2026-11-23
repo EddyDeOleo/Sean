@@ -1,0 +1,350 @@
+[
+ {
+  "index": 0,
+  "file": "00-ACCELERATION-0.400s.png",
+  "expectedPhase": "ACCELERATION",
+  "phase": "ACCELERATION",
+  "elapsed": 0.4,
+  "probe": {
+   "phase": "ACCELERATION",
+   "elapsed": 0.4,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7497,
+     "minX": 0.03234683760188098,
+     "maxX": 0.09252398194326131,
+     "minY": -0.6677463769078417,
+     "maxY": -0.37393370138360876,
+     "marginLeft": 495.52648204890284,
+     "marginRight": 435.58848866723457,
+     "marginTop": 370.9620993735744,
+     "marginBottom": 89.70847823488275
+    },
+    {
+     "side": "R",
+     "vertices": 10014,
+     "minX": -0.22132527570961427,
+     "maxX": -0.10810184510577764,
+     "minY": -1.054189579183798,
+     "maxY": -0.5531595641681578,
+     "marginLeft": 373.76386765938514,
+     "marginRight": 531.8888856507732,
+     "marginTop": 419.3530823254026,
+     "marginBottom": -14.63118637962548
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "index": 1,
+  "file": "01-LUNGE-0.550s.png",
+  "expectedPhase": "LUNGE",
+  "phase": "LUNGE",
+  "elapsed": 0.55,
+  "probe": {
+   "phase": "LUNGE",
+   "elapsed": 0.55,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7512,
+     "minX": 0.3129544172109019,
+     "maxX": 0.40521060041545454,
+     "minY": -0.6900485298131255,
+     "maxY": -0.42945805578826984,
+     "marginLeft": 630.2181202612328,
+     "marginRight": 285.4989118005818,
+     "marginTop": 385.9536750628329,
+     "marginBottom": 83.68689695045612
+    },
+    {
+     "side": "R",
+     "vertices": 10077,
+     "minX": -0.7860565931289304,
+     "maxX": -0.5192793390300613,
+     "minY": -0.5799067423066928,
+     "maxY": -0.14105417360806652,
+     "marginLeft": 102.69283529811341,
+     "marginRight": 729.2540827344295,
+     "marginTop": 308.08462687417796,
+     "marginBottom": 113.42517957719294
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "index": 2,
+  "file": "02-IMPACT-0.620s.png",
+  "expectedPhase": "IMPACT",
+  "phase": "IMPACT",
+  "elapsed": 0.62,
+  "probe": {
+   "phase": "IMPACT",
+   "elapsed": 0.62,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7513,
+     "minX": 0.31822150727930903,
+     "maxX": 0.41921011445221457,
+     "minY": -0.753392523218267,
+     "maxY": -0.4760546353207212,
+     "marginLeft": 632.7463234940684,
+     "marginRight": 278.779145062937,
+     "marginTop": 398.5347515365947,
+     "marginBottom": 66.58401873106791
+    },
+    {
+     "side": "R",
+     "vertices": 10081,
+     "minX": -0.9061310038521967,
+     "maxX": -0.6203279497927636,
+     "minY": -0.6288318324134394,
+     "maxY": -0.11658066370050663,
+     "marginLeft": 45.057118150945584,
+     "marginRight": 777.7574159005266,
+     "marginTop": 301.4767791991368,
+     "marginBottom": 100.21540524837135
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "index": 3,
+  "file": "03-IMPACT-0.700s.png",
+  "expectedPhase": "IMPACT",
+  "phase": "IMPACT",
+  "elapsed": 0.7,
+  "probe": {
+   "phase": "IMPACT",
+   "elapsed": 0.7,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7513,
+     "minX": 0.30070493685465105,
+     "maxX": 0.39792274550501666,
+     "minY": -0.6644585287491418,
+     "maxY": -0.3920748262704018,
+     "marginLeft": 624.3383696902325,
+     "marginRight": 288.997082157592,
+     "marginTop": 375.8602030930085,
+     "marginBottom": 90.59619723773172
+    },
+    {
+     "side": "R",
+     "vertices": 10081,
+     "minX": -0.9203199709243436,
+     "maxX": -0.6336526159829456,
+     "minY": -0.5378527932683679,
+     "maxY": -0.03544619881287726,
+     "marginLeft": 38.24641395631508,
+     "marginRight": 784.1532556718139,
+     "marginTop": 279.5704736794769,
+     "marginBottom": 124.77974581754067
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "index": 4,
+  "file": "04-HOLD-0.800s.png",
+  "expectedPhase": "HOLD",
+  "phase": "HOLD",
+  "elapsed": 0.8,
+  "probe": {
+   "phase": "HOLD",
+   "elapsed": 0.8,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7513,
+     "minX": 0.31498131519754724,
+     "maxX": 0.41332178927648133,
+     "minY": -0.6468118435606199,
+     "maxY": -0.38208049382404796,
+     "marginLeft": 631.1910312948227,
+     "marginRight": 281.60554114728893,
+     "marginTop": 373.161733332493,
+     "marginBottom": 95.36080223863262
+    },
+    {
+     "side": "R",
+     "vertices": 10081,
+     "minX": -0.8956928126871616,
+     "maxX": -0.6067134958236381,
+     "minY": -0.5332822237033704,
+     "maxY": -0.030200163865244344,
+     "marginLeft": 50.06744991016242,
+     "marginRight": 771.2224779953464,
+     "marginTop": 278.15404424361594,
+     "marginBottom": 126.01379960008998
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ },
+ {
+  "index": 5,
+  "file": "05-HOLD-0.950s.png",
+  "expectedPhase": "HOLD",
+  "phase": "HOLD",
+  "elapsed": 0.95,
+  "probe": {
+   "phase": "HOLD",
+   "elapsed": 0.95,
+   "hands": [
+    {
+     "side": "L",
+     "vertices": 7513,
+     "minX": 0.32581399684595713,
+     "maxX": 0.42559570074360625,
+     "minY": -0.6558368385276189,
+     "maxY": -0.39234842789866725,
+     "marginLeft": 636.3907184860593,
+     "marginRight": 275.71406364306904,
+     "marginTop": 375.9340755326402,
+     "marginBottom": 92.92405359754291
+    },
+    {
+     "side": "R",
+     "vertices": 10081,
+     "minX": -0.8806038401780244,
+     "maxX": -0.5910037020226737,
+     "minY": -0.5459189826047056,
+     "maxY": -0.04131262704593554,
+     "marginLeft": 57.310156714548285,
+     "marginRight": 763.6817769708833,
+     "marginTop": 281.1544093024026,
+     "marginBottom": 122.60187469672948
+    }
+   ],
+   "histogram": {
+    "handR": 11769,
+    "lowerArmR": 2382,
+    "upperArmR": 7342,
+    "footR": 6588,
+    "shoulderR": 5794,
+    "chest": 23699,
+    "lowerLegR": 2738,
+    "neck": 1611,
+    "head": 27208,
+    "upperLegR": 4325,
+    "hips": 4794,
+    "spine": 7691,
+    "shoulderL": 5136,
+    "upperArmL": 5070,
+    "upperLegL": 4491,
+    "lowerLegL": 2325,
+    "footL": 5674,
+    "lowerArmL": 1431,
+    "handL": 9179
+   }
+  }
+ }
+]

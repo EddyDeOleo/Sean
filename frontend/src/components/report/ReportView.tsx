@@ -6,6 +6,7 @@ import { AdvisorSection, Roadmap } from "./AdvisorSection";
 import { ArtifactContext, type ArtifactContextValue } from "./ArtifactPanel";
 import { FindingsSection } from "./FindingsSection";
 import { HistorySection } from "./HistorySection";
+import { AnswerSection } from "./AnswerSection";
 import { OverviewSection } from "./OverviewSection";
 import { TransparencySection } from "./TransparencySection";
 import { PlainBadge } from "./badges";
@@ -39,6 +40,7 @@ export function ReportView({ snapshot, origin, onNew, artifacts }: ReportViewPro
       <nav className="sx-toc" aria-label="Report sections">
         <a href="#overview">Overview</a>
         <a href="#history">History</a>
+        <a href="#advisor-answer">Answer</a>
         <a href="#findings">Findings</a>
         <a href="#advisor">Kiro Advisor</a>
         {analysis ? <a href="#roadmap">Roadmap</a> : null}
@@ -47,6 +49,8 @@ export function ReportView({ snapshot, origin, onNew, artifacts }: ReportViewPro
 
       <OverviewSection snapshot={snapshot} />
       <HistorySection snapshot={snapshot} />
+      {/* The answer comes directly before the findings that support it, as one reading of the question. */}
+      <AnswerSection answer={snapshot.answer ?? null} note={snapshot.answerNote ?? null} />
       <FindingsSection findings={findings} />
       <ArtifactContext.Provider value={artifacts}>
         <AdvisorSection analysis={analysis ? { advisor: analysis.advisor, observations: analysis.profile.observations } : null} note={snapshot.analysisNote} />

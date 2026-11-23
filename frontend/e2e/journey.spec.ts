@@ -269,22 +269,32 @@ test.describe("the narrative interlude", () => {
     await expect(page.getByTestId("report-conclusion")).toHaveText(conclusion);
   });
 
-  test("never appears for insufficient evidence, a failure, or a saved report", async ({ page }) => {
+  test("the Investigate button starts it even when the result is insufficient, and a saved report never starts it", async ({ page }) => {
     await page.goto("/");
     await page.getByText("Advanced target").click();
     await page.getByLabel("Repository", { exact: true }).last().fill("sample");
     await page.getByLabel("File path").fill("src/never_existed.py");
     await page.getByLabel("Question", { exact: true }).fill("Why was it removed?");
     await page.getByRole("button", { name: "Investigate this target" }).click();
+    await expect(page.getByTestId("interlude")).toBeVisible({ timeout: 15000 });
+    await page.getByTestId("skip-interlude").click();
     await expect(page.getByTestId("report-classification")).toHaveText("INSUFFICIENT_EVIDENCE");
-    await page.waitForTimeout(1500);
-    await expect(page.getByTestId("interlude")).toHaveCount(0);
     await page.reload();
     await page.getByTestId("recent").getByRole("button").first().click();
     await expect(page.getByTestId("report")).toHaveAttribute("data-origin", "saved");
     await expect(page.getByTestId("interlude")).toHaveCount(0);
   });
 
+  test("a repository-level question starts the game at once, and the file chooser stays available", async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true, intensity: "low", quality: "low" })));
+    await page.goto("/");
+    await ask(page, "sample - Which are the domain models?");
+    await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 30000 });
+    await page.getByTestId("skip-interlude").click();
+    // The fixture repository has no candidate files for this question, so the chooser shows its prompt and the answer.
+    await expect(page.getByTestId("needs-target")).toBeVisible();
+    await expect(page.getByTestId("section-answer")).toBeVisible();
+  });
   test("reduced motion shows a static board", async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();

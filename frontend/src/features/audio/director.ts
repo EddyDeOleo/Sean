@@ -2,8 +2,8 @@
  * Decides which sound goes with what happens (Spec 4 section 12). No audio API is used here: it maps interlude phases and
  * game events to moods and cues, so the mapping is testable without a sound device.
  *
- * Sound is part of the fiction only. It is never played for an investigation result, and the interlude never runs for a
- * failed, cancelled or insufficient result, so no success-like sound can accompany those outcomes.
+ * Sound is part of the fiction only. It is never played for an investigation result. The interlude runs after every
+ * Investigate, whatever the outcome, and its sounds are the same for all of them, so no success-like sound marks a result.
  *
  * Everything here is deterministic: the same inputs give the same plans, with no Math.random and no clock.
  */

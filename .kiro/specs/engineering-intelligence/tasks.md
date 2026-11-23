@@ -2,7 +2,7 @@
 
 ## Overview
 
-The work runs in eight stages in the order the owner fixed on 2026-11-12, followed by the owner decisions of 2026-11-13 (task 9). Task state is recorded in `.kiro/reports/phase-status.md`, not in the checkboxes below.
+The work runs in eight stages in the order the owner fixed on 2026-11-12, followed by the owner decisions of 2026-11-13 (task 9). Checkboxes follow the shared convention in the Notes section. Task state is recorded in `.kiro/reports/phase-status.md`.
 
 ## Task Dependency Graph
 
@@ -34,7 +34,7 @@ A stage does not start while the previous stage has unresolved failures.
 - [x] 2. Backend profile and Advisor, with tests
   - [x] 2.1 `repository_profile` models, scanner, manifest parsing. _Req 1_
   - [x] 2.2 `advisor` catalog, contract, rules, roadmap. _Req 2_
-  - [x] 2.3 `intent` deterministic parser and Gemini adapter with injected transport. _Req 3_
+  - [x] 2.3 `intent` deterministic parser and Groq adapter with injected transport. _Req 3_
   - [x] 2.4 `advisor_routes`, `local_guard` and `main_advisor`. _Req 1 to 3_
   - [x] 2.5 Tests: unit per rule, contract validation, differing-repository tests, no fabricated references, limits, read-only checks, route tests, guard tests.
   - [x] 2.6 Evidence: 184 new tests pass, 1061 Phase 3 tests pass (1245 total), 71 hashes match. Security review done; findings fixed except M4 (Phase 3 runner, needs owner decision).
@@ -54,6 +54,6 @@ A stage does not start while the previous stage has unresolved failures.
 
 ## Notes
 
-- Checkboxes follow the project convention. A checked box is not a status record. The status record is `.kiro/reports/phase-status.md`, which uses the lifecycle statuses (`NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `VERIFIED`, `ACCEPTED`).
-- A checked box means the work was implemented and its evidence is listed in the task. It does not mean the phase is accepted. Phase 4 is not ACCEPTED.
+- Checkbox convention (all Sean specifications): `[x]` means the task is completed and its acceptance criteria are satisfied. `[ ]` means the task is not yet completed. A checked task is VERIFIED or ACCEPTED in `.kiro/reports/phase-status.md`, but the checkbox does not show which one. `phase-status.md` is the authoritative status record, including the IMPLEMENTED, VERIFIED, and ACCEPTED distinctions and the limitations of each task. A parent task is checked only when all of its subtasks are checked.
+- Phase 4 is not ACCEPTED. The checked tasks here were kept as they were. `phase-status.md` records the status of each stage, and tasks 2 to 9 are recorded as VERIFIED or ACCEPTED there. Task 1 (plan and specs) is recorded as IMPLEMENTED only.
 - Test counts in the task lines are the counts reported at the time of each stage. The current counts are in `phase-status.md`.

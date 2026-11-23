@@ -1,0 +1,104 @@
+{
+ "label": "final2-low",
+ "quality": "low",
+ "eastIntoCart": {
+  "player": [
+   3.4799999999999978,
+   1.5
+  ]
+ },
+ "southAlongEastWall": {
+  "player": [
+   3.556412925779956,
+   5.714727763850425
+  ]
+ },
+ "firstClue": {
+  "collected": 1,
+  "at": [
+   3.5027052410873467,
+   7.518615715068451
+  ]
+ },
+ "huntMisses": [
+  {
+   "time": 41.68,
+   "status": "PLAYING",
+   "monster": "PURSUING",
+   "off": 0.02,
+   "sight": false,
+   "d": 4.05
+  },
+  {
+   "time": 41.7,
+   "status": "PLAYING",
+   "monster": "PURSUING",
+   "off": 0.02,
+   "sight": false,
+   "d": 4.01
+  },
+  {
+   "time": 41.73,
+   "status": "PLAYING",
+   "monster": "PURSUING",
+   "off": 0.02,
+   "sight": false,
+   "d": 3.98
+  },
+  {
+   "time": 41.78,
+   "status": "PLAYING",
+   "monster": "PURSUING",
+   "off": 0.03,
+   "sight": false,
+   "d": 3.9
+  },
+  {
+   "time": 41.85,
+   "status": "PLAYING",
+   "monster": "PURSUING",
+   "off": 0.03,
+   "sight": false,
+   "d": 3.79
+  }
+ ],
+ "hunting": {
+  "monster": "PURSUING",
+  "status": "PLAYING",
+  "hidden": false,
+  "player": [
+   6.031990991253731,
+   7.5013458330710066
+  ],
+  "monsterAt": [
+   4.5,
+   10.635416666666412
+  ],
+  "distance": 3.49,
+  "bearingOffView": 0.039,
+  "lineOfSight": true,
+  "creatureDrawn": "true"
+ },
+ "huntEnd": {
+  "status": "PLAYING",
+  "monster": "PURSUING",
+  "player": [
+   6.031990991253731,
+   7.5013458330710066
+  ],
+  "monsterAt": [
+   4.5,
+   10.635416666666412
+  ],
+  "time": 41.933333333332236
+ },
+ "monsterClearance": {
+  "samples": 1173,
+  "nearestSolid": 0.29
+ },
+ "playerInsideSolid": {
+  "samples": 1044,
+  "overlapping": 0,
+  "first": null
+ }
+}

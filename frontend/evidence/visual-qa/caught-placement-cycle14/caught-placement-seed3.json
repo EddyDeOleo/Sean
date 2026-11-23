@@ -1,0 +1,117 @@
+[
+ {
+  "moment": 0.12,
+  "phase": "ANTICIPATION",
+  "placement": {
+   "wanted": 1.18608,
+   "openAhead": 0.15000000000000002,
+   "fitted": 0.2,
+   "depth": 0.315,
+   "minReach": 0.2,
+   "eyeX": 9.8,
+   "eyeZ": 3.5,
+   "yaw": 0
+  },
+  "player": [
+   9.5,
+   3.5
+  ],
+  "monsterAt": [
+   9.5,
+   3.5
+  ],
+  "yaw": 0.3655824811194565
+ },
+ {
+  "moment": 0.4,
+  "phase": "ACCELERATION",
+  "placement": {
+   "wanted": 0.963375,
+   "openAhead": 0.15000000000000002,
+   "fitted": 0.2,
+   "depth": 0.315,
+   "minReach": 0.2,
+   "eyeX": 9.8,
+   "eyeZ": 3.5,
+   "yaw": 0
+  },
+  "player": [
+   9.5,
+   3.5
+  ],
+  "monsterAt": [
+   9.5,
+   3.5
+  ],
+  "yaw": 0.3655824811194565
+ },
+ {
+  "moment": 0.55,
+  "phase": "LUNGE",
+  "placement": {
+   "wanted": 0.5040562625733565,
+   "openAhead": 0.15000000000000002,
+   "fitted": 0.2,
+   "depth": 0.315,
+   "minReach": 0.2,
+   "eyeX": 9.8,
+   "eyeZ": 3.5,
+   "yaw": 0
+  },
+  "player": [
+   9.5,
+   3.5
+  ],
+  "monsterAt": [
+   9.5,
+   3.5
+  ],
+  "yaw": 0.3655824811194565
+ },
+ {
+  "moment": 0.7,
+  "phase": "IMPACT",
+  "placement": {
+   "wanted": 0.4546633369868303,
+   "openAhead": 0.15000000000000002,
+   "fitted": 0.2,
+   "depth": 0.315,
+   "minReach": 0.2,
+   "eyeX": 9.8,
+   "eyeZ": 3.5,
+   "yaw": 0
+  },
+  "player": [
+   9.5,
+   3.5
+  ],
+  "monsterAt": [
+   9.5,
+   3.5
+  ],
+  "yaw": 0.3655824811194565
+ },
+ {
+  "moment": 0.95,
+  "phase": "HOLD",
+  "placement": {
+   "wanted": 0.4546633369868303,
+   "openAhead": 0.15000000000000002,
+   "fitted": 0.2,
+   "depth": 0.315,
+   "minReach": 0.2,
+   "eyeX": 9.8,
+   "eyeZ": 3.5,
+   "yaw": 0
+  },
+  "player": [
+   9.5,
+   3.5
+  ],
+  "monsterAt": [
+   9.5,
+   3.5
+  ],
+  "yaw": 0.3655824811194565
+ }
+]

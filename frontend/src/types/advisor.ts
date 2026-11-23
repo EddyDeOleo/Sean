@@ -114,6 +114,7 @@ export const AI_STATUSES = [
   "NOT_NEEDED",
   "AI_USED",
   "AI_NO_USABLE_ANSWER",
+  "AI_NOT_SENT",
   "AI_TIMEOUT",
   "AI_HTTP_ERROR",
   "AI_CONNECTION_FAILED",
@@ -126,7 +127,7 @@ export type AIStatus = (typeof AI_STATUSES)[number];
 
 export interface InterpretedRequest {
   mode: InterpretMode;
-  interpreter: "deterministic" | "gemini";
+  interpreter: "deterministic" | "groq";
   repository_id: string | null;
   target_path: string | null;
   symbol: string | null;
@@ -188,4 +189,38 @@ export interface PreviewResponse {
   instructions: ArtifactInstruction[];
   skipped: { capability: string; reason: string }[];
   verification: { path: string; status: VerificationStatus }[];
+}
+/** The AI advisor's answer for one question (backend /repositories/{id}/answer). Every claim cites retrieved evidence. */
+export type AnswerProvider = "groq" | "deterministic";
+export type AnswerBasis = "DOCUMENTED" | "INFERRED" | "UNKNOWN";
+export interface AnswerClaim {
+  text: string;
+  basis: AnswerBasis;
+  evidence_ids: string[];
+}
+export interface AnswerContent {
+  answer: string;
+  summary: string;
+  claims: AnswerClaim[];
+  limitations: string[];
+  recommendations: string[];
+  confidence: "LOW" | "MEDIUM" | "HIGH";
+  answer_type: "explanation" | "analysis" | "recommendation" | "investigation" | "clarification";
+}
+export interface AnswerEvidence {
+  evidence_id: string;
+  path: string;
+  start_line: number;
+  end_line: number;
+  why: string;
+  commit: string;
+  classification: string;
+  excerpt: string;
+}
+export interface AnswerRecord {
+  provider: AnswerProvider;
+  ai_status: AIStatus;
+  answer: AnswerContent | null;
+  evidence: AnswerEvidence[];
+  limitations: string[];
 }

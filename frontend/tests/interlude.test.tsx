@@ -11,7 +11,7 @@ import { createIndexedDbStorage, type SnapshotStorage } from "../src/features/re
 import type { CallOutcome } from "../src/services/advisorClient";
 import type { SubmitOutcome } from "../src/services/investigationClient";
 import { act, byRole, click, pressKey, render, type } from "./renderHelpers";
-import { capabilitiesFixture, clone, complete, insufficient, interpretInvestigate, profileRich, repositoriesFixture } from "./fixtures";
+import { capabilitiesFixture, clone, complete, insufficient, interpretInvestigate, interpretNeedsTarget, profileRich, repositoriesFixture } from "./fixtures";
 
 const tid = (id: string): HTMLElement | null => document.querySelector(`[data-testid="${id}"]`);
 const ok = <T,>(value: T): CallOutcome<T> => ({ kind: "ok", value: clone(value) });
@@ -113,11 +113,10 @@ describe("when the interlude appears", () => {
   it.each([
     ["insufficient evidence", () => ({ kind: "result", result: clone(insufficient().body) }) as SubmitOutcome],
     ["a failed investigation", () => ({ kind: "network" }) as SubmitOutcome],
-  ])("never appears for %s", async (_n, outcome) => {
+  ])("appears after an Investigate with %s too: the button, not the result, is the trigger", async (_n, outcome) => {
     await start(props({ result: outcome() }));
-    await advance(10000);
-    expect(tid("interlude")).toBeNull();
-    expect(tid("preparing")).toBeNull();
+    await advance(3500);
+    expect(tid("interlude")).not.toBeNull();
   });
 
   it("never appears when the user turned the experience off, and the report opens at once", async () => {
@@ -139,6 +138,70 @@ describe("when the interlude appears", () => {
     await advance(10000);
     expect(tid("interlude")).toBeNull();
     expect(tid("report")).not.toBeNull();
+  });
+});
+
+describe("the Investigate button starts the game, whatever the question", () => {
+  const answerOk = (async () => ok({ provider: "deterministic", ai_status: "NOT_REQUESTED", answer: null, evidence: [], limitations: [] })) as never;
+  /** The app with the game available, and an interpretation that returns the given plan for every question. */
+  function gameProps(plan: unknown, over: Partial<AppProps> = {}): AppProps {
+    const base = props();
+    return {
+      ...base,
+      renderGame: fakeGame,
+      ...over,
+      analysisDeps: { ...base.analysisDeps!, interpret: (async () => ok(plan)) as never, answer: answerOk, ...over.analysisDeps },
+    };
+  }
+  beforeEach(() => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true }));
+  });
+  it.each([
+    ["a predefined question", "sample - Why does src/billing.py validate the amount?", interpretInvestigate],
+    ["a custom question", "sample - What does this project do differently from its neighbours?", interpretInvestigate],
+    ["a repository-level question", "sample - Which are the domain models?", interpretNeedsTarget],
+    ["a file-specific question", "sample - Why does src/billing.py exist?", interpretInvestigate],
+  ])("starts the game once for %s", async (_n, sentence, interpreted) => {
+    const body = interpreted().body;
+    await render(<App {...gameProps(clone(body))} />);
+    await settle();
+    await ask(sentence);
+    await throughInterruption();
+    expect(document.querySelectorAll('[data-testid="fake-game"]').length).toBe(1);
+  });
+  it("a repository-level question starts the game at once, while the file chooser and its answer stay available", async () => {
+    await render(<App {...gameProps(clone(interpretNeedsTarget().body))} />);
+    await settle();
+    await ask("sample - Which are the domain models?");
+    await advance(200);
+    expect(tid("fake-game")).not.toBeNull();
+    await advance(20000);
+    expect(tid("file-candidates")).not.toBeNull();
+    expect(tid("section-answer")).not.toBeNull();
+  });
+  it("one click starts one game, and the game is not started again when the chooser is used", async () => {
+    await render(<App {...gameProps(clone(interpretNeedsTarget().body))} />);
+    await settle();
+    await ask("sample - Which are the domain models?");
+    await advance(20000);
+    expect(lastGame?.attempt).toBe(1);
+  });
+  it("is not started by a question being typed, only by the button", async () => {
+    await render(<App {...gameProps(clone(interpretInvestigate().body))} />);
+    await settle();
+    await type(byRole("textbox", "Your request") as HTMLTextAreaElement, "sample - Why does src/billing.py exist?");
+    await advance(15000);
+    expect(tid("interlude")).toBeNull();
+    expect(tid("fake-game")).toBeNull();
+  });
+  it("is not started when the user turned the game off, even though the button was pressed", async () => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true, skipGameplay: true }));
+    await render(<App {...gameProps(clone(interpretNeedsTarget().body))} />);
+    await settle();
+    await ask("sample - Which are the domain models?");
+    await advance(2000);
+    expect(tid("fake-game")).toBeNull();
+    expect(tid("file-candidates")).not.toBeNull();
   });
 });
 

@@ -255,11 +255,4 @@ export function deriveUiState(result: Pick<InvestigationResult, "retrieval_statu
   return "COMPLETED";
 }
 
-/**
- * The one eligibility rule shared by the narrative interruption, the escape game, and every success cue. A result is
- * eligible only when it is valid, presented as COMPLETED or PARTIAL, and has at least one evidence item.
- */
-export function isNarrativeEligible(result: InvestigationResult): boolean {
-  const state = deriveUiState(result);
-  return (state === "COMPLETED" || state === "PARTIAL") && result.evidence.length > 0;
-}
+

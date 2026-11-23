@@ -1,4 +1,4 @@
-﻿# Sean — Spec 4: Engineering Intelligence, Kiro Repository Advisor, and 3D Survival Horror
+# Sean — Spec 4: Engineering Intelligence, Kiro Repository Advisor, and 3D Survival Horror
 
 **Spec ID:** SEAN-SPEC-04
 **Version:** 1.0
@@ -17,7 +17,7 @@ Authority order when documents disagree: Spec 1, then Spec 2, then the architect
 |---|---|---|
 | O-1 | Leave Spec 1 and Spec 2 text untouched. Record departures in a new spec. | This document. |
 | O-2 | Backend changes allowed only as new, additive, read-only modules. No existing Phase 3 file changes. Local registered repositories only. No cloning. | Section 4. |
-| O-3 | Gemini behind an environment variable. Deterministic path is the working version. | Section 8. |
+| O-3 | Gemini behind an environment variable (original decision, 2026-11-12). Superseded on 2026-11-14: Groq replaces Gemini (phase-status section 45). Deterministic path is the working version. | Section 8. |
 | O-4 | Remove the 2D escape game. Replace it with the 3D game. | Section 10. |
 | O-5 | Stage order: plan and specs; backend profile and Advisor; product UI, sidebar and report persistence; artifact preview and export; Ouija change; Three.js game; audio; independent reviews and screenshots. | Section 12. |
 | O-6 | Three.js approved as a new dependency, subject to the install-time checks in section 11. | Section 11. |
@@ -31,7 +31,7 @@ Departures from approved text:
 | X-3 | Spec 3 §8 (2D escape game) | Removed. Replaced by section 10. | O-4. |
 | X-4 | Spec 2 (structured form) | One natural-language input replaces the long form. The structured fields remain available under "Advanced target". | Directive §4.2. |
 | X-5 | Spec 3 §4 (state machine) | Analysis, Advisor, game and report state become independent reducers (section 9.2). | Directive §13.1. |
-| X-6 | E-D13 (Gemini deferred, no private content to the Free Tier) | Gemini may be used for intent interpretation only, and only the user's typed sentence and registered repository IDs may be sent (section 8). | Directive §14 with E-D13 privacy rule preserved. |
+| X-6 | E-D13 (provider deferred, no private content to a free tier) | An optional AI provider may be used for intent interpretation only, and only the user's typed sentence may be sent (section 8). Original provider: Gemini. Current provider: Groq (phase-status section 45). Repository IDs were removed from the payload by review M1. | Directive §14 with E-D13 privacy rule preserved. |
 | X-7 | Section 10 (the game only after a successful, saved investigation) | The game is its own experience. It can be started at any time, with no backend and no report, and it is offered after a failed or empty investigation. Section 17.1. | Owner decision 2026-11-13. |
 | X-8 | O-2 (backend read-only, no existing Phase 3 file changes) | The backend writes its own registry file on an explicit user action, and two Phase 3 files were amended for it. Sections 16 and 17.5. | Owner decision 2026-11-13. |
 
@@ -51,7 +51,7 @@ New code lives in new files only. The 71 protected files are re-hashed at the en
 |---|---|
 | `backend/app/modules/repository_profile/` | Read-only repository scan and observations. |
 | `backend/app/modules/advisor/` | Kiro capability catalog, signal rules, recommendation contract, roadmap, artifact templates. |
-| `backend/app/modules/intent/` | Deterministic request interpretation. Optional Gemini adapter. |
+| `backend/app/modules/intent/` | Deterministic request interpretation. Optional Groq adapter. |
 | `backend/app/api/advisor_routes.py` | Router for the new endpoints. |
 | `backend/app/main_advisor.py` | New entry point. Builds the Phase 3 app with `create_app(registry)` and includes the new router. Start with `uvicorn app.main_advisor:app`. |
 
@@ -152,15 +152,23 @@ Only the states the system can observe are shown. "Applied" is never claimed fro
 
 Generation rules: templates are filled from profile observations (real paths, real commands detected in manifests). If the target path already exists at `HEAD`, the status is `CONFLICT`, the preview shows a diff, and the default action is a new file name. No secrets, no invented endpoints or credentials. MCP configs are not generated unless the user supplies a server definition. Permissions produce on-screen instructions only. Each artifact is validated for its format (JSON parses, front matter keys are valid, skill `name` equals its folder).
 
-## 8. Intent interpretation and Gemini
+## 8. Intent interpretation and the optional AI provider (Groq)
 
 `POST /interpret` takes the sentence and returns `{mode, repository_id, target?, question, unresolved?}`.
 
 Deterministic parser: split the repository reference from the request at the first separator (an em dash, hyphen with spaces, or colon). A reference is a registered ID, or a GitHub URL that matches the optional GitHub identity of a registered repository. A URL that matches nothing returns a clear message: Sean analyzes registered local repositories and does not clone. A path in the sentence is accepted only if it exists in the committed tree. Modes: `INVESTIGATE` (target resolved), `ADVISE` (workflow or Kiro intent, or no target), `NEEDS_TARGET` (candidate paths offered by file-name match, never invented).
 
-Gemini (optional): model `gemini-3.6-flash` (approved AI-4), key in `SEAN_GEMINI_API_KEY` read by the backend only and never sent to the browser. Only the user's own sentence may be sent (no repository IDs, no file content, no commit text, no evidence, no paths). Text typed by the user may be retained by the provider on the Free Tier, and the UI says so whenever the interpreter that answered was `gemini`. Output is parsed against a strict schema and then re-validated by the deterministic resolver. A path, repository or symbol that fails resolution is discarded. Without a key, or on any provider failure, the deterministic parser answers and the response says `interpreter: "deterministic"`. A mock is never reported as Gemini. Each live call needs the owner's explicit go-ahead; until then the adapter is covered by tests with an injected fake transport only.
+Groq (optional, since 2026-11-14): model `openai/gpt-oss-20b` (the AI-4 approval was for the Gemini model and does not carry over; see phase-status section 45), key in `SEAN_GROQ_API_KEY` read by the backend only and never sent to the browser. Only the user's own sentence may be sent, and only after sanitization (amendment of 2026-11-14, phase-status section 50): registered repository identifiers, local folder roots, paths, and URLs are removed. A question that cannot be sanitized with confidence is not sent, and its status is AI_NOT_SENT. No repository IDs, file content, commit text, evidence, or paths are sent. Groq keeps request text for up to 30 days for reliability and abuse checks, unless the account has Zero Data Retention turned on (Groq data-retention documentation, read 2026-11-14). The UI says so whenever the interpreter that answered was `groq`. Output is parsed against a strict schema and then re-validated by the deterministic resolver. A path, repository or symbol that fails resolution is discarded. Without a key, or on any provider failure, the deterministic parser answers and the response says `interpreter: "deterministic"`. A mock is never reported as Groq. Each live call needs the owner's explicit go-ahead. Live calls so far, all authorized: one diagnostic request and one application request on 2026-11-14, with the User-Agent `Sean/1.0` (phase-status sections 48 and 49).
 
-No Gemini request is made for explanations, findings or recommendations. Those stay deterministic, because they are built from repository content that must not reach the Free Tier.
+No Groq request is made for explanations, findings or recommendations. Those stay deterministic, because they are built from repository content that must not reach the Free Tier.
+
+Amended 2026-11-14, owner decision (phase-status section 54). The paragraphs above describe the sentence-only design, and the sentence "No Groq request is made for explanations, findings or recommendations" is superseded for the answer route. The owner approved the following for the default AI Engineering Advisor, and this approval is the separate owner decision that AI-3 required:
+- `POST /repositories/{id}/answer` sends one Groq request per question. It contains the sanitized question and up to six selected evidence excerpts from the repository's committed files at HEAD. The request has no tools and no filesystem or execution access. The model returns JSON only.
+- Excerpts are the minimum relevant text: at most 6 items, 60 lines and 1,200 characters each, and 6,000 characters in total (`app/modules/answer/evidence.py`). Excerpts pass secret redaction, and registered repository folders and user-profile paths are replaced before they leave the machine.
+- Never sent: the entire repository, `.env` files, credential or key-like names, private keys, tokens, registry entries, and local folder paths. Repository content is untrusted data, and the instruction tells the model to ignore instructions inside it.
+- Local repository resolution and evidence retrieval stay local. A failed or invalid answer yields the deterministic local result, and no retry happens.
+- Questions that name no file (`NEEDS_TARGET`) are answered from the repository too. The file chooser stays available beside the answer, and it is optional.
+- The model stays `openai/gpt-oss-20b`. The endpoint, authentication and account settings are unchanged. ZDR and billing are not modified.
 
 ## 9. Frontend
 
@@ -176,9 +184,13 @@ IndexedDB, one object store of report snapshots keyed by ID, with a schema versi
 ### 9.4 Unified report
 Sections: repository overview, engineering history, technical findings, Kiro Repository Advisor, implementation roadmap, evidence and transparency. Facts, documented statements, inferences, recommendations, generated artifacts, user actions and verified results are visibly different. The story never edits it.
 
+Amended 2026-11-14 (phase-status section 56). The AI answer is a section of the same report, placed directly before the findings it supports. It is not part of the repository overview. Its label is "AI-generated answer" or "Local result", and its evidence follows it in the report. The interface names no AI provider. Transparency wording describes the external AI service, the data sent, and the retention terms without naming a company.
+
 ## 10. Ouija and 3D game
 
 > **Superseded in part by section 17 (2026-11-13).** The automatic Ouija and game after a successful analysis stay as described here. The game can also be started on its own, and the creature, the capture and the audio are as in sections 17.2 to 17.4.
+
+> **Amended 2026-11-14 (owner correction, phase-status section 56).** The Investigate button is the only trigger. Game activation does not depend on the question's text, examples, keywords, AI classification, or result classification. A ready report (any classification) starts the Ouija and the game after it is saved. A repository-level question that ends with a file choice starts the game alone, and the choice and the answer stay available. A failed or invalid analysis starts nothing, and the user can retry with the button. A cancelled analysis starts nothing. Saved reports never start the interlude. The rule "only for a successful analysis" below is superseded.
 
 The Ouija appears only after the report snapshot is saved and only for a successful analysis. Failed, invalid, rejected or cancelled analysis never triggers it. Sequence: fade, board, autonomous planchette, settle, 2000 ms, "Wait... something is wrong.", interruption, game. Fictional lines are labelled fiction and never mixed into the report. Reduced motion produces static text. Skip is always available.
 
@@ -194,7 +206,7 @@ The 2D game is removed in the stage that adds the 3D game, so the application ke
 
 ## 11. Dependencies
 
-Backend: none planned. (`httpx2` is already pinned for the optional Gemini transport; this is reassessed at that stage.) Frontend: `three` (MIT) and `@types/three`. Install-time checks: exact version, license, Windows support, npm advisories, `npm audit`, bundle size, and a documented reason. If any check fails the dependency is not added and the owner is told. A decision record is added at `docs/development/d04-phase-4-dependency-decision-record.md` when the dependency is installed.
+Backend: none planned. (`httpx2` is already pinned for the optional Groq transport; this is reassessed at that stage.) Frontend: `three` (MIT) and `@types/three`. Install-time checks: exact version, license, Windows support, npm advisories, `npm audit`, bundle size, and a documented reason. If any check fails the dependency is not added and the owner is told. A decision record is added at `docs/development/d04-phase-4-dependency-decision-record.md` when the dependency is installed.
 
 ## 12. Staging and acceptance
 
@@ -221,11 +233,11 @@ Controls added after the stage 2 review (all in new files):
 - A local-only guard (`app/api/local_guard.py`, included by `app.main_advisor`): the Host must be `127.0.0.1`, `localhost` or `[::1]`, and a request that carries an Origin must come from a localhost origin. This stops a web page in the browser from calling the API and defeats DNS rebinding. It also covers the Phase 3 route when served through `app.main_advisor`.
 - At most 4 profile or interpret requests run at once. More get `429 BUSY`. Profiles are cached per repository and HEAD, so repeated requests do not start new Git processes.
 - Absence is never reported as proof. A scan with a limit hit, an unreadable history, or a skipped manifest yields `PARTIAL_EVIDENCE` and `LOW` confidence for every recommendation.
-- Repository-controlled strings that are echoed (paths, area names) are bounded, and the Gemini adapter refuses redirects so the key header cannot be forwarded.
+- Repository-controlled strings that are echoed (paths, area names) are bounded, and the Groq adapter refuses redirects so the key header cannot be forwarded.
 
 Resolved by owner authorization (2026-11-13, "solve all the M's"): the Phase 3 Git runner `app/core/git_runner.py` was amended in two places. `GIT_NO_LAZY_FETCH=1` is added to the controlled environment, and `-c protocol.allow=never` is added to the guard options. Reproduction before the fix: in a partial clone whose `.git/config` names an upload-pack command, `git cat-file` ran that command. After the fix it fails with a Git error, and the scanner reports `MANIFEST_NOT_READ` instead. Either protection alone blocks it (mutation-checked), and removing both makes the tests fail. This is the only Phase 3 file changed in Phase 4. The full backend suite passes (1254 tests).
 
-Consent for the AI interpreter (review M1): `POST /interpret` accepts `allow_ai`, a strict boolean that defaults to false. The sentence is sent to the provider only when it is true. `GET /capabilities` tells the interface whether an AI interpreter exists, and never returns a key. The interface shows an unchecked "Let Gemini help read this request" box only when one exists, explains what is sent and that the free tier may keep it, and clears the box after each request. The provider exchange has a total deadline of 15 seconds in addition to the per-operation timeout.
+Amended 2026-11-14 (phase-status section 53): per-request consent was removed. Groq is the default AI provider, and the AI advisor answers from local evidence through `POST /repositories/{id}/answer`. `POST /interpret` no longer takes `allow_ai` and never calls the provider. The text that follows is the superseded consent design, kept as history: `POST /interpret` accepted `allow_ai`, a strict boolean that defaulted to false. The sentence is sent to the provider only when it is true. `GET /capabilities` tells the interface whether an AI interpreter exists, and never returns a key. The interface shows an unchecked "Let Groq help read this request" box only when one exists, explains what is sent and that the free tier may keep it, and clears the box after each request. The provider exchange has a total deadline of 15 seconds in addition to the per-operation timeout.
 
 ## 14. Implementation notes for stages 4 to 8 (recorded departures and facts)
 These record how stages 4 to 8 were implemented, including where the implementation differs from the text above.
@@ -236,10 +248,10 @@ These record how stages 4 to 8 were implemented, including where the implementat
 - **Keyboard turning** is 3.6 rad/s. Mouse look uses pointer lock when granted.
 - **Artifacts.** Names and paths copied from a repository into generated files must be plain identifiers (letters, digits and `. _ / @ + -`), so repository text cannot become instructions in an always-included steering file. Text that looks like a secret is never sent to the browser, whether it is generated or already committed.
 - **Sound.** Procedural Web Audio, no assets (`docs/development/audio-asset-manifest.md`). On by default from the first click or key press (section 17.6). Ambient, effects and master levels persist.
-- **Known limits.** A repository with more than 20 000 tracked paths may be reported as having a file "absent" or "NEW" when it exists beyond that limit. The scene is hand-authored and small (one archive level). Browser coverage is Microsoft Edge only. The audio output was verified through the Web Audio graph and fake contexts and a clean browser run; whether it sounds good was not judged. Gemini was not reached (HTTP 503 from the provider at the last attempt); the deterministic reader is the tested path.
+- **Known limits.** A repository with more than 20 000 tracked paths may be reported as having a file "absent" or "NEW" when it exists beyond that limit. The scene is hand-authored and small (one archive level). Browser coverage is Microsoft Edge only. The audio output was verified through the Web Audio graph and fake contexts and a clean browser run; whether it sounds good was not judged. Groq was not reached (HTTP 503 from the provider at the last attempt); the deterministic reader is the tested path.
 ## 15. Deferred and known limits
 
-Pull requests, issues and CI results are not analyzed in this scope. Only locally registered repositories are supported; there is no cloning. Gemini is not exercised against the live service until the owner authorizes a call. Browser coverage is Microsoft Edge only. Gameplay feel and horror quality are subjective and are judged through screenshots, a recording, and the owner's play.
+Pull requests, issues and CI results are not analyzed in this scope. Only locally registered repositories are supported; there is no cloning. Groq is not exercised against the live service until the owner authorizes a call. Browser coverage is Microsoft Edge only. Gameplay feel and horror quality are subjective and are judged through screenshots, a recording, and the owner's play.
 
 ## 16. Repository management API
 
@@ -312,6 +324,8 @@ New departure **X-7**: the game no longer needs a successful, saved investigatio
   - Difficulty changes only the creature: speed, sight, hearing, wake delay, search width and how long it dwells at a locker.
 - **Balance by playing** (`tests/gameBalance.test.ts`): a scripted player plays 80 games on each difficulty on the real rules, varying route and patience by game. A careful player (walks, stands still or steps out of sight when it is about, runs and hides when hunted) escapes in 57, 47 and 43 of 80 games on low, normal and high. A reckless sprinter escapes in 36, 20 and 4. A player who stands still never escapes. The tests assert winnable on every setting, not trivial, harder with each step, and a real threat to the careless.
 - **Presence, tension and camera.** Distant footsteps, breathing, a heartbeat that rises with tension, a low drone when it is close, now and then a drip, a pipe or a far creak. Near it, lights in the room stutter and the flashlight dips, the edges darken, the field of view tightens and pulses and the picture shakes a little. Light changes hold their state for at least 0.4 s, so nothing changes more than 2.5 times a second. With reduced motion, or with the scare setting off, none of that moves: lights dim steadily and nothing shakes.
+
+Amended 2026-11-14 (phase-status section 57): the monster's body is the supplied static model sean-monster.glb (frontend/public/models), scaled to the same height, with the same position, facing and visibility rule. Its aura is deep red (no blue). The procedural creature remains as the fallback if the model cannot be loaded. The monster AI, pursuit, detection, aggression, collision and evidence rules are unchanged.
 
 ### 17.3 The capture (jumpscare)
 

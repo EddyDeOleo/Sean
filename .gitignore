@@ -24,6 +24,7 @@ frontend/build/
 frontend/coverage/
 playwright-report/
 test-results/
+test-results-diagnostics/
 *.tsbuildinfo
 
 # Local databases
@@ -56,3 +57,30 @@ logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# QA evidence marked SUPERSEDED or INVALID (each folder holds the marker file). Kept locally, not published.
+/frontend/evidence/visual-qa/archive-cycle-d4/after-low/
+/frontend/evidence/visual-qa/archive-cycle-d4/after-medium/
+/frontend/evidence/visual-qa/archive-cycle-d4/final-low/
+/frontend/evidence/visual-qa/archive-cycle-d4/final-medium/
+/frontend/evidence/visual-qa/cinematic-cycle13-candidateA/
+/frontend/evidence/visual-qa/cinematic-cycle17/nearwall-s2-v6/
+/frontend/evidence/visual-qa/cinematic-cycle17/nearwall-s2-v7/
+/frontend/evidence/visual-qa/cinematic-cycle17/nearwall-s2-v9/
+/frontend/evidence/visual-qa/cinematic-cycle18/k1-seed1-open/
+/frontend/evidence/visual-qa/cinematic-cycle18/k1-seed2-corner/
+/frontend/evidence/visual-qa/cinematic-cycle18/k1-seed3-corner/
+/frontend/evidence/visual-qa/cinematic-cycle18/k2-seed3-corner/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-a/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-b/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-d/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-e/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-f/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-corner-g/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed1-open/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed2-corner/
+/frontend/evidence/visual-qa/cinematic-cycle18/seed3-corner/
+/frontend/evidence/visual-qa/escape-traces-cycle11/
+# Optional monster model variants (dev benchmark candidates) and a copy of the original model. Kept locally, not published.
+# The game loads only /models/sean-monster-250k-rigged.glb (monsterVisual.ts). See assets/monster/README.md.
+/assets/monster/variants/

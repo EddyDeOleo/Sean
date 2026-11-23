@@ -1,0 +1,58 @@
+{
+ "label": "before",
+ "quality": "medium",
+ "eastIntoCart": {
+  "player": [
+   3.6999999999999975,
+   1.5
+  ]
+ },
+ "southAlongEastWall": {
+  "player": [
+   3.7475583483365087,
+   5.700665798150424
+  ]
+ },
+ "firstClue": {
+  "collected": 1,
+  "at": [
+   3.502693831584644,
+   7.5186302481705285
+  ]
+ },
+ "huntMisses": [],
+ "hunting": {
+  "monster": "PURSUING",
+  "status": "PLAYING",
+  "hidden": false,
+  "player": [
+   6.031979460304548,
+   7.501346178949196
+  ],
+  "monsterAt": [
+   4.5,
+   11.251666666666406
+  ],
+  "distance": 4.05,
+  "bearingOffView": 0.018,
+  "lineOfSight": true,
+  "creatureDrawn": "true"
+ },
+ "huntEnd": {
+  "status": "PLAYING",
+  "monster": "PURSUING",
+  "player": [
+   6.031979460304548,
+   7.501346178949196
+  ],
+  "monsterAt": [
+   4.5,
+   11.251666666666406
+  ],
+  "time": 41.88333333333224
+ },
+ "monsterClearance": {
+  "samples": 1168,
+  "nearestSolid": 0.04
+ }
+}

@@ -11,7 +11,7 @@
  * Phases: IDLE, INTERPRETING, NEEDS_TARGET, ANALYZING, READY, ERROR, CANCELLED.
  */
 
-import type { InterpretedRequest, ProfileResponse } from "../../types/advisor";
+import type { AnswerRecord, InterpretedRequest, ProfileResponse } from "../../types/advisor";
 import type { BackendError, InvestigationResult } from "../../types/contract";
 import { buildSnapshot, type ReportSnapshot, type SnapshotInput } from "../report/reportSnapshot";
 
@@ -33,8 +33,16 @@ export interface AnalysisState {
   plan: InterpretedRequest | null;
   investigation: { status: PartStatus; result: InvestigationResult | null; note: string | null };
   profile: { status: PartStatus; value: ProfileResponse | null; note: string | null };
+  /** The AI advisor answer for a question that needs a target. It is shown beside the file chooser. */
+  answer: AnswerPart;
   snapshot: ReportSnapshot | null;
   error: AnalysisError | null;
+}
+
+export interface AnswerPart {
+  status: PartStatus;
+  value: AnswerRecord | null;
+  note: string | null;
 }
 
 export const initialAnalysis: AnalysisState = {
@@ -44,6 +52,7 @@ export const initialAnalysis: AnalysisState = {
   plan: null,
   investigation: { status: "IDLE", result: null, note: null },
   profile: { status: "IDLE", value: null, note: null },
+  answer: { status: "IDLE", value: null, note: null },
   snapshot: null,
   error: null,
 };
@@ -56,8 +65,9 @@ export type AnalysisEvent =
   | { type: "INVESTIGATION_FAILED"; token: number; note: string }
   | { type: "PROFILE_DONE"; token: number; value: ProfileResponse }
   | { type: "PROFILE_FAILED"; token: number; note: string }
+  | { type: "ANSWER_SETTLED"; token: number; value: AnswerRecord | null; note: string | null }
   | { type: "FAIL"; token: number; error: AnalysisError }
-  | { type: "FINALIZE"; token: number; id: string; createdAt: string }
+  | { type: "FINALIZE"; token: number; id: string; createdAt: string; answer?: AnswerRecord | null; answerNote?: string | null }
   | { type: "CANCEL" }
   | { type: "RESET" }
   | { type: "OPEN"; snapshot: ReportSnapshot };
@@ -96,7 +106,13 @@ export function analysisReducer(state: AnalysisState, event: AnalysisEvent): Ana
       if (!isCurrent(state, event.token) || state.phase !== "INTERPRETING") return state;
       const plan = event.plan;
       if (plan.mode === "UNRESOLVED") return { ...state, plan, phase: "ERROR", error: { kind: "UNRESOLVED", message: plan.message ?? "The request could not be resolved." } };
-      if (plan.mode === "NEEDS_TARGET") return { ...state, plan, phase: "NEEDS_TARGET" };
+      if (plan.mode === "NEEDS_TARGET") {
+        // The AI advisor answers from the repository without a target. The file chooser stays available beside it.
+        const answer: AnswerPart = plan.repository_id === null
+          ? { status: "SKIPPED", value: null, note: null }
+          : { status: "RUNNING", value: null, note: null };
+        return { ...state, plan, phase: "NEEDS_TARGET", answer };
+      }
       return reducerBegin(state, plan);
     }
 
@@ -124,6 +140,14 @@ export function analysisReducer(state: AnalysisState, event: AnalysisEvent): Ana
     case "PROFILE_FAILED":
       if (!isCurrent(state, event.token)) return state;
       return { ...state, profile: { status: "FAILED", value: null, note: event.note } };
+    case "ANSWER_SETTLED":
+      if (event.token !== state.token || state.phase !== "NEEDS_TARGET") return state;
+      return {
+        ...state,
+        answer: event.value !== null
+          ? { status: "DONE", value: event.value, note: null }
+          : { status: "FAILED", value: null, note: event.note },
+      };
 
     case "FAIL":
       if (!isCurrent(state, event.token)) return state;
@@ -144,6 +168,8 @@ export function analysisReducer(state: AnalysisState, event: AnalysisEvent): Ana
       const snapshot = buildSnapshot({
         id: event.id,
         createdAt: event.createdAt,
+        answer: event.answer ?? null,
+        answerNote: event.answerNote ?? null,
         input,
         investigation,
         investigationNote: state.investigation.note,

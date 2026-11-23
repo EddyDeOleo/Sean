@@ -15,6 +15,62 @@ import { NO_INPUT, createWorld, step, nearHidingPlace, threatInfo, toggleFlashli
 import { LEVEL } from "../../features/game/level";
 import { buildClues } from "../../features/game/clues";
 import type { ClueRecord } from "../../features/game/clues";
+import { FIXED_STEP, testClockSettings, worldSeed, type TestFrameState, type TestInput } from "../../features/game/testClock";
+
+/** The development test clock, or null. Read once: a page is either driven by the test or played normally. */
+const TEST_CLOCK = testClockSettings();
+
+/** Writes the game state to the root element's attributes, which the browser tests read. */
+function publishWorld(root: HTMLElement | null, world: World, cinematicPhase: string | null): void {
+  if (!root) return;
+  root.dataset.player = `${world.player.pos.x.toFixed(2)},${world.player.pos.y.toFixed(2)},${world.player.yaw.toFixed(3)}`;
+  root.dataset.monster = world.monster.state;
+  root.dataset.monsterAt = `${world.monster.pos.x.toFixed(2)},${world.monster.pos.y.toFixed(2)}`;
+  root.dataset.status = world.status;
+  root.dataset.hidden = String(world.player.hidden);
+  root.dataset.canhide = String(nearHidingPlace(world));
+  // The defeat card waits for the simulation's DEFEAT_CARD phase (see game.css), not for the wall clock.
+  root.dataset.cinematicPhase = cinematicPhase ?? "";
+}
+
+/** A short, stable name for a game event, for the test traces. */
+function describeEvent(event: GameEvent): string {
+  switch (event.type) {
+    case "CLUE_COLLECTED":
+      return `CLUE_COLLECTED:${event.collected}`;
+    case "MONSTER_STATE":
+      return `MONSTER_STATE:${event.state}`;
+    case "HIDING":
+      return `HIDING:${event.hidden}`;
+    default:
+      return event.type;
+  }
+}
+
+/** The state a test reads after an advance. */
+function frameState(world: World, events: string[], cinematicPhase: string | null, cinematicElapsed: number | null): TestFrameState {
+  return {
+    time: world.time,
+    status: world.status,
+    monster: world.monster.state,
+    monsterAt: [world.monster.pos.x, world.monster.pos.y],
+    monsterYaw: world.monster.yaw,
+    flashlight: world.player.flashlight,
+    cinematicPhase,
+    cinematicElapsed,
+    canHide: nearHidingPlace(world),
+    player: [world.player.pos.x, world.player.pos.y],
+    yaw: world.player.yaw,
+    collected: world.collected,
+    clues: world.clues.map((clue): [number, number, boolean] => [clue.position.x, clue.position.y, clue.collected]),
+    gateOpen: world.gateOpen,
+    hidden: world.player.hidden,
+    moving: world.player.moving,
+    sprinting: world.player.sprinting,
+    noiseAt: world.monster.noiseAt ? [world.monster.noiseAt.x, world.monster.noiseAt.y] : null,
+    events,
+  };
+}
 
 interface Hud {
   collected: number;
@@ -121,7 +177,7 @@ export function GameView(props: GameProps) {
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!ready || !renderer) return;
-    const world = createWorld(propsRef.current.snapshot, propsRef.current.intensity, LEVEL, attempt);
+    const world = createWorld(propsRef.current.snapshot, propsRef.current.intensity, LEVEL, worldSeed(attempt, TEST_CLOCK));
     worldRef.current = world;
     renderer.resetView();
     renderer.setJumpscare(propsRef.current.jumpscare);
@@ -252,6 +308,37 @@ export function GameView(props: GameProps) {
         p.onEscaped();
       }
     };
+    if (TEST_CLOCK) {
+      // Test clock (development builds only): the world steps only when a test advances it, with a fixed step and the
+      // test's own input. The same step function runs, so the rules are unchanged; only the clock and the input differ.
+      window.__seanTest = {
+        advance(input: TestInput, frames: number, render: boolean, renderSeconds?: number): TestFrameState {
+          const world = worldRef.current;
+          const renderer = rendererRef.current;
+          if (!world || !renderer) throw new Error("testClock: the game is not ready");
+          const events: string[] = [];
+          // The hiding action (E) is the same call the key handler makes, before this step.
+          if (input.interact && world.status === "PLAYING") {
+            for (const event of toggleHiding(world)) {
+              events.push(describeEvent(event));
+              handle(event);
+            }
+          }
+          for (let i = 0; i < frames && phase === "GAME_ACTIVE" && world.status === "PLAYING"; i += 1) {
+            for (const event of step(world, input, FIXED_STEP)) {
+              events.push(describeEvent(event));
+              handle(event);
+            }
+          }
+          if (render) renderer.render(world, renderSeconds ?? FIXED_STEP, propsRef.current.reducedMotion);
+          publishWorld(rootRef.current, world, renderer.cinematicPhase);
+          return frameState(world, events, renderer.cinematicPhase, renderer.cinematicElapsed);
+        },
+      };
+      return () => {
+        delete window.__seanTest;
+      };
+    }
     const tick = (now: number): void => {
       const world = worldRef.current;
       const renderer = rendererRef.current;
@@ -278,15 +365,7 @@ export function GameView(props: GameProps) {
       }
       renderer.render(world, dt, propsRef.current.reducedMotion);
       // Plain attributes (not React state) so the browser tests can follow the game without a back door into it.
-      const root = rootRef.current;
-      if (root) {
-        root.dataset.player = `${world.player.pos.x.toFixed(2)},${world.player.pos.y.toFixed(2)},${world.player.yaw.toFixed(3)}`;
-        root.dataset.monster = world.monster.state;
-        root.dataset.monsterAt = `${world.monster.pos.x.toFixed(2)},${world.monster.pos.y.toFixed(2)}`;
-        root.dataset.status = world.status;
-        root.dataset.hidden = String(world.player.hidden);
-        root.dataset.canhide = String(nearHidingPlace(world));
-      }
+      publishWorld(rootRef.current, world, renderer.cinematicPhase);
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
@@ -378,6 +457,11 @@ export function GameView(props: GameProps) {
                 ? "Your latest report has no evidence to use here, so every clue is fiction and says so."
                 : "This run is not tied to any report. Every clue is fiction and none comes from a repository."}
           </p>
+          {props.investigationNote ? (
+            <p className="gm-technical" role="status" data-testid="game-investigation-note">
+              {props.investigationNote}
+            </p>
+          ) : null}
           <ul className="gm-controls" aria-label="Controls">
             <li><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move</li>
             <li>Mouse or <kbd>←</kbd> <kbd>→</kbd> look</li>

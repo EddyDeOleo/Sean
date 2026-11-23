@@ -1,0 +1,28 @@
+[
+ {
+  "state": "empty-corridor",
+  "monsterShown": "false",
+  "phase": "DORMANT"
+ },
+ {
+  "state": "dormant",
+  "collected": 1,
+  "monster": "DORMANT",
+  "visible": "true"
+ },
+ {
+  "state": "hunting",
+  "monster": "PURSUING",
+  "status": "PLAYING",
+  "player": [
+   8.910879613375828,
+   13.608257553158113
+  ],
+  "monsterAt": [
+   12.382416666666664,
+   8.5
+  ],
+  "creatureDrawn": "true",
+  "hidden": false
+ }
+]

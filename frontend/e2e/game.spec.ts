@@ -1,3 +1,5 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { LEVEL } from "../src/features/game/level";
 import { Keys, ask, begin, enterGame, normalise, read, shot, walkTo } from "./helpers";
@@ -89,10 +91,13 @@ test("the creature catches a player who walks into it, and the player can retry 
   expect(await walkTo(page, LEVEL.clueSpots[0]!, { gateOpen: false })).toBe(true);
   // Walk toward wherever it is until it catches us.
   const keys = new Keys(page);
+  // The monster states seen on the way: the encounter must wake the creature, pursue, and attack before the catch.
+  const seen = new Set<string>();
   const deadline = Date.now() + 45_000;
   while (Date.now() < deadline && (await page.getByTestId("game-caught").count()) === 0) {
     const s = await read(page);
     if (!s || s.status !== "PLAYING") break;
+    seen.add(s.monster);
     const diff = normalise(Math.atan2(s.monsterAt[1] - s.y, s.monsterAt[0] - s.x) - s.yaw);
     const wanted = [Math.abs(diff) > 0.1 ? (diff > 0 ? "ArrowRight" : "ArrowLeft") : "", "KeyW"].filter(Boolean);
     await keys.set(wanted);
@@ -100,6 +105,10 @@ test("the creature catches a player who walks into it, and the player can retry 
   }
   await keys.release();
   await expect(page.getByTestId("game-caught")).toBeVisible({ timeout: 10_000 });
+  // Wake, pursuit and attack are each asserted, not assumed: the creature left DORMANT, pursued, and attacked before the catch.
+  expect([...seen].some((state) => state !== "DORMANT"), "the creature woke").toBe(true);
+  expect(seen.has("PURSUING") || seen.has("ATTACKING"), "the creature pursued").toBe(true);
+  expect(seen.has("ATTACKING"), "the creature attacked before the catch").toBe(true);
   await expect(page.getByTestId("jumpscare")).toBeVisible();
   await page.waitForTimeout(400);
   await shot(page, "34-game-caught");
@@ -142,13 +151,18 @@ test("a player who collects every clue and reaches the exit escapes to the repor
   const spots = Array.from({ length: total }, (_, i) => LEVEL.clueSpots[Math.floor((i * LEVEL.clueSpots.length) / total) % LEVEL.clueSpots.length]!);
   let attempts = 0;
   let escaped = false;
+  // Scoped instrumentation: every walk, catch and retry is recorded and attached to the test report.
+  const trace: Array<Record<string, unknown>> = [];
   while (!escaped && attempts < 6) {
     attempts += 1;
     let alive = true;
     for (const spot of spots) {
-      if (!(await walkTo(page, spot, { gateOpen: false, sprint: true, careful: true }))) {
-        const s = await read(page);
-        console.log(`attempt ${attempts}: stopped going to ${spot.x},${spot.y}: ${JSON.stringify(s)}`);
+      const before = await read(page);
+      const ok = await walkTo(page, spot, { gateOpen: false, sprint: true, careful: true });
+      const after = await read(page);
+      trace.push({ attempt: attempts, walk: { target: [spot.x, spot.y], ok, from: before && [before.x, before.y], to: after && [after.x, after.y], monster: after?.monster ?? null, status: after?.status ?? null } });
+      if (!ok) {
+        console.log(`attempt ${attempts}: stopped going to ${spot.x},${spot.y}: ${JSON.stringify(after)}`);
         alive = false;
         break;
       }
@@ -164,11 +178,31 @@ test("a player who collects every clue and reaches the exit escapes to the repor
     if (alive) {
       escaped = true;
     } else if ((await page.getByTestId("game-caught").count()) > 0) {
+      trace.push({ attempt: attempts, caught: await read(page) });
       await page.getByTestId("game-retry").click();
       await begin(page);
-    } else break;
+    } else {
+      // The walk ran out of time while the game is still running (not a catch). The route is tried again, so the test does
+      // not give up on a live game. The attempt budget still bounds the run.
+      trace.push({ attempt: attempts, timedOut: await read(page), reason: "walk ran out of time without a catch" });
+    }
   }
-  expect(escaped, `escaped after ${attempts} attempt(s)`).toBe(true);
+  const caughtAttempts = trace.filter((entry) => "caught" in entry).length;
+  // The trace goes to this test's own output folder (under the configured test-results directory). Each run has a fresh
+  // folder, so earlier traces are never overwritten, and Playwright keeps the folder for inspection.
+  const summary = { escaped, attempts, caughtAttempts, trace };
+  // Playwright clears test-results at the start of each run, so each trace also goes to a project-relative diagnostics
+  // folder with a unique name (time and process id): earlier runs are kept, and nothing is written outside the project.
+  const stamp = `${new Date().toISOString().replace(/[:.]/g, "-")}-${process.pid}`;
+  mkdirSync(resolve("test-results-diagnostics"), { recursive: true });
+  const diagnosticPath = resolve("test-results-diagnostics", `escape-${stamp}.json`);
+  writeFileSync(diagnosticPath, JSON.stringify(summary, null, 1));
+  const tracePath = test.info().outputPath("escape-trace.json");
+  writeFileSync(tracePath, JSON.stringify(summary, null, 1));
+  await test.info().attach("escape-trace.json", { path: tracePath, contentType: "application/json" });
+  test.info().annotations.push({ type: "caught-attempts", description: `${caughtAttempts} caught before the escape` });
+  console.log(`ESCAPE-RESULT escaped=${escaped} attempts=${attempts} caught=${caughtAttempts}`);
+  expect(escaped, `escaped after ${attempts} attempt(s), ${caughtAttempts} caught`).toBe(true);
   await expect(page.getByTestId("report")).toBeVisible({ timeout: 15_000 });
   await expect(page.getByTestId("game")).toHaveCount(0);
 });

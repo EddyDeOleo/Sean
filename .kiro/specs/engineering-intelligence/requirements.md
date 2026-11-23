@@ -58,7 +58,7 @@ Source: `docs/specs/spec-4-engineering-intelligence.md` (SEAN-SPEC-04 v1.0). Tha
 
 3.1 THE deterministic interpreter SHALL resolve a repository reference and an optional target path that exists in the committed tree.
 3.2 AN unresolved GitHub URL SHALL produce a clear message and no cloning.
-3.3 THE Gemini adapter SHALL send only the sentence and registered IDs, SHALL be disabled without `SEAN_GEMINI_API_KEY`, and SHALL have its output re-validated deterministically.
+3.3 THE Groq adapter SHALL send only the sentence and registered IDs, SHALL be disabled without `SEAN_GROQ_API_KEY`, and SHALL have its output re-validated deterministically.
 3.4 THE response SHALL state which interpreter answered.
 
 ### Requirement 4: Application shell and report (stage 3)

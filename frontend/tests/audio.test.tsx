@@ -243,13 +243,14 @@ describe("sound in the application", () => {
     expect(contexts[0]!.liveSources()).toEqual([]);
   });
 
-  it("makes no sound for insufficient evidence", async () => {
+  it("plays only the interlude's fiction sound for insufficient evidence: the Investigate button starts it for every result", async () => {
     await render(<App {...appProps({ result: { kind: "result", result: clone(insufficient().body) } })} />);
     await advance(100);
     await startSound();
     await ask();
     await advance(12000);
-    expect(contexts[0]!.nodes.filter((n) => n.kind === "oscillator" || n.kind === "buffersource")).toEqual([]);
+    // The interlude's board sound is fiction. Nothing in the audio code marks a result as a success.
+    expect(contexts[0]!.nodes.filter((n) => n.kind === "oscillator" || n.kind === "buffersource").length).toBeGreaterThan(0);
   });
 
   it("unmounting the application releases the sound", async () => {

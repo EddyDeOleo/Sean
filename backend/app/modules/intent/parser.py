@@ -1,34 +1,41 @@
 """Request interpretation (Spec 4 section 8).
 
 `interpret` turns one sentence into a structured plan. The deterministic parser decides everything it can. The optional
-Gemini hint (see gemini.py) is consulted only when the parser could not resolve a target, and every hint it returns is
+Groq hint (see groq.py) is consulted only when the parser could not resolve a target, and every hint it returns is
 re-validated here: a repository must be registered and a path must exist in the committed tree. Nothing a model says is
 trusted.
 """
 
 from __future__ import annotations
 
+import logging
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
-from app.modules.intent.gemini import HintOutcome
+from app.modules.intent.groq import HintOutcome
+from app.modules.intent.sanitize import sanitize_for_provider
 
 MAX_SENTENCE_LENGTH = 2000
 MAX_CANDIDATES = 5
 MAX_SYMBOL_LENGTH = 256
 MAX_CANDIDATE_WORDS = 20
+# Logs carry fixed reason codes only: never the question, the sanitized text, a path, an identifier, or a model value.
+logger = logging.getLogger("sean.intent")
+NEEDS_TARGET_ANSWERED = "NEEDS_TARGET_ANSWERED"
+_KNOWN_MODES = ("INVESTIGATE", "ADVISE", "NEEDS_TARGET")
 
 Mode = Literal["INVESTIGATE", "ADVISE", "NEEDS_TARGET", "UNRESOLVED"]
-Interpreter = Literal["deterministic", "gemini"]
+Interpreter = Literal["deterministic", "groq"]
 AIStatus = Literal[
     "NOT_REQUESTED",
     "NOT_NEEDED",
     "AI_USED",
     "AI_NO_USABLE_ANSWER",
+    "AI_NOT_SENT",
     "AI_TIMEOUT",
     "AI_HTTP_ERROR",
     "AI_CONNECTION_FAILED",
@@ -78,7 +85,7 @@ class InterpretedRequest(BaseModel):
     ai_status: AIStatus = "NOT_REQUESTED"
 
 
-# A hint from an optional model. Its value is untrusted and is checked by _accept_hint.
+# A hint from an optional model. Its value is untrusted and is checked by _judge_hint.
 Hint = Callable[[str], HintOutcome]
 TreePaths = Callable[[str], list[str]]
 
@@ -151,6 +158,7 @@ def interpret(
     *,
     selected_repository_id: str | None = None,
     hint: Hint | None = None,
+    local_roots: Iterable[str] = (),
 ) -> InterpretedRequest:
     text = " ".join(sentence.split())[:MAX_SENTENCE_LENGTH]
     if not text:
@@ -185,13 +193,24 @@ def interpret(
         )
     ai_status: AIStatus = _unused(hint)
     if hint is not None:
-        outcome = hint(question)
-        ai_status = outcome.status  # type: ignore[assignment]
-        accepted = _accept_hint(outcome.value, ref, tree, question)
-        if accepted is not None:
-            return accepted.model_copy(update={"ai_status": "AI_USED"})
-        if outcome.status == "AI_USED":
-            ai_status = "AI_NO_USABLE_ANSWER"
+        # The original question stays local. Only the sanitized text may leave the machine.
+        sanitized = sanitize_for_provider(question, refs.keys(), local_roots)
+        if sanitized.text is None:
+            logger.info("AI reader not used: the question could not be made safe to send (%s)", sanitized.reason)
+            ai_status = "AI_NOT_SENT"
+        else:
+            outcome = hint(sanitized.text)
+            ai_status = outcome.status  # type: ignore[assignment]
+            accepted, reason = _judge_hint(outcome.value, ref, tree, question)
+            if accepted is not None:
+                logger.info("AI answer accepted: %s", reason)
+                return accepted.model_copy(update={"ai_status": "AI_USED"})
+            if outcome.status == "AI_USED":
+                if reason == NEEDS_TARGET_ANSWERED:
+                    ai_status = "AI_USED"
+                else:
+                    logger.warning("AI answer not used: %s", reason)
+                    ai_status = "AI_NO_USABLE_ANSWER"
     candidates = _candidates(question, tree_list)
     return InterpretedRequest(
         mode="NEEDS_TARGET", interpreter="deterministic", repository_id=ref.repository_id, question=question, candidates=candidates,
@@ -204,19 +223,41 @@ def interpret(
     )
 
 
-def _accept_hint(raw: dict | None, ref: RepositoryRef, tree: set[str], question: str) -> InterpretedRequest | None:
-    """Accept a model hint only if it passes the same checks as user text. Anything else is discarded."""
+def _judge_hint(raw: dict | None, ref: RepositoryRef, tree: set[str], question: str) -> tuple[InterpretedRequest | None, str]:
+    """Judge a model answer against Sean's accepted contract. Returns (plan, reason).
+
+    A plan is returned only for an answer Sean accepts: a path that exists in the committed tree (INVESTIGATE), or mode ADVISE.
+    NEEDS_TARGET_ANSWERED means the model asked for a target. The deterministic plan is kept, and the answer counts as used.
+    Every other answer returns (None, reason). `reason` is a fixed code, optionally with the Python type of an unexpected value.
+    It never contains the model's text, a path, an identifier, or the question.
+    """
     if not isinstance(raw, dict):
-        return None
+        return None, "NOT_AN_OBJECT"
     if raw.get("repository_id") not in (None, ref.repository_id):
-        return None
+        return None, "REPOSITORY_ID_MISMATCH"
     path = raw.get("path")
     if isinstance(path, str) and path in tree:
         symbol = raw.get("symbol")
         valid_symbol = symbol if isinstance(symbol, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", symbol) and len(symbol) <= MAX_SYMBOL_LENGTH else None
-        return InterpretedRequest(
-            mode="INVESTIGATE", interpreter="gemini", repository_id=ref.repository_id, target_path=path, symbol=valid_symbol, question=question
+        plan = InterpretedRequest(
+            mode="INVESTIGATE", interpreter="groq", repository_id=ref.repository_id, target_path=path, symbol=valid_symbol, question=question
         )
-    if raw.get("mode") == "ADVISE":
-        return InterpretedRequest(mode="ADVISE", interpreter="gemini", repository_id=ref.repository_id, question=question)
-    return None
+        return plan, "ACCEPTED_TARGET"
+    mode = raw.get("mode")
+    if mode == "ADVISE":
+        return InterpretedRequest(mode="ADVISE", interpreter="groq", repository_id=ref.repository_id, question=question), "ACCEPTED_ADVISE"
+    if mode == "NEEDS_TARGET":
+        return None, NEEDS_TARGET_ANSWERED
+    if mode is None:
+        return None, "MODE_MISSING"
+    if not isinstance(mode, str):
+        return None, f"MODE_NOT_TEXT:{type(mode).__name__}"
+    if mode == "INVESTIGATE":
+        if path is None:
+            return None, "PATH_MISSING"
+        if not isinstance(path, str):
+            return None, f"PATH_NOT_TEXT:{type(path).__name__}"
+        return None, "PATH_NOT_IN_COMMITTED_TREE"
+    if mode.strip().upper() in _KNOWN_MODES:
+        return None, "MODE_NOT_EXACT"
+    return None, "MODE_NOT_ALLOWED"

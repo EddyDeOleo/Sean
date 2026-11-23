@@ -11,10 +11,22 @@ import { AnalysisNotice } from "../components/request/AnalysisNotice";
 import { AnalysisProgress } from "../components/request/AnalysisProgress";
 import { RequestScreen } from "../components/request/RequestScreen";
 import { ReportView } from "../components/report/ReportView";
+import { AnswerSection } from "../components/report/AnswerSection";
 import { SavedReportsView, SettingsView } from "../components/shell/ListViews";
 import { RepositoriesView, type RepositoryActions, type RepositoryField, type RepositoryResult } from "../components/shell/RepositoriesView";
 import { Sidebar, type View } from "../components/shell/Sidebar";
 import { useAnalysis, type AnalysisDependencies } from "../features/analysis/useAnalysis";
+import type { AnalysisError } from "../features/analysis/analysisMachine";
+
+/** The technical reason an investigation did not complete. Plain words, no fiction, no provider details. */
+function investigationFailureNote(error: AnalysisError | null, cancelled: boolean): string {
+  const tail = " The game uses atmosphere clues only, and no repository finding is shown in it.";
+  if (cancelled) return `The investigation was cancelled.${tail}`;
+  if (error?.kind === "NETWORK") return `The backend could not be reached for the investigation.${tail}`;
+  if (error?.kind === "REQUEST_REJECTED") return `The backend did not accept the investigation (status ${error.status}).${tail}`;
+  if (error?.kind === "INVALID_RESPONSE") return `The investigation response could not be validated.${tail}`;
+  return `The investigation did not complete.${tail}`;
+}
 import { loadSettings, resolveReducedMotion, saveSettings, type MotionPreference, type Settings } from "../features/experience/settingsStore";
 import type { SnapshotSummary } from "../features/report/reportSnapshot";
 import { ReportStore, createIndexedDbStorage, type SnapshotStorage } from "../features/report/reportStore";
@@ -27,7 +39,7 @@ import { useAudio } from "../features/audio/useAudio";
 import type { ContextFactory } from "../features/audio/AudioController";
 import { PresenceSounds, cueForPhase, moodForPhase, planForGameEvent, planForOuijaStep, type CuePlan } from "../features/audio/director";
 import type { GameEvent, ThreatInfo } from "../features/game/world";
-import { isInterludeEligible, type ArtifactRecord } from "../features/report/reportSnapshot";
+import type { ArtifactRecord } from "../features/report/reportSnapshot";
 import {
   createRepository as defaultCreateRepository, deleteRepository as defaultDeleteRepository, getCapabilities as defaultGetCapabilities,
   listRepositories as defaultListRepositories, previewArtifacts as defaultPreviewArtifacts, updateRepository as defaultUpdateRepository,
@@ -92,6 +104,9 @@ export function App(props: AppProps) {
   const [openNote, setOpenNote] = useState<string | null>(null);
   const [saveNote, setSaveNote] = useState<string | null>(null);
   const [gameNote, setGameNote] = useState<string | null>(null);
+  // Why the investigation did not complete, when the game started without it. Null when it completed.
+  const [investigationNote, setInvestigationNote] = useState<string | null>(null);
+  const investigationArmed = useRef(false);
   const refreshSaved = useCallback(async (): Promise<void> => {
     const listed = await store.list();
     if (listed.ok) {
@@ -210,6 +225,8 @@ export function App(props: AppProps) {
     if (!renderGameAvailable) return;
     standaloneCount.current += 1;
     setGameNote(null);
+    // The demo has no investigation, so no note from an earlier analysis may appear on its intro card.
+    setInvestigationNote(null);
     beginGame(`standalone-${standaloneCount.current}`);
   }, [beginGame, renderGameAvailable]);
   const [finishedInterludes, setFinishedInterludes] = useState<ReadonlySet<string>>(new Set());
@@ -248,6 +265,8 @@ export function App(props: AppProps) {
     onSnapshot: (snapshot) => {
       setSaveNote(null);
       setGameNote(null);
+      // The game after this analysis shows this analysis's own technical note (null when the investigation completed).
+      setInvestigationNote(snapshot.investigationNote);
       // The report is saved first. The interlude starts only after the save has finished or failed, or after three seconds.
       const saved = store.save(snapshot).then((result) => {
         if (!result.ok) setSaveNote("This report could not be saved in this browser. It stays on screen until you leave it.");
@@ -262,7 +281,7 @@ export function App(props: AppProps) {
           setFinishedInterludes((current) => new Set(current).add(snapshot.id));
           return;
         }
-        if (settingsRef.current.horror && isInterludeEligible(snapshot)) beginInterlude(snapshot.id);
+        if (settingsRef.current.horror) beginInterlude(snapshot.id);
       });
     },
   });
@@ -285,6 +304,37 @@ export function App(props: AppProps) {
   useEffect(() => {
     if (interludePhase === "REPORT_AVAILABLE" && interludeSnapshot) setFinishedInterludes((current) => new Set(current).add(interludeSnapshot));
   }, [interludePhase, interludeSnapshot]);
+  // The Investigate button is the only trigger for the game. It starts once for each click, whatever the question is.
+  // A ready report starts its interlude when it is saved (onSnapshot). A repository-level question ends with a file choice
+  // and no report, so the game starts here instead. A failure or a cancelled analysis never starts the game: a failure
+  // offers no game in its place, and the user can retry with the button.
+  const analysisToken = state.token;
+  const analysisPhase = state.phase;
+  const analysisError = state.error;
+  useEffect(() => {
+    if (!investigationArmed.current) return;
+    if (analysisPhase === "NEEDS_TARGET") {
+      investigationArmed.current = false;
+      const gameWanted = settingsRef.current.horror && !settingsRef.current.skipGameplay && renderGameAvailable;
+      if (gameWanted && !isActive(phaseRef.current)) {
+        setGameNote(null);
+        setInvestigationNote(null);
+        beginGame(`investigation-${analysisToken}`);
+      }
+    } else if (analysisPhase === "ERROR" || analysisPhase === "CANCELLED") {
+      // Gameplay does not depend on the investigation. A failed or cancelled investigation starts the game with atmosphere
+      // clues, and the technical reason is shown on the game's intro card, apart from the fiction.
+      investigationArmed.current = false;
+      const gameWanted = settingsRef.current.horror && !settingsRef.current.skipGameplay && renderGameAvailable;
+      if (gameWanted && !isActive(phaseRef.current)) {
+        setInvestigationNote(investigationFailureNote(analysisError, analysisPhase === "CANCELLED"));
+        setGameNote(null);
+        beginGame(`investigation-unavailable-${analysisToken}`);
+      }
+    } else if (analysisPhase === "READY") {
+      investigationArmed.current = false;
+    }
+  }, [analysisPhase, analysisToken, analysisError, beginGame, renderGameAvailable]);
   useEffect(() => {
     setArtifactRecords(state.snapshot ? [...state.snapshot.artifacts] : []);
     // Only a different snapshot resets the records.
@@ -353,14 +403,21 @@ export function App(props: AppProps) {
     setView("new");
   }
 
-  const submitText = (text: string, allowAi: boolean): void => {
+  /** Set by an accepted Investigate click. A click made while an analysis is running is ignored by the hook, so it does not arm. */
+  function armInvestigation(): void {
+    const running = analysis.state.phase === "INTERPRETING" || analysis.state.phase === "ANALYZING";
+    if (!running) investigationArmed.current = true;
+  }
+  const submitText = (text: string): void => {
     setGameNote(null);
     setOpenedId(null);
-    analysis.submit(text, selectedRepository || null, allowAi);
+    armInvestigation();
+    analysis.submit(text, selectedRepository || null);
   };
   const submitStructured = (request: InvestigationRequest): void => {
     setGameNote(null);
     setOpenedId(null);
+    armInvestigation();
     persist({ lastRepositoryId: request.repository_id });
     analysis.submitPlan(
       {
@@ -375,7 +432,7 @@ export function App(props: AppProps) {
   // A fresh, eligible snapshot is held back until its interlude has ended, so the report does not flash before the surprise.
   const holdReport =
     state.phase === "READY" && state.snapshot !== null && state.snapshot.id !== openedId && settings.horror &&
-    isInterludeEligible(state.snapshot) && !finishedInterludes.has(state.snapshot.id);
+    !finishedInterludes.has(state.snapshot.id);
 
   let content: React.ReactNode;
   if (view === "reports") {
@@ -468,7 +525,12 @@ export function App(props: AppProps) {
         onSubmitStructured={submitStructured}
         candidates={state.phase === "NEEDS_TARGET" ? state.plan?.candidates ?? [] : []}
         onChooseCandidate={(path) => {
-          if (state.plan) analysis.submitPlan({ ...state.plan, mode: "INVESTIGATE", target_path: path, candidates: [], message: null }, state.text);
+          if (!state.plan) return;
+          // The answer shown beside the chooser is kept. While it is still running, it is not requested again.
+          const carried = state.answer.status === "RUNNING"
+            ? { value: null, note: "The AI Engineering Advisor answer was not finished before you chose a file, so it is not shown." }
+            : { value: state.answer.value, note: state.answer.note };
+          analysis.submitPlan({ ...state.plan, mode: "INVESTIGATE", target_path: path, candidates: [], message: null }, state.text, carried);
         }}
         symbolCandidates={rejected?.candidates ?? []}
         onChooseSymbol={(symbol) => {
@@ -479,11 +541,17 @@ export function App(props: AppProps) {
           <>
             {gameNote && view === "new" && state.phase !== "READY" ? <div className="sx-notice" role="status" data-testid="game-note"><h3>The game did not start</h3><p>{gameNote}</p></div> : null}
             {openNote ? <div className="sx-notice" data-tone="warn" role="alert" data-testid="open-note"><h3>Report not opened</h3><p>{openNote}</p></div> : null}
+            {state.phase === "NEEDS_TARGET" && state.answer.status !== "SKIPPED" ? (
+              <AnswerSection
+                answer={state.answer.value}
+                note={state.answer.status === "RUNNING" ? "Sean is answering from the repository's local evidence." : state.answer.note}
+              />
+            ) : null}
             {state.phase === "NEEDS_TARGET" && state.plan?.message ? <div className="sx-notice" role="status" data-testid="needs-target"><h3>One more detail</h3><p>{state.plan.message}</p></div> : null}
             {state.phase === "CANCELLED" ? (
               <div className="sx-notice" role="status" data-testid="cancelled"><h3>Stopped</h3><p>You stopped waiting. Nothing was concluded, and this says nothing about whether evidence exists.</p></div>
             ) : null}
-            {state.error ? <AnalysisNotice error={state.error} onDismiss={analysis.reset} onRetry={state.text ? () => submitText(state.text, false) : undefined} /> : null}
+            {state.error ? <AnalysisNotice error={state.error} onDismiss={analysis.reset} onRetry={state.text ? () => submitText(state.text) : undefined} /> : null}
           </>
         }
       />
@@ -495,6 +563,8 @@ export function App(props: AppProps) {
       ? props.renderGame({
           // The demo has no report. A game after an analysis uses that analysis.
           snapshot: standalone ? null : state.snapshot ?? null,
+          // Set by the start path of this game: the failed or cancelled start, the report's own note, or null (demo, complete).
+          investigationNote,
           phase: interlude.state.phase as "GAME_INITIALIZATION" | "GAME_ACTIVE" | "PLAYER_CAUGHT",
           attempt: interlude.state.attempts,
           reducedMotion: reduced,
@@ -575,7 +645,7 @@ function announce(phase: string): string {
     case "INTERPRETING": return "Reading your request.";
     case "ANALYZING": return "Analyzing the repository.";
     case "READY": return "The report is ready.";
-    case "NEEDS_TARGET": return "Sean needs a file to continue.";
+    case "NEEDS_TARGET": return "Sean answered from the repository. Choose a file to investigate one file in depth.";
     case "CANCELLED": return "Stopped waiting.";
     case "ERROR": return "The analysis did not produce a result.";
     default: return "";

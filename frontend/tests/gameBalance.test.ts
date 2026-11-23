@@ -155,7 +155,9 @@ function play(intensity: Intensity, seed: number, policy: Policy, limit = 300): 
   return { outcome: "TIMEOUT", seconds: limit, hid, chases };
 }
 
-const SEEDS = Array.from({ length: 80 }, (_, i) => i + 1);
+// 400 games per cell. At 80 games the standard error of a win rate near 0.6 is about 0.055, which is larger than the 0.05 slack in
+// "harder settings are harder", so the test failed on sampling noise. The thresholds are unchanged.
+const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
 function summary(intensity: Intensity, policy: Policy, limit = 300) {
   const results = SEEDS.map((seed) => play(intensity, seed, policy, limit));
   const count = (o: Outcome) => results.filter((r) => r.outcome === o).length;
@@ -179,7 +181,7 @@ describe("balance, by playing", () => {
   });
 
   it("a careful player can win on every difficulty, and it is not a sure thing on the hardest", () => {
-    // Measured with 80 games each (see the table the first test writes): about 71%, 59% and 54%. The bands leave room for noise.
+    // Measured with 400 games each (see the table the first test writes): about 76%, 59% and 58%. The bands leave room for noise.
     expect(careful.low.winRate).toBeGreaterThanOrEqual(0.6);
     expect(careful.normal.winRate).toBeGreaterThanOrEqual(0.45);
     expect(careful.high.winRate).toBeGreaterThanOrEqual(0.35);
@@ -209,5 +211,6 @@ describe("balance, by playing", () => {
   it("someone who stands still all game never escapes", () => {
     const idle = summary("normal", "idle", 120);
     expect(idle.escaped).toBe(0);
-  });
+    // 400 idle games of 120 simulated seconds each take longer than the default 30-second test timeout.
+  }, 120_000);
 });

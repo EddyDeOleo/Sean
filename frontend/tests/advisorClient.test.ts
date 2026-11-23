@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchProfile, getCapabilities, interpretRequest, listRepositories } from "../src/services/advisorClient";
+import { ADVISOR_TIMEOUT_MS, answerRequest, fetchProfile, getCapabilities, interpretRequest, listRepositories } from "../src/services/advisorClient";
 import { capabilitiesFixture, clone, interpretInvestigate, profileNotRegistered, profileRich, repositoriesFixture } from "./fixtures";
 
 const json = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -39,12 +39,26 @@ describe("request shapes", () => {
     expect(JSON.parse(g.mock.calls[0]![1]?.body as string)).toEqual({ text: "why?" });
   });
 
-  it("sends consent only when it is explicitly true", async () => {
-    for (const [allow, expected] of [[true, true], [false, undefined], [undefined, undefined]] as const) {
-      const f = fetcher(json(200, interpretInvestigate().body));
-      await interpretRequest({ text: "x", selected_repository_id: null, allow_ai: allow }, { fetchImpl: f });
-      expect(JSON.parse(f.mock.calls[0]![1]?.body as string).allow_ai).toBe(expected);
-    }
+  it("never sends a consent field: the AI advisor is the default", async () => {
+    const f = fetcher(json(200, interpretInvestigate().body));
+    await interpretRequest({ text: "x", selected_repository_id: null }, { fetchImpl: f });
+    expect(JSON.parse(f.mock.calls[0]![1]?.body as string)).not.toHaveProperty("allow_ai");
+  });
+  it("posts the question to the answer route and returns a validated answer", async () => {
+    const record = { provider: "deterministic", ai_status: "NOT_REQUESTED", answer: null, evidence: [], limitations: ["none"] };
+    const f = fetcher(json(200, record));
+    const outcome = await answerRequest("sample", "Is this repository deployed?", { fetchImpl: f });
+    expect(f.mock.calls[0]![0]).toMatch(/\/repositories\/sample\/answer$/);
+    expect(JSON.parse(f.mock.calls[0]![1]?.body as string)).toEqual({ question: "Is this repository deployed?" });
+    expect(outcome.kind).toBe("ok");
+  });
+  it("rejects an answer that cites evidence which was not retrieved", async () => {
+    const bad = {
+      provider: "groq", ai_status: "AI_USED", limitations: [], evidence: [],
+      answer: { answer: "x", summary: "y", claims: [{ text: "z", basis: "DOCUMENTED", evidence_ids: ["E9"] }], limitations: [], recommendations: [], confidence: "LOW", answer_type: "explanation" },
+    };
+    const outcome = await answerRequest("sample", "q", { fetchImpl: fetcher(json(200, bad)) });
+    expect(outcome.kind).toBe("invalid");
   });
 
   it("reads capabilities with GET and no body", async () => {
@@ -103,5 +117,17 @@ describe("outcomes", () => {
     const pending = fetchProfile("rich", { fetchImpl: f, signal: controller.signal });
     controller.abort();
     expect(await pending).toEqual({ kind: "aborted" });
+  });
+
+  it("network, not aborted, when the backend does not answer within the advisor deadline", async () => {
+    vi.useFakeTimers();
+    try {
+      const f = vi.fn<typeof fetch>((_url, init) => new Promise((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")))));
+      const pending = listRepositories({ fetchImpl: f });
+      await vi.advanceTimersByTimeAsync(ADVISOR_TIMEOUT_MS);
+      expect(await pending).toEqual({ kind: "network" });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

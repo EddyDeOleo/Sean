@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan turns the Ouija Experience requirements and design into ordered implementation tasks. It has 15 top-level tasks and 45 subtasks (60 checkboxes), and every checkbox is pending. Each task lists the requirements it covers.
+This plan turns the Ouija Experience requirements and design into ordered implementation tasks. It has 15 top-level tasks and 45 subtasks (60 checkboxes). Checkboxes follow the shared convention in the Notes section. Task 0 is VERIFIED and checked. Tasks 1 to 14 are unchecked because `phase-status.md` records no status for them. Each task lists the requirements it covers.
 
 **Status: NOT APPROVED. No task may start.** Every task below is pending. These tasks become eligible only after:
 
@@ -101,7 +101,7 @@ Not drawn: task 13 depends on every task from 1 to 12, and task 14 depends on ev
 
 ## Tasks
 
-- [ ] 0. Frontend gate check (depends on: Spec 2 approval, the Spec 1 gate report)
+- [x] 0. Frontend gate check (depends on: Spec 2 approval, the Spec 1 gate report)
   - Confirm the gates in Spec 2 §22.6 and Architecture §25 that apply to the frontend.
   - Confirm that the decisions O-D1, O-D3, O-D7, and O-D11 are recorded in `design.md`, and that the contract decisions C-D1 to C-D10 are recorded in the Evidence Retrieval design (C-D5 is decided as a UUID version 4 string, and Evidence task 15.1 records that confirmation). O-D2 is resolved by reference to the canonical contract.
   - Report each gate as closed or open. Change no code.
@@ -198,7 +198,7 @@ Not drawn: task 13 depends on every task from 1 to 12, and task 14 depends on ev
 
 Format note: Kiro's documentation describes checkbox tasks in `tasks.md` and a dependency graph built from that file. The exact syntax and how dependency text is recognized are not verified for IDE 1.4.121. The "depends on" text is written for human readers. Do not use "Run all Tasks" before the owner approves this plan.
 
-Status mapping: a `[ ]` checkbox means `NOT_STARTED`. No checkbox is marked complete for `VERIFIED` or `ACCEPTED`. Task status uses the Engineering Playbook §15 vocabulary (`NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `VERIFIED`, `ACCEPTED`). Only the owner marks `ACCEPTED`.
+Checkbox convention (all Sean specifications): `[x]` means the task is completed and its acceptance criteria are satisfied. `[ ]` means the task is not yet completed. A checked task is VERIFIED or ACCEPTED in `.kiro/reports/phase-status.md`, but the checkbox does not show which one. `phase-status.md` is the authoritative status record, including the IMPLEMENTED, VERIFIED, and ACCEPTED distinctions and the limitations of each task. A parent task is checked only when all of its subtasks are checked. Task status uses the Engineering Playbook §15 vocabulary (`NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `VERIFIED`, `ACCEPTED`). Only the owner marks `ACCEPTED`.
 
 ### Cross-spec dependency
 

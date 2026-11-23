@@ -15,7 +15,7 @@ from app.api.advisor_routes import create_advisor_router
 from app.api.app import create_app
 from app.api.local_guard import LocalOnlyMiddleware
 from app.modules.advisor.contract import ContractViolation
-from app.modules.intent import gemini
+from app.modules.intent import groq
 from app.modules.repository.registry import GitHubIdentity, LoadedRegistry, RegistryEntry
 
 
@@ -105,31 +105,6 @@ def test_interpret_rejects_unknown_fields_and_oversized_text(sample):
     assert asgi(app, "POST", "/interpret", {"text": "x", "extra": 1})[0] == 400
     assert asgi(app, "POST", "/interpret", {"text": "x" * 2001})[0] == 400
     assert asgi(app, "POST", "/interpret", {"text": "x", "selected_repository_id": "BAD ID"})[0] == 400
-
-
-def test_interpret_uses_the_hint_only_when_needed(sample):
-    calls = []
-
-    def transport(payload):
-        calls.append(payload)
-        return {"candidates": [{"content": {"parts": [{"text": json.dumps({"path": "src/billing.py"})}]}}]}
-
-    app = _app(_entries(sample), gemini_transport=transport)
-    status, body = asgi(app, "POST", "/interpret", {"text": "sample — Why was src/billing.py changed?", "allow_ai": True})
-    assert status == 200 and body["interpreter"] == "deterministic" and calls == []
-    status, body = asgi(app, "POST", "/interpret", {"text": "sample — Why was the money code added?", "allow_ai": True})
-    assert status == 200 and body["interpreter"] == "gemini" and body["target_path"] == "src/billing.py"
-    sent = json.dumps(calls)
-    assert "def charge" not in sent and "src/billing.py" not in sent  # no repository content or paths leave the machine
-
-
-def test_a_failing_provider_falls_back_to_the_parser(sample):
-    def broken(_payload):
-        raise OSError("provider down")
-
-    app = _app(_entries(sample), gemini_transport=broken)
-    status, body = asgi(app, "POST", "/interpret", {"text": "sample — Why was the money code added?", "allow_ai": True})
-    assert status == 200 and body["interpreter"] == "deterministic" and body["mode"] == "NEEDS_TARGET"
 
 
 def test_phase_3_investigation_route_still_works_in_the_combined_app(sample):
@@ -287,67 +262,16 @@ def test_profile_route_does_not_log_commit_subjects_or_authors(sample, caplog):
 # ---------------------------------------------------------------- consent and capabilities (security review M1)
 
 
-def test_the_sentence_never_leaves_the_machine_without_consent(sample):
-    calls = []
-
-    def transport(payload):
-        calls.append(payload)
-        return {"candidates": [{"content": {"parts": [{"text": json.dumps({"path": "src/billing.py"})}]}}]}
-
-    app = _app(_entries(sample), gemini_transport=transport)
-    for body in (
-        {"text": "sample — Why was the money code added?"},
-        {"text": "sample — Why was the money code added?", "allow_ai": False},
-    ):
-        status, result = asgi(app, "POST", "/interpret", body)
-        assert status == 200 and result["interpreter"] == "deterministic" and result["mode"] == "NEEDS_TARGET"
-    assert calls == []
-
-
-def test_consent_must_be_a_real_boolean(sample):
-    app = _app(_entries(sample), gemini_transport=lambda _p: {})
+def test_the_removed_consent_field_is_refused(sample):
+    app = _app(_entries(sample), groq_transport=lambda _p: {})
     assert asgi(app, "POST", "/interpret", {"text": "x", "allow_ai": "yes"})[0] == 400
-
-
-def test_the_payload_that_leaves_contains_no_repository_identifiers(sample):
-    sent = []
-
-    def transport(payload):
-        sent.append(json.dumps(payload))
-        return {}
-
-    entries = _entries(sample)
-    entries["another"] = RegistryEntry(repository_id="another", root=entries["sample"].root)
-    asgi(_app(entries, gemini_transport=transport), "POST", "/interpret", {"text": "sample — Why was the money code added?", "allow_ai": True})
-    assert len(sent) == 1
-    for name in ("another", "allowed_repository_ids", str(sample.path)):
-        assert name not in sent[0]
-    assert "Why was the money code added?" in sent[0]
 
 
 def test_capabilities_report_availability_and_never_a_secret(sample):
     secret = "AIza-test-secret-value"
     off = asgi(_app(_entries(sample)), "GET", "/capabilities")
     assert off[0] == 200 and off[1]["ai_interpreter"]["available"] is False
-    on = asgi(_app(_entries(sample), gemini_transport=lambda _p: {}), "GET", "/capabilities")
+    on = asgi(_app(_entries(sample), groq_transport=lambda _p: {}), "GET", "/capabilities")
     assert on[1]["ai_interpreter"]["available"] is True
-    assert on[1]["ai_interpreter"]["model"] == "gemini-3.6-flash"
+    assert on[1]["ai_interpreter"]["model"] == "openai/gpt-oss-20b"
     assert secret not in json.dumps(on[1])
-
-
-def test_the_interpret_response_says_what_the_ai_reader_did(sample):
-    def refuse(_payload):
-        raise gemini.ProviderError("HTTP_ERROR", http_status=403, stage="BEFORE_HEADERS")
-
-    app = _app(_entries(sample), gemini_transport=refuse)
-    status, body = asgi(app, "POST", "/interpret", {"text": "sample — Why was the money code added?", "allow_ai": True})
-    assert status == 200
-    assert body["interpreter"] == "deterministic" and body["mode"] == "NEEDS_TARGET"
-    assert body["ai_status"] == "AI_HTTP_ERROR"
-    assert "403" not in json.dumps(body)  # the provider status is logged, not returned
-
-
-def test_the_interpret_response_reports_not_requested_and_not_needed(sample):
-    app = _app(_entries(sample), gemini_transport=lambda _p: {})
-    assert asgi(app, "POST", "/interpret", {"text": "sample — Why was the money code added?"})[1]["ai_status"] == "NOT_REQUESTED"
-    assert asgi(app, "POST", "/interpret", {"text": "sample — Explain src/billing.py", "allow_ai": True})[1]["ai_status"] == "NOT_NEEDED"

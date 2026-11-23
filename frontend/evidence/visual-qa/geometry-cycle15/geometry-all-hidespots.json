@@ -1,0 +1,164 @@
+[
+ {
+  "spot": {
+   "x": 17.5,
+   "y": 1.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   17.8,
+   1.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 3.98,
+  "right": 0.48
+ },
+ {
+  "spot": {
+   "x": 9.5,
+   "y": 3.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   9.8,
+   3.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 0.48,
+  "right": 2.48
+ },
+ {
+  "spot": {
+   "x": 23.5,
+   "y": 3.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   23.8,
+   3.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 0.48,
+  "right": 2.48
+ },
+ {
+  "spot": {
+   "x": 16.5,
+   "y": 7.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   16.8,
+   7.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 3.98,
+  "right": 0.5
+ },
+ {
+  "spot": {
+   "x": 23.5,
+   "y": 8.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   23.8,
+   8.5
+  ],
+  "wallAhead": 0.18,
+  "back": 1.8,
+  "left": 3.48,
+  "right": 3.48
+ },
+ {
+  "spot": {
+   "x": 8.5,
+   "y": 10.5
+  },
+  "wallDirection": [
+   -1,
+   0
+  ],
+  "eye": [
+   8.2,
+   10.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 3.48,
+  "right": 1.48
+ },
+ {
+  "spot": {
+   "x": 1.5,
+   "y": 15.5
+  },
+  "wallDirection": [
+   -1,
+   0
+  ],
+  "eye": [
+   1.2,
+   15.5
+  ],
+  "wallAhead": 0.2,
+  "back": 2.78,
+  "left": 2.48,
+  "right": 0.48
+ },
+ {
+  "spot": {
+   "x": 5.5,
+   "y": 15.5
+  },
+  "wallDirection": [
+   -1,
+   0
+  ],
+  "eye": [
+   5.2,
+   15.5
+  ],
+  "wallAhead": 0.2,
+  "back": 3.98,
+  "left": 2.48,
+  "right": 0.48
+ },
+ {
+  "spot": {
+   "x": 15.5,
+   "y": 15.5
+  },
+  "wallDirection": [
+   1,
+   0
+  ],
+  "eye": [
+   15.8,
+   15.5
+  ],
+  "wallAhead": 0.18,
+  "back": 3.98,
+  "left": 0.48,
+  "right": 3.98
+ }
+]

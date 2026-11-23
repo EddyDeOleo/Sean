@@ -9,12 +9,13 @@ const AI_STATUS_TEXT: Record<string, string> = {
   NOT_RECORDED: "Not recorded for this report.",
   AI_USED: "Answered, and its answer was checked against the repository.",
   AI_NO_USABLE_ANSWER: "Answered, but nothing it said matched the repository. Sean used its built-in reader.",
+  AI_NOT_SENT: "Not sent. The question could not be made safe to send, so Sean used its built-in reader.",
   AI_TIMEOUT: "Did not answer in time. Sean used its built-in reader.",
-  AI_HTTP_ERROR: "The provider refused the request. Sean used its built-in reader.",
-  AI_CONNECTION_FAILED: "The provider could not be reached. Sean used its built-in reader.",
-  AI_PROTOCOL_ERROR: "The provider answered incorrectly. Sean used its built-in reader.",
-  AI_RESPONSE_TOO_LARGE: "The provider's answer was too large to use. Sean used its built-in reader.",
-  AI_INVALID_REPLY: "The provider's answer had an unexpected form. Sean used its built-in reader.",
+  AI_HTTP_ERROR: "The AI service refused the request. Sean used its built-in reader.",
+  AI_CONNECTION_FAILED: "The AI service could not be reached. Sean used its built-in reader.",
+  AI_PROTOCOL_ERROR: "The AI service answered incorrectly. Sean used its built-in reader.",
+  AI_RESPONSE_TOO_LARGE: "The AI service's answer was too large to use. Sean used its built-in reader.",
+  AI_INVALID_REPLY: "The AI service's answer had an unexpected form. Sean used its built-in reader.",
   AI_UNEXPECTED: "The AI reader failed unexpectedly. Sean used its built-in reader.",
 };
 
@@ -51,14 +52,18 @@ export function TransparencySection({ snapshot, origin }: { snapshot: ReportSnap
           <dd><bdi>{input.text}</bdi></dd>
           <dt>Interpreted by</dt>
           <dd data-testid="interpreter">
-            {input.interpreter === "gemini"
-              ? "Gemini helped read the request. Text you type may be retained by the provider on the free tier. No repository content was sent. Every path was checked against the repository."
-              : "Sean's built-in deterministic reader. No AI provider was used."}
+            {input.interpreter === "groq"
+              ? "An AI model helped read the request. For this step only the request text was sent. The AI service may keep that text for up to 30 days for reliability and abuse checks, unless zero data retention is turned on. Every path was checked against the repository."
+              : "Sean's built-in deterministic reader decided this request. The AI reader status is shown below."}
           </dd>
           <dt>AI reader</dt>
-          <dd data-testid="ai-status">{AI_STATUS_TEXT[input.ai_status ?? "NOT_RECORDED"]}</dd>
+          <dd data-testid="ai-status">{snapshot.answer ? AI_STATUS_TEXT[snapshot.answer.ai_status] : (snapshot.answerNote ?? AI_STATUS_TEXT["NOT_RECORDED"])}</dd>
+          <dt>AI-assisted answers</dt>
+          <dd data-testid="provider-disclosure">
+            When an AI service is configured, Sean answers questions with it. Sean retrieves evidence on this machine first. The AI service receives the question, with registered identifiers and folder paths removed, and only the selected evidence excerpts, never the whole repository. Secrets are redacted before anything is sent. The AI service may keep inference data for up to 30 days for abuse and reliability checks, unless the account has zero data retention turned on.
+          </dd>
           <dt>Explanations and recommendations</dt>
-          <dd>Deterministic. No AI provider writes the findings or the advice.</dd>
+          <dd>Deterministic. No AI service writes the findings or the advice.</dd>
           <dt>Not analyzed</dt>
           <dd>Pull requests, issues and CI results. Uncommitted files.</dd>
         </dl>

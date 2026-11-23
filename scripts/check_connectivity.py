@@ -1,4 +1,4 @@
-"""Check the network path to the Gemini host from the backend's own Python (no key is used or read).
+"""Check the network path to the Groq host from the backend's own Python (no key is used or read).
 
 Reports, for each phase, the elapsed time and the outcome: DNS, TCP connect, TLS handshake, and one unauthenticated HTTPS
 request. The unauthenticated request is expected to fail with HTTP 403 when the host is reachable. Proxy settings are reported
@@ -17,8 +17,8 @@ import time
 import urllib.error
 import urllib.request
 
-HOST = "generativelanguage.googleapis.com"
-URL = f"https://{HOST}/v1beta/models/gemini-3.6-flash"
+HOST = "api.groq.com"
+URL = f"https://{HOST}/openai/v1/models"
 TIMEOUT = 20.0
 
 

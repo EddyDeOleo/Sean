@@ -109,11 +109,11 @@ export function SettingsView(props: {
       <section className="sx-card" aria-labelledby="experience-heading">
         <h2 className="sx-h2" id="experience-heading">Experience</h2>
         <p className="sx-muted" style={{ marginTop: 0 }}>
-          After an analysis, Sean can show a short fictional interlude before the report. It is never part of the report and cannot change it. You can always skip it.
+          When you investigate, Sean can show a short fictional interlude, and a game, before the result. It is never part of the report and cannot change it. You can always skip it.
         </p>
         <label style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "0.4rem 0" }}>
           <input type="checkbox" checked={props.experience} onChange={(event) => props.onExperience(event.target.checked)} data-testid="experience-toggle" />
-          <span>Show the interlude after an analysis</span>
+          <span>Show the interlude when I investigate</span>
         </label>
         <label style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "0.4rem 0" }}>
           <input type="checkbox" checked={props.skipGameplay} disabled={!props.experience} onChange={(event) => props.onSkipGameplay(event.target.checked)} data-testid="skip-gameplay-toggle" />

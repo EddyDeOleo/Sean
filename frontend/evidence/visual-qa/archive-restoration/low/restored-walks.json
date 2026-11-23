@@ -1,0 +1,155 @@
+{
+ "label": "restore-low",
+ "quality": "low",
+ "monster": "DORMANT",
+ "collected": 0,
+ "walks": [
+  {
+   "label": "row-5 south wall, past the junction bookshelves (3,5) and (2,5)",
+   "from": {
+    "x": 4.6,
+    "y": 5.71
+   },
+   "to": {
+    "x": 1.6,
+    "y": 5.71
+   },
+   "end": [
+    1.6206000351405714,
+    5.6854761210681195
+   ],
+   "missed": 0.032,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "room (5..9, 1..3) south wall, past the cabinet (7,3) to the doorway",
+   "from": {
+    "x": 8.7,
+    "y": 3.71
+   },
+   "to": {
+    "x": 6.5,
+    "y": 3.71
+   },
+   "end": [
+    6.512191186209546,
+    3.697153319562292
+   ],
+   "missed": 0.018,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "corridor (17,4) north into the room along the east wall, past the cabinet (17,3)",
+   "from": {
+    "x": 17.71,
+    "y": 4.6
+   },
+   "to": {
+    "x": 17.71,
+    "y": 2.4
+   },
+   "end": [
+    17.69209369873481,
+    2.4191250472890324
+   ],
+   "missed": 0.026,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "row-5 south wall east, past the bin (17,5)",
+   "from": {
+    "x": 16.4,
+    "y": 5.71
+   },
+   "to": {
+    "x": 19.6,
+    "y": 5.71
+   },
+   "end": [
+    19.569528365908027,
+    5.7060638499246465
+   ],
+   "missed": 0.031,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "corridor (23,6) north along the east wall, round the cart (23,5) to the corridor end",
+   "from": {
+    "x": 23.71,
+    "y": 6.6
+   },
+   "to": {
+    "x": 23.45,
+    "y": 5.32
+   },
+   "end": [
+    23.443900567425874,
+    5.333189429183346
+   ],
+   "missed": 0.015,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "row-11 south wall east, past the bins (8,11), (14,11) and the shelving (13,11)",
+   "from": {
+    "x": 6.6,
+    "y": 11.71
+   },
+   "to": {
+    "x": 15.6,
+    "y": 11.71
+   },
+   "end": [
+    15.567055684489398,
+    11.693190135575527
+   ],
+   "missed": 0.037,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "doorway (3,12) south along the east wall, round the locker (3,13) into the room",
+   "from": {
+    "x": 3.71,
+    "y": 12.4
+   },
+   "to": {
+    "x": 3.5,
+    "y": 14.5
+   },
+   "end": [
+    3.4994300162339016,
+    14.481319276551428
+   ],
+   "missed": 0.019,
+   "stallFrames": 0,
+   "longestStall": 0
+  },
+  {
+   "label": "doorway (9,12) south along the east wall, round the bookshelf (9,13) into the room",
+   "from": {
+    "x": 9.71,
+    "y": 12.4
+   },
+   "to": {
+    "x": 9.5,
+    "y": 14.5
+   },
+   "end": [
+    9.49897017547305,
+    14.450481223783571
+   ],
+   "missed": 0.05,
+   "stallFrames": 0,
+   "longestStall": 0
+  }
+ ],
+ "samples": 5506,
+ "overlapping": 0,
+ "first": null
+}

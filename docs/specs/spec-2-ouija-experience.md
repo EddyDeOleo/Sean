@@ -356,6 +356,9 @@ A failed retrieval MUST NOT be presented as a successful revelation.
 
 The interface MUST communicate the failure and provide a recovery action when possible.
 
+Approved decision (owner, Option B): a failed, cancelled, incomplete or unavailable investigation does not block gameplay.
+The game starts with fictional atmosphere clues, labelled as fiction. The technical reason is shown on the game intro as a separate status line, never as fiction, and no repository finding is presented. A retry is never required before the game can start.
+
 ### 7.6 Cancelled Investigation
 
 A cancelled investigation MUST NOT be presented as a successful conclusion or as proof of insufficient historical evidence.

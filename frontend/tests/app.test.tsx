@@ -44,26 +44,51 @@ interface Harness {
   interpret: ReturnType<typeof vi.fn>;
   investigate: ReturnType<typeof vi.fn>;
   profile: ReturnType<typeof vi.fn>;
+  answer: ReturnType<typeof vi.fn>;
 }
+const answerLocal = async () => ok({ provider: "deterministic", ai_status: "NOT_REQUESTED", answer: null, evidence: [], limitations: ["No AI answer was produced in this test."] });
+/** A valid Groq answer that cites its one evidence item, as the backend returns it. */
+const answerGroq = (ai_status = "AI_USED") =>
+  async () =>
+    ok({
+      provider: "groq",
+      ai_status,
+      answer: {
+        answer: "The HTTP API is kept apart by the application layer, which the API calls.",
+        summary: "A layered design.",
+        claims: [{ text: "The API calls the application services.", basis: "DOCUMENTED", evidence_ids: ["E1"] }],
+        limitations: ["The evidence is one file."],
+        recommendations: [],
+        confidence: "MEDIUM",
+        answer_type: "explanation",
+      },
+      evidence: [{ evidence_id: "E1", path: "backend/app/api/advisor_routes.py", start_line: 1, end_line: 12, why: "matches the question", commit: "abc1234", classification: "DOCUMENTED", excerpt: "class InterpretIn(BaseModel):" }],
+      limitations: [],
+    });
+/** A fallback answer, as the backend returns it when no valid Groq answer was produced. */
+const answerFallback = (ai_status: string) =>
+  async () =>
+    ok({ provider: "deterministic", ai_status, answer: null, evidence: [], limitations: ["No AI answer was produced."] });
 const aiOn = async () => {
   const body = clone(capabilitiesFixture().body);
   body.ai_interpreter.available = true;
   return ok(body);
 };
 
-function harness(over: Partial<{ interpret: (...a: never[]) => unknown; investigate: (...a: never[]) => unknown; profile: (...a: never[]) => unknown; storage: SnapshotStorage }> = {}): Harness {
+function harness(over: Partial<{ interpret: (...a: never[]) => unknown; investigate: (...a: never[]) => unknown; profile: (...a: never[]) => unknown; answer: (...a: never[]) => unknown; storage: SnapshotStorage }> = {}): Harness {
   const storage = over.storage ?? createIndexedDbStorage(new IDBFactory());
   const interpret = vi.fn((over.interpret as never) ?? plan(interpretInvestigate().body));
   const investigate = vi.fn((over.investigate as never) ?? resultOk);
   const profile = vi.fn((over.profile as never) ?? profileOk);
+  const answer = vi.fn((over.answer as never) ?? answerLocal);
   return {
-    storage, interpret, investigate, profile,
+    storage, interpret, investigate, profile, answer,
     props: {
       storage,
       systemPrefersReducedMotion: false,
       listRepositories: async () => ok(repositoriesFixture().body.repositories),
       getCapabilities: async () => ok(capabilitiesFixture().body),
-      analysisDeps: { interpret: interpret as never, investigate: investigate as never, profile: profile as never, makeId: (() => { let n = 0; return () => `snap-${++n}`; })(), now: () => new Date("2026-11-12T10:00:00.000Z") },
+      analysisDeps: { interpret: interpret as never, investigate: investigate as never, profile: profile as never, answer: answer as never, makeId: (() => { let n = 0; return () => `snap-${++n}`; })(), now: () => new Date("2026-11-12T10:00:00.000Z") },
     },
   };
 }
@@ -221,8 +246,11 @@ describe("the report keeps the evidence and the labels exactly", () => {
     await mount(h);
     await ask("sample - Why?");
     await click(document.querySelector(`[data-evidence-id="${first.evidence_id}"] button`)!);
-    expect(document.querySelector("img")).toBeNull();
+    // Scoped to the report: the sidebar logo is a legitimate image outside the report and is not evidence content.
+    expect(must("report").querySelector("img")).toBeNull();
     expect(document.querySelector("script")).toBeNull();
+    // The hostile title is shown as literal text, not parsed as markup.
+    expect(document.querySelector(`[data-evidence-id="${first.evidence_id}"]`)!.textContent).toContain("<img src=x onerror=alert(1)>");
     expect((window as unknown as { __xss?: number }).__xss).toBeUndefined();
     expect(must("evidence-detail").textContent).toContain("<script>window.__xss=1</script>");
     for (const a of Array.from(document.querySelectorAll("main a[href]"))) {
@@ -286,6 +314,23 @@ describe("choices Sean does not make for the user", () => {
     expect(h.investigate).toHaveBeenCalledTimes(1);
     expect(h.investigate.mock.calls[0]![0].target.path).toBe(choices[0]);
     expect(tid("report")).not.toBeNull();
+  });
+
+  it("answers a question that names no file beside the chooser, and reuses that answer after a file is chosen", async () => {
+    const h = harness({ interpret: plan(interpretNeedsTarget().body), answer: answerGroq() });
+    await mount(h);
+    await ask("Which are the domain models?");
+    expect(h.investigate).not.toHaveBeenCalled();
+    expect(h.answer).toHaveBeenCalledTimes(1);
+    expect(must("section-answer")).not.toBeNull();
+    expect(text("answer-text")).toContain("application layer");
+    const group = must("file-candidates");
+    expect(allByRole("button", group).length).toBeGreaterThan(0);
+    await click(allByRole("button", group)[0]!);
+    await settle();
+    expect(h.answer).toHaveBeenCalledTimes(1);
+    expect(h.investigate).toHaveBeenCalledTimes(1);
+    expect(text("answer-text")).toContain("application layer");
   });
 
   it("offers the ambiguous definitions and asks again with the chosen one", async () => {
@@ -493,41 +538,135 @@ describe("navigation, settings and preferences", () => {
   });
 });
 
-describe("consent to use an AI provider", () => {
-  it("offers nothing to consent to when the backend has no AI provider", async () => {
+/** Every text a person can read or hear: text nodes and the attributes that are announced or shown as tooltips. */
+function visibleStrings(): string {
+  const attributes = Array.from(document.querySelectorAll("[aria-label],[title],[alt],[placeholder]")).flatMap((element) =>
+    ["aria-label", "title", "alt", "placeholder"].map((name) => element.getAttribute(name) ?? ""),
+  );
+  return `${document.body.textContent ?? ""} ${attributes.join(" ")}`;
+}
+describe("the answer belongs to the report", () => {
+  const follows = (first: HTMLElement, second: HTMLElement): boolean =>
+    Boolean(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING);
+  it.each([
+    ["a Groq answer", () => answerGroq()],
+    ["the deterministic fallback", () => answerFallback("AI_NOT_SENT")],
+  ])("%s sits in the report, before the findings it supports, and never inside Overview", async (_n, answer) => {
+    await mount(harness({ interpret: plan(interpretInvestigate().body), answer: answer() }));
+    await ask("sample - Why does src/billing.py validate the amount?");
+    const answerSection = must("section-answer");
+    expect(must("report").contains(answerSection)).toBe(true);
+    expect(must("section-overview").contains(answerSection)).toBe(false);
+    expect(follows(must("section-history"), answerSection)).toBe(true);
+    expect(follows(answerSection, must("section-findings"))).toBe(true);
+    expect(must("section-findings").textContent).not.toBe("");
+    expect(document.querySelectorAll('[data-testid="section-answer"]').length).toBe(1);
+  });
+  it("the answer's evidence is listed in the same report, and each item shows its excerpt", async () => {
+    await mount(harness({ interpret: plan(interpretAdvise().body), answer: answerGroq() }));
+    await ask("rich - improve our workflow with Kiro");
+    expect(must("answer-evidence").closest('[data-testid="report"]')).not.toBeNull();
+    expect(document.querySelectorAll("[data-evidence-id]").length).toBeGreaterThan(0);
+  });
+});
+
+describe("no provider is named in the user interface", () => {
+  it("the request screen, the settings and a report with a Groq answer name no provider", async () => {
+    const h = harness({ interpret: plan(interpretAdvise().body), answer: answerGroq() });
+    h.props.getCapabilities = aiOn;
+    await mount(h);
+    expect(visibleStrings()).not.toMatch(/groq/i);
+    await ask("rich - improve our workflow with Kiro");
+    expect(tid("answer-groq")).not.toBeNull();
+    expect(visibleStrings()).not.toMatch(/groq/i);
+    expect(text("provider-disclosure")).toMatch(/external AI service|AI service/);
+    expect(text("provider-disclosure")).toContain("30 days");
+  });
+  it("a saved report restored from storage names no provider either", async () => {
+    const h = harness({ interpret: plan(interpretAdvise().body), answer: answerGroq() });
+    h.props.getCapabilities = aiOn;
+    const first = await mount(h);
+    await ask("rich - improve our workflow with Kiro");
+    await settle();
+    await first.unmount();
+    await mount(h);
+    await click(allByRole("button", must("recent"))[0]!);
+    await settle();
+    expect(tid("report")).not.toBeNull();
+    expect(visibleStrings()).not.toMatch(/groq/i);
+  });
+});
+
+describe("the AI advisor is the default, with no consent step", () => {
+  it("shows no consent checkbox when no AI service is configured", async () => {
     await mount(harness());
     expect(tid("allow-ai")).toBeNull();
-    expect(tid("ai-disclosure")).toBeNull();
+    expect(text("ai-provider-note")).toContain("not configured");
   });
-
-  it("offers an unchecked, explained choice when one exists, and sends consent for one request only", async () => {
+  it("shows no consent checkbox when an AI service is configured, and says AI answers are on", async () => {
     const h = harness();
     h.props.getCapabilities = aiOn;
     await mount(h);
-    const box = must("allow-ai") as HTMLInputElement;
-    expect(box.checked).toBe(false);
-    expect(text("ai-disclosure")).toContain("nothing from the repository");
-    expect(text("ai-disclosure")).toContain("may keep it");
-
-    await ask("sample - Why did it change?");
-    expect(h.interpret.mock.calls[0]![0].allow_ai).toBe(false);
-
-    await click(byRole("button", "New Investigation") as HTMLElement);
-    await settle();
-    await click(must("allow-ai"));
-    expect((must("allow-ai") as HTMLInputElement).checked).toBe(true);
-    await ask("sample - Why did it change?");
-    expect(h.interpret.mock.calls[1]![0].allow_ai).toBe(true);
-
-    await click(byRole("button", "New Investigation") as HTMLElement);
-    await settle();
-    expect((must("allow-ai") as HTMLInputElement).checked).toBe(false);
+    expect(tid("allow-ai")).toBeNull();
+    expect(text("ai-provider-note")).toContain("AI-assisted answers are on");
   });
-
-  it("never sends consent when the choice is not offered", async () => {
+  it("sends the question without any consent field", async () => {
     const h = harness();
     await mount(h);
-    await ask("sample - Why?");
-    expect(h.interpret.mock.calls[0]![0].allow_ai).toBe(false);
+    await ask("sample - Why did it change?");
+    expect(h.interpret.mock.calls[0]![0]).not.toHaveProperty("allow_ai");
+  });
+  it("the transparency section explains the external processing and the retention terms, without naming a provider", async () => {
+    await mount(harness({ interpret: plan(interpretAdvise().body), answer: answerGroq() }));
+    await ask("rich - improve our workflow with Kiro");
+    expect(text("provider-disclosure")).toContain("When an AI service is configured");
+    expect(text("provider-disclosure")).toContain("30 days");
+  });
+});
+
+describe("how the report presents each answer source", () => {
+  const question = "Why do layered architectures keep the HTTP API separate from the application logic?";
+  it("a Groq answer is shown first, with its claim, its evidence, and its limitation", async () => {
+    const h = harness({ interpret: plan({ ...interpretAdvise().body, repository_id: "sample", question }), answer: answerGroq() });
+    await mount(h);
+    await ask(`sample - ${question}`);
+    expect(tid("section-answer")).not.toBeNull();
+    expect(tid("answer-groq")).not.toBeNull();
+    expect(text("answer-text")).toContain("kept apart by the application layer");
+    expect(text("answer-claims")).toContain("DOCUMENTED");
+    expect(text("answer-limitations")).toContain("The evidence is one file.");
+    expect(document.querySelector('[data-evidence-id="E1"]')).not.toBeNull();
+    expect(tid("report")).not.toBeNull();
+    expect(tid("section-advisor")).not.toBeNull();
+  });
+  it("an accepted Groq investigation runs on its target and shows its answer", async () => {
+    const h = harness({ interpret: plan({ ...interpretInvestigate().body, interpreter: "groq", ai_status: "AI_USED" }), answer: answerGroq() });
+    await mount(h);
+    await ask("sample - Why does src/billing.py validate the amount?");
+    expect(h.investigate).toHaveBeenCalledTimes(1);
+    expect(tid("answer-groq")).not.toBeNull();
+  });
+  it("without a Groq answer the report says that it is a local result, and why", async () => {
+    await mount(harness({ interpret: plan({ ...interpretAdvise().body, repository_id: "rich" }) }));
+    await ask("rich - improve our workflow with Kiro");
+    expect(tid("answer-local")).not.toBeNull();
+    expect(text("ai-status")).toContain("Not requested");
+    expect(text("answer-local")).toContain("No AI answer was produced");
+  });
+  it("a failed AI attempt is shown as a failure, and the report never says that no AI was used", async () => {
+    await mount(harness({ interpret: plan({ ...interpretAdvise().body, repository_id: "rich" }), answer: answerFallback("AI_HTTP_ERROR") }));
+    await ask("rich - improve our workflow with Kiro");
+    expect(text("ai-status")).toContain("The AI service refused the request. Sean used its built-in reader.");
+  });
+  it("an answer that did not match the contract is shown as unusable, not as Groq's", async () => {
+    await mount(harness({ interpret: plan({ ...interpretAdvise().body, repository_id: "rich" }), answer: answerFallback("AI_NO_USABLE_ANSWER") }));
+    await ask("rich - improve our workflow with Kiro");
+    expect(text("ai-status")).toContain("Answered, but nothing it said matched the repository.");
+    expect(tid("answer-groq")).toBeNull();
+  });
+  it("a question that could not be made safe to send is said so", async () => {
+    await mount(harness({ interpret: plan({ ...interpretAdvise().body, repository_id: "rich" }), answer: answerFallback("AI_NOT_SENT") }));
+    await ask("rich - Explain the sample rate in the audio code");
+    expect(text("ai-status")).toContain("Not sent.");
   });
 });

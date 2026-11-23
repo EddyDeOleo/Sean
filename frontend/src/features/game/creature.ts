@@ -88,6 +88,8 @@ export interface CreatureView {
   /** Seconds of the world clock, for slow idle motion. */
   time: number;
   reducedMotion: boolean;
+  /** Tiles from the monster to the player. The attack's lunge never goes closer than a short distance. */
+  distance?: number;
 }
 
 export class Creature {
@@ -227,8 +229,8 @@ export class Creature {
     this.waist.add(this.neck);
     this.group.add(this.waist);
 
-    // A faint cold glow that makes the creature readable in the dark without lighting the room.
-    this.light = new THREE.PointLight(0x7d93b0, 0.55, 2.6, 2);
+    // A faint red glow that makes the creature readable in the dark without lighting the room. Deep crimson, not blue.
+    this.light = new THREE.PointLight(0x8a0812, 0.55, 2.6, 2);
     this.light.position.set(0.05, 0.75, 0);
     this.group.add(this.light);
     this.pose({ state: "DORMANT", speed: 0, lunging: false, playerBearing: 0, watching: false, time: 0, reducedMotion: true }, 0);

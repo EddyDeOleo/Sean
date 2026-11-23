@@ -8,7 +8,7 @@ import {
   createIndexedDbStorage,
   type SnapshotStorage,
 } from "../src/features/report/reportStore";
-import { MAX_ARTIFACT_RECORDS, buildSnapshot, isInterludeEligible, parseSnapshot, summarize, type ReportSnapshot, type SnapshotInput } from "../src/features/report/reportSnapshot";
+import { MAX_ARTIFACT_RECORDS, buildSnapshot, parseSnapshot, summarize, type ReportSnapshot, type SnapshotInput } from "../src/features/report/reportSnapshot";
 import { clone, complete, insufficient, profileRich } from "./fixtures";
 
 const input = (over: Partial<SnapshotInput> = {}): SnapshotInput => ({
@@ -69,13 +69,6 @@ describe("snapshot", () => {
     expect(parseSnapshot(raw)).toBeNull();
   });
 
-  it("interlude eligibility follows the investigation, or the advisory mode", () => {
-    expect(isInterludeEligible(snapshot())).toBe(true);
-    expect(isInterludeEligible(snapshot({ investigation: clone(insufficient().body) }))).toBe(false);
-    expect(isInterludeEligible(snapshot({ investigation: null, analysis: clone(profileRich().body), input: input({ mode: "ADVISE", target_path: null, symbol: null }) }))).toBe(true);
-    // An investigation request whose investigation did not produce a result is not eligible, even if the profile worked.
-    expect(isInterludeEligible(snapshot({ investigation: null, investigationNote: "failed" }))).toBe(false);
-  });
 
   it("summary counts only adoptable recommendations", () => {
     const summary = summarize(snapshot());
@@ -214,5 +207,38 @@ describe("artifact records (review follow-up)", () => {
       bad.artifacts[0].path = path;
       expect(parseSnapshot(bad)).toBeNull();
     }
+  });
+});
+
+describe("a saved report that was interpreted by Groq", () => {
+  const groqInput = (over: Partial<SnapshotInput> = {}): SnapshotInput => ({
+    ...input(),
+    mode: "ADVISE",
+    interpreter: "groq",
+    ai_status: "AI_USED",
+    target_path: null,
+    symbol: null,
+    question: "Why do layered architectures keep the HTTP API separate from the application logic?",
+    ...over,
+  });
+  it("is saved and reopened with its attribution and its AI status unchanged", () => {
+    const s = buildSnapshot({
+      id: "groq-1", createdAt: "2026-11-14T21:20:00.000Z", input: groqInput(), investigation: null,
+      investigationNote: "No file history was requested for an advisory request.", analysis: clone(profileRich().body), analysisNote: null,
+    });
+    const reopened = parseSnapshot(JSON.parse(JSON.stringify(s)));
+    expect(reopened).not.toBeNull();
+    expect(reopened!.input.interpreter).toBe("groq");
+    expect(reopened!.input.ai_status).toBe("AI_USED");
+    expect(reopened!.input.mode).toBe("ADVISE");
+  });
+  it("a record with an unknown interpreter or AI status is discarded, not shown", () => {
+    const s = buildSnapshot({
+      id: "groq-2", createdAt: "2026-11-14T21:20:00.000Z", input: groqInput(), investigation: null,
+      investigationNote: "x", analysis: clone(profileRich().body), analysisNote: null,
+    });
+    const raw = JSON.parse(JSON.stringify(s));
+    expect(parseSnapshot({ ...raw, input: { ...raw.input, interpreter: "gemini" } })).toBeNull();
+    expect(parseSnapshot({ ...raw, input: { ...raw.input, ai_status: "AI_GUESSED" } })).toBeNull();
   });
 });

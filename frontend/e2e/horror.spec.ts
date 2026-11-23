@@ -51,17 +51,39 @@ test.describe("the game: the surprise after a prompt, and the demo in Settings",
     await expect(error).toHaveAttribute("data-kind", "NETWORK");
     await expect(error).toContainText("could not be reached");
     await expect(error).toContainText("says nothing about the repository");
-    // The game is the surprise after a prompt. A failure offers no game in its place.
+    // With the game turned off in Settings (quiet), a failure offers no game. With the game on, it still starts: see the test
+    // "a failed investigation still starts the game".
     await expect(page.getByTestId("play-from-notice")).toHaveCount(0);
     await expect(page.getByTestId("game-intro")).toHaveCount(0);
     // Retry, once the network is back.
     await page.unroute("**/api/interpret");
     await page.getByTestId("retry-analysis").click();
-    await expect(page.getByTestId("report")).toBeVisible();
+    // The retry runs the whole analysis again. On a cold backend the profile can take longer than the default wait (observed:
+    // the page stayed on "Reading the committed repository" past 15 s), so this wait is longer. A failure still ends the test.
+    await expect(page.getByTestId("report")).toBeVisible({ timeout: 60_000 });
     await expect(page.getByTestId("report-status")).toHaveText("COMPLETE");
     await expect(page.getByTestId("report-classification")).toHaveText("DOCUMENTED");
   });
 
+  test("a failed investigation still starts the game, with atmosphere clues and a technical note that is not fiction", async ({ page }) => {
+    // The horror setting is on: the game is the surprise after a prompt. Gameplay must not depend on the investigation.
+    await quiet(page, { horror: true });
+    await page.route("**/api/interpret", (route) => route.abort());
+    await page.goto("/");
+    await submit(page);
+    await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 60_000 });
+    // The technical reason is shown as a status, separate from the fiction.
+    await expect(page.getByTestId("game-investigation-note")).toContainText("could not be reached");
+    await expect(page.getByTestId("game-investigation-note")).toContainText("no repository finding is shown");
+    // No repository finding is presented: every clue is fiction and says so.
+    await expect(page.getByTestId("game-clue-source")).toContainText("not tied to any report");
+    await page.getByTestId("game-begin").click();
+    await expect(page.getByTestId("clue-counter")).toHaveText(/Clues 0 \//);
+    await expect(page.getByTestId("game")).toHaveAttribute("data-phase", "GAME_ACTIVE");
+    await page.keyboard.press("Escape");
+    await page.getByTestId("game-quit").click();
+    await expect(page.getByTestId("game")).toHaveCount(0);
+  });
   test("after a failed investigation the demo in Settings still plays, with no report behind it", async ({ page }) => {
     await quiet(page);
     await page.route("**/api/interpret", (route) => route.abort());
@@ -110,7 +132,7 @@ test.describe("the game: the surprise after a prompt, and the demo in Settings",
     await page.getByTestId("game-quit").click();
     await expect(page.getByTestId("report")).toBeVisible();
     // The clue is a real record of the report, word for word.
-    expect((await page.getByTestId("report").innerText())).toContain(text.replace(/…$/, ""));
+    expect((await page.getByTestId("report").innerText())).toContain(text.replace(/ï¿½$/, ""));
     await expect(page.getByTestId("report-status")).toHaveText("COMPLETE");
     await expect(page.getByTestId("report-classification")).toHaveText("DOCUMENTED");
   });
@@ -224,5 +246,28 @@ test.describe("being caught", () => {
     await shot(page, "54-caught-no-scare");
     await page.getByTestId("game-giveup").click();
     await expect(page.getByTestId("game")).toHaveCount(0);
+  });
+});
+
+test.describe("the creature appears with the first evidence fragment", () => {
+  test("hidden until the first fragment, then visible and unchanged by later fragments", async ({ page }) => {
+    await enterStandalone(page, { intensity: "normal", quality: "medium" });
+    await begin(page);
+    const canvas = page.getByTestId("game-canvas");
+    // Before any fragment the creature is not drawn, and it is still dormant.
+    await expect(canvas).toHaveAttribute("data-creature-visible", "false");
+    expect((await read(page))!.monster).toBe("DORMANT");
+    // Explore for a moment without collecting anything. It stays hidden.
+    const keys = new Keys(page);
+    await keys.set(["KeyW"]);
+    await page.waitForTimeout(1500);
+    await keys.release();
+    await expect(canvas).toHaveAttribute("data-creature-visible", "false");
+    // The first fragment makes it visible straight away.
+    expect(await walkTo(page, LEVEL.clueSpots[0]!, { gateOpen: false })).toBe(true);
+    await expect(canvas).toHaveAttribute("data-creature-visible", "true");
+    // A later fragment does not change the visibility.
+    expect(await walkTo(page, LEVEL.clueSpots[1]!, { gateOpen: false })).toBe(true);
+    await expect(canvas).toHaveAttribute("data-creature-visible", "true");
   });
 });

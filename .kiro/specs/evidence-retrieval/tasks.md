@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan turns the Evidence Retrieval requirements and design into ordered implementation tasks. It has 20 top-level tasks and 55 subtasks (75 checkboxes). Checkbox state is not a status record. Status is recorded in phase-status. Each task lists the requirements it covers.
+This plan turns the Evidence Retrieval requirements and design into ordered implementation tasks. It has 20 top-level tasks and 55 subtasks (75 checkboxes). Checkboxes follow the shared convention in the Notes section. Status is recorded in phase-status. Each task lists the requirements it covers.
 
 **Status (2026-11-12): the amended text below is the Native Spec task baseline. Owner regularization is recorded in phase-status section 42. Provenance of each change is recorded there.** The earlier header, "NOT APPROVED. No task may start.", contradicted the owner's OD-16 approval and the task authorizations recorded in `.kiro/reports/phase-status.md` (sections 7 to 38). Task state is recorded in phase-status and the Phase 3 closure report. The checkboxes in this file are not a status record. The conditions below still apply to any task that has no recorded owner authorization:
 
@@ -121,66 +121,66 @@ Not drawn: task 19 depends on every task from 0 to 18. The table lists this depe
 
 ## Tasks
 
-- [ ] 0. Implementation gate check
+- [x] 0. Implementation gate check
   - Confirm each gate in Spec 1 §25 and Architecture §25: approved documents, verified Kiro configuration formats for 1.4.121, Windows dependency compatibility, the Golden repository and baseline (D03), the license holder before any `LICENSE` file, and the cross-document consistency review.
   - Confirm that the owner decisions are recorded in `design.md` (E-D1, E-D2, E-D4, E-D9, C-D1 to C-D4, C-D6 to C-D10, and DEC-13 keep-as-is). C-D5 (`investigation_id` format) is decided: a UUID version 4 string. Task 15.1 records that confirmation. Confirm that no open decision is needed by the task being started.
   - Report each gate as closed or open. Do not infer closure from document approval alone.
   - _Requirements: Spec 1 §25; Architecture §25_
 
-- [ ] 1. Repository registration and selection (depends on 0; owner decision E-D1 must be recorded first)
-  - [ ] 1.1 Define the registry JSON file at `%LOCALAPPDATA%\Sean\config\repositories.json` with the schema in `design.md` ("Repository registration and selection"): `schema_version`, and entries with `repository_id`, `root`, and optional `github` (`owner`, `name`). Reject unknown keys (E-D1, DEC-3).
-  - [ ] 1.2 Implement read-only loading at startup in `repository`, with validation of each entry. Exclude and report invalid entries, and keep the others working. Provide one resolve function that returns the resolved root and GitHub identity, and returns `REPOSITORY_NOT_FOUND` or `REPOSITORY_UNAVAILABLE`.
-  - [ ] 1.3 Read the explicit `github` object from the entry. Return `GITHUB_IDENTITY_UNRESOLVED` when it is absent. Never derive owner or name from a Git remote (E-D2, DEC-4).
+- [x] 1. Repository registration and selection (depends on 0; owner decision E-D1 must be recorded first)
+  - [x] 1.1 Define the registry JSON file at `%LOCALAPPDATA%\Sean\config\repositories.json` with the schema in `design.md` ("Repository registration and selection"): `schema_version`, and entries with `repository_id`, `root`, and optional `github` (`owner`, `name`). Reject unknown keys (E-D1, DEC-3).
+  - [x] 1.2 Implement read-only loading at startup in `repository`, with validation of each entry. Exclude and report invalid entries, and keep the others working. Provide one resolve function that returns the resolved root and GitHub identity, and returns `REPOSITORY_NOT_FOUND` or `REPOSITORY_UNAVAILABLE`.
+  - [x] 1.3 Read the explicit `github` object from the entry. Return `GITHUB_IDENTITY_UNRESOLVED` when it is absent. Never derive owner or name from a Git remote (E-D2, DEC-4).
   - _Requirements: 1.1 to 1.7_
 
-- [ ] 2. Path containment and input validation (depends on 1)
-  - [ ] 2.1 Apply the path rules in canonical C.3a, implemented once in `repository`, to normalize repository-relative paths. Verify junction and reparse-point handling on Windows. Reject traversal, drive letters, UNC paths, alternate data streams, reserved names, and trailing dots or spaces.
-  - [ ] 2.2 Check containment on resolved paths, including symbolic links and junctions.
-  - [ ] 2.3 Validate symbol and file inputs before any use.
-  - [ ] 2.4 Request a security review before this task closes, because it handles paths (Playbook §8).
+- [x] 2. Path containment and input validation (depends on 1)
+  - [x] 2.1 Apply the path rules in canonical C.3a, implemented once in `repository`, to normalize repository-relative paths. Verify junction and reparse-point handling on Windows. Reject traversal, drive letters, UNC paths, alternate data streams, reserved names, and trailing dots or spaces.
+  - [x] 2.2 Check containment on resolved paths, including symbolic links and junctions.
+  - [x] 2.3 Validate symbol and file inputs before any use.
+  - [x] 2.4 Request a security review before this task closes, because it handles paths (Playbook §8).
   - _Requirements: 2.1, 2.4, 14.2 to 14.7_
 
-- [ ] 3. Guarded Git runner (depends on 1 and 16.1)
-  - [ ] 3.1 Implement the single subprocess function in `core`: argument array, explicit working directory, controlled environment, timeout, byte limit, no shell.
-  - [ ] 3.2 Add the option set that neutralizes repository-controlled programs. Verify it against the installed Git before relying on it (D02 §16.9 item 4).
-  - [ ] 3.3 Reject input that starts with `-` before it reaches Git.
-  - [ ] 3.4 Test that the runner passes no inherited secrets and reports errors without environment values.
+- [x] 3. Guarded Git runner (depends on 1 and 16.1)
+  - [x] 3.1 Implement the single subprocess function in `core`: argument array, explicit working directory, controlled environment, timeout, byte limit, no shell.
+  - [x] 3.2 Add the option set that neutralizes repository-controlled programs. Verify it against the installed Git before relying on it (D02 §16.9 item 4).
+  - [x] 3.3 Reject input that starts with `-` before it reaches Git.
+  - [x] 3.4 Test that the runner passes no inherited secrets and reports errors without environment values.
   - _Requirements: 14.1, 15.1 to 15.6_
 
-- [ ] 4. Target resolution (depends on 2, 3)
-  - [ ] 4.1 Resolve symbols and code regions in the current state, and return ambiguity with its candidates.
-  - [ ] 4.2 Continue historical search when the current location is absent.
+- [x] 4. Target resolution (depends on 2, 3)
+  - [x] 4.1 Resolve symbols and code regions in the current state, and return ambiguity with its candidates.
+  - [x] 4.2 Continue historical search when the current location is absent.
   - _Requirements: 2.2, 2.3_
 
-- [ ] 5. Historical retrieval (depends on 3, 4)
-  - [ ] 5.1 Retrieve commits for a file or symbol, including renames, moves, and deletions where history permits.
-  - [ ] 5.2 Detect shallow clones and missing history. Add the matching limitations and cap the retrieval status at `PARTIAL`.
-  - [ ] 5.3 Mark heuristic rename and copy detection as heuristic in the result.
-  - [ ] 5.4 Retrieve repository documentation whose history touches the target, return it as `DOCUMENTATION` evidence with its commit and path, and claim no documentation evidence when none is found (E-D16 scope).
+- [x] 5. Historical retrieval (depends on 3, 4)
+  - [x] 5.1 Retrieve commits for a file or symbol, including renames, moves, and deletions where history permits.
+  - [x] 5.2 Detect shallow clones and missing history. Add the matching limitations and cap the retrieval status at `PARTIAL`.
+  - [x] 5.3 Mark heuristic rename and copy detection as heuristic in the result.
+  - [x] 5.4 Retrieve repository documentation whose history touches the target, return it as `DOCUMENTATION` evidence with its commit and path, and claim no documentation evidence when none is found (E-D16 scope).
   - _Requirements: 3.1 to 3.4, 4.6_
 
-- [ ] 6. Blame retrieval with revision support (depends on 5)
-  - [ ] 6.1 Implement blame for a path and line range at a revision that is a full SHA-1 (40 characters) or SHA-256 (64 characters) object name, defaulting to HEAD when omitted (E-D4, DEC-14).
-  - [ ] 6.2 Reject every other revision value before any Git call, including branch names, tags, abbreviated SHAs, and expressions (`HEAD~1`, `a..b`, `@{...}`, `:/text`). Report `REVISION_NOT_FOUND` for a SHA that is not in the repository, and `PATH_NOT_FOUND` for a path missing at the resolved commit.
-  - [ ] 6.3 Report uncommitted lines as a limitation, without inventing a commit.
+- [x] 6. Blame retrieval with revision support (depends on 5)
+  - [x] 6.1 Implement blame for a path and line range at a revision that is a full SHA-1 (40 characters) or SHA-256 (64 characters) object name, defaulting to HEAD when omitted (E-D4, DEC-14).
+  - [x] 6.2 Reject every other revision value before any Git call, including branch names, tags, abbreviated SHAs, and expressions (`HEAD~1`, `a..b`, `@{...}`, `:/text`). Report `REVISION_NOT_FOUND` for a SHA that is not in the repository, and `PATH_NOT_FOUND` for a path missing at the resolved commit.
+  - [x] 6.3 Report uncommitted lines as a limitation, without inventing a commit.
   - _Requirements: 3.1, 13.1, 13.8_
 
-- [ ] 7. Evidence model and provenance (depends on 1)
-  - [ ] 7.1 Implement the evidence item fields and the source-type enumeration.
-  - [ ] 7.2 Derive identifiers from the namespace and source identifiers only.
-  - [ ] 7.3 Keep unavailable fields distinct from verified absence.
+- [x] 7. Evidence model and provenance (depends on 1)
+  - [x] 7.1 Implement the evidence item fields and the source-type enumeration.
+  - [x] 7.2 Derive identifiers from the namespace and source identifiers only.
+  - [x] 7.3 Keep unavailable fields distinct from verified absence.
   - _Requirements: 1.2, 4.1 to 4.5_
 
-- [ ] 8. Deterministic ranking (depends on 7)
-  - [ ] 8.1 Implement the Spec 1 §9 criteria with configurable weights (E-D5).
-  - [ ] 8.2 Implement the deterministic tie-break and store the per-criterion awards. Order by score descending, then by evidence_id ascending using ordinal UTF-8 byte comparison, with no locale collation and no case folding.
-  - [ ] 8.3 Treat missing metadata as no award, not as evidence.
+- [x] 8. Deterministic ranking (depends on 7)
+  - [x] 8.1 Implement the Spec 1 §9 criteria with configurable weights (E-D5).
+  - [x] 8.2 Implement the deterministic tie-break and store the per-criterion awards. Order by score descending, then by evidence_id ascending using ordinal UTF-8 byte comparison, with no locale collation and no case folding.
+  - [x] 8.3 Treat missing metadata as no award, not as evidence.
   - _Requirements: 6.1 to 6.5_
 
-- [ ] 9. GitHub metadata (depends on 1, 7)
-  - [ ] 9.1 Retrieve public pull request and issue records with timeouts, size bounds, and no redirects to other hosts (E-D8).
-  - [ ] 9.2 Validate that each record belongs to the registered repository. Return `GITHUB_IDENTITY_MISMATCH` otherwise.
-  - [ ] 9.3 Map rate-limit, network, and not-found outcomes to limitations, never to proof of absence.
+- [x] 9. GitHub metadata (depends on 1, 7)
+  - [x] 9.1 Retrieve public pull request and issue records with timeouts, size bounds, and no redirects to other hosts (E-D8).
+  - [x] 9.2 Validate that each record belongs to the registered repository. Return `GITHUB_IDENTITY_MISMATCH` otherwise.
+  - [x] 9.3 Map rate-limit, network, and not-found outcomes to limitations, never to proof of absence.
   - _Requirements: 5.1 to 5.4, 16.1 to 16.5_
 
 - [ ] 10. SQLite cache (depends on 9)
@@ -188,20 +188,20 @@ Not drawn: task 19 depends on every task from 0 to 18. The table lists this depe
   - [ ] 10.2 Flag stale entries served after a failed live request. Keep retrieval working when the cache is absent.
   - _Requirements: 17.1 to 17.4_
 
-- [ ] 11. Classification and retrieval status (depends on 5, 7, 8)
-  - [ ] 11.1 Implement the four retrieval statuses and the four classifications, as separate fields.
-  - [ ] 11.2 Implement the classification rules from the evidence supporting each claim.
+- [x] 11. Classification and retrieval status (depends on 5, 7, 8)
+  - [x] 11.1 Implement the four retrieval statuses and the four classifications, as separate fields.
+  - [x] 11.2 Implement the classification rules from the evidence supporting each claim.
   - _Requirements: 7.1 to 7.4, 8.1 to 8.3_
 
-- [ ] 12. Result assembly and consistency checks (depends on 11)
-  - [ ] 12.1 Assemble the investigation result with every field listed in Spec 1 §10.3.
-  - [ ] 12.2 Enforce the consistency rules in `design.md`. Return `INTERNAL_ERROR` as `FAILED` on violation. Never edit a value silently.
-  - [ ] 12.3 Keep cancellation separate from every status and classification.
+- [x] 12. Result assembly and consistency checks (depends on 11)
+  - [x] 12.1 Assemble the investigation result with every field listed in Spec 1 §10.3.
+  - [x] 12.2 Enforce the consistency rules in `design.md`. Return `INTERNAL_ERROR` as `FAILED` on violation. Never edit a value silently.
+  - [x] 12.3 Keep cancellation separate from every status and classification.
   - _Requirements: 9.1 to 9.8, 12.1 to 12.3_
 
-- [ ] 13. Deterministic explanation (depends on 12)
-  - [ ] 13.1 Build templates from verified fields that state the fact, the inference, and what is unknown.
-  - [ ] 13.2 Abstain when evidence is insufficient. Include source references and limitations.
+- [x] 13. Deterministic explanation (depends on 12)
+  - [x] 13.1 Build templates from verified fields that state the fact, the inference, and what is unknown.
+  - [x] 13.2 Abstain when evidence is insufficient. Include source references and limitations.
   - _Requirements: 10.1 to 10.3_
 
 - [ ] 14. Optional AI wording (DEFERRED by owner decision, 2026-11-10; depends on 13 and, before reconsideration, on the E-D13 decisions AI-3 and AI-5 to AI-10)
@@ -209,9 +209,9 @@ Not drawn: task 19 depends on every task from 0 to 18. The table lists this depe
   - [ ] 14.2 Accept only the verified fields as input. Reject output that adds facts or removes limitations. Fall back to the deterministic explanation on any failure.
   - _Requirements: 11.1 to 11.4_
 
-- [ ] 15. HTTP investigation endpoint
-  - [ ] 15.1 (depends on: design approval; owner decision C-D5, recorded as UUID v4) Confirm the canonical contract in `design.md` (section "Shared integration contract (canonical)"). The owner decisions recorded in its C.13 table are closed. This task records the confirmation only. It is a documentation step with no code, and it depends on no other task and on no Ouija task.
-  - [ ] 15.2 (depends on: tasks 12, 13.1, and 13.2; task 15.1; owner decision C-D5) Implement `POST /investigations` in `api` with the status mapping in design C.11 (200 for any category A result, 400, 404, 409 for `TARGET_AMBIGUOUS`, 503, and 500). It calls the investigation and explanation functions and nothing else. Map each error to category A, B, or C (design C.5). Never return a category B error as an investigation result.
+- [x] 15. HTTP investigation endpoint
+  - [x] 15.1 (depends on: design approval; owner decision C-D5, recorded as UUID v4) Confirm the canonical contract in `design.md` (section "Shared integration contract (canonical)"). The owner decisions recorded in its C.13 table are closed. This task records the confirmation only. It is a documentation step with no code, and it depends on no other task and on no Ouija task.
+  - [x] 15.2 (depends on: tasks 12, 13.1, and 13.2; task 15.1; owner decision C-D5) Implement `POST /investigations` in `api` with the status mapping in design C.11 (200 for any category A result, 400, 404, 409 for `TARGET_AMBIGUOUS`, 503, and 500). It calls the investigation and explanation functions and nothing else. Map each error to category A, B, or C (design C.5). Never return a category B error as an investigation result.
   - _Requirements: 9.1, 9.8, 13.2_
 
 - [ ] 16. Configuration and observability (depends on 1)
@@ -220,9 +220,9 @@ Not drawn: task 19 depends on every task from 0 to 18. The table lists this depe
   - _Requirements: 18.1 to 18.4, 19.1, 19.2, 20.1 to 20.4_
 
 - [ ] 17. MCP adapter (depends on 6, 9, 12, and owner approval of this task)
-  - [ ] 17.1 Implementation prerequisites: the approved contract (15.1) and owner approval of this task. D02 closure is not needed to implement the module. Runtime enablement in Kiro is governed by 17.5 and owner decision C-D7.
-  - [ ] 17.2 Implement the four tools as thin adapters over the same functions as `api`. Validate inputs and return structured errors.
-  - [ ] 17.3 Implement STDIO entry point at `app.modules.mcp` with stdout reserved for protocol messages and logs on stderr.
+  - [x] 17.1 Implementation prerequisites: the approved contract (15.1) and owner approval of this task. D02 closure is not needed to implement the module. Runtime enablement in Kiro is governed by 17.5 and owner decision C-D7.
+  - [x] 17.2 Implement the four tools as thin adapters over the same functions as `api`. Validate inputs and return structured errors.
+  - [x] 17.3 Implement STDIO entry point at `app.modules.mcp` with stdout reserved for protocol messages and logs on stderr.
   - [ ] 17.4 Run the tool-level tests MCP-01 to MCP-18 (D02 §16.11).
   - [ ] 17.5 Validate or correct `.kiro/settings/mcp.json` against the implemented module. The owner decided to keep the file unchanged until this task (DEC-13). Change only what the implemented module requires. Do not start the module or enable the server in Kiro here. Enabling it for runtime use waits for D02 closure and Architecture §12.2 (C-D7).
   - _Requirements: 13.1 to 13.7_
@@ -243,7 +243,7 @@ Not drawn: task 19 depends on every task from 0 to 18. The table lists this depe
 
 Format note: Kiro's documentation describes checkbox tasks in `tasks.md` and a dependency graph that Kiro builds from that file. The exact syntax and how dependency text is recognized are not verified for IDE 1.4.121. The "depends on" text is written for human readers. Do not use "Run all Tasks" before the owner approves this plan.
 
-Status mapping: a `[ ]` checkbox means `NOT_STARTED`. No checkbox is marked complete for `VERIFIED` or `ACCEPTED`. Task status uses the Engineering Playbook §15 vocabulary (`NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `VERIFIED`, `ACCEPTED`). Only the owner marks `ACCEPTED`.
+Checkbox convention (all Sean specifications): `[x]` means the task is completed and its acceptance criteria are satisfied. `[ ]` means the task is not yet completed. A checked task is VERIFIED or ACCEPTED in `.kiro/reports/phase-status.md`, but the checkbox does not show which one. `phase-status.md` is the authoritative status record, including the IMPLEMENTED, VERIFIED, and ACCEPTED distinctions and the limitations of each task. A parent task is checked only when all of its subtasks are checked. Task status uses the Engineering Playbook §15 vocabulary (`NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `VERIFIED`, `ACCEPTED`). Only the owner marks `ACCEPTED`.
 
 ### Dependencies on the Ouija Experience spec
 

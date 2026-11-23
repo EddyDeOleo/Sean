@@ -158,3 +158,44 @@ describe("AI status in the interpretation", () => {
     expect(interpretAdvise().body.ai_status).toBeDefined();
   });
 });
+
+describe("representative accepted Groq interpretations (shape of the backend model, not a captured body)", () => {
+  // Built from the backend InterpretedRequest model (backend/app/modules/intent/parser.py). Sean returns exactly these nine fields.
+  const acceptedAdvise = {
+    mode: "ADVISE",
+    interpreter: "groq",
+    repository_id: "sean",
+    target_path: null,
+    symbol: null,
+    question: "Why do layered architectures keep the HTTP API separate from the application logic?",
+    candidates: [],
+    message: null,
+    ai_status: "AI_USED",
+  };
+  it("a Groq ADVISE answer that Sean accepted validates, with its values unchanged", () => {
+    const result = validateInterpreted(clone(acceptedAdvise));
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value).toEqual(acceptedAdvise);
+  });
+  it("a Groq INVESTIGATE answer with a target validates", () => {
+    const body = { ...acceptedAdvise, mode: "INVESTIGATE", repository_id: "sample", target_path: "src/billing.py", ai_status: "AI_USED" };
+    expect(validateInterpreted(body).ok).toBe(true);
+  });
+  it("an accepted NEEDS_TARGET answer keeps the deterministic plan and validates", () => {
+    const body = { ...acceptedAdvise, mode: "NEEDS_TARGET", interpreter: "deterministic", ai_status: "AI_USED" };
+    expect(validateInterpreted(body).ok).toBe(true);
+  });
+  it("every AI status the backend can return validates", () => {
+    const every = [
+      "NOT_REQUESTED", "NOT_NEEDED", "AI_USED", "AI_NO_USABLE_ANSWER", "AI_NOT_SENT", "AI_TIMEOUT", "AI_HTTP_ERROR",
+      "AI_CONNECTION_FAILED", "AI_PROTOCOL_ERROR", "AI_RESPONSE_TOO_LARGE", "AI_INVALID_REPLY", "AI_UNEXPECTED",
+    ];
+    for (const status of every) expect(validateInterpreted({ ...clone(acceptedAdvise), interpreter: "deterministic", ai_status: status }).ok, status).toBe(true);
+  });
+  it("an answer that breaks the contract is invalid, not shown as an interpretation", () => {
+    expect(validateInterpreted({ ...clone(acceptedAdvise), repository_id: null }).ok).toBe(false);
+    expect(validateInterpreted({ ...clone(acceptedAdvise), interpreter: "gemini" }).ok).toBe(false);
+    expect(validateInterpreted({ ...clone(acceptedAdvise), candidates: "src/billing.py" }).ok).toBe(false);
+    expect(validateInterpreted({ ...clone(acceptedAdvise), ai_status: "AI_OK" }).ok).toBe(false);
+  });
+});

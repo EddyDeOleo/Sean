@@ -1,0 +1,45 @@
+{
+  "phasesObserved": [
+    "ANTICIPATION",
+    "HOLD",
+    "DEFEAT_CARD"
+  ],
+  "samples": [
+    {
+      "index": 0,
+      "phase": "ANTICIPATION",
+      "elapsedSeconds": 0.09,
+      "file": "test-results-diagnostics/screenshots/cinematic/00-ANTICIPATION-90ms.png"
+    },
+    {
+      "index": 1,
+      "phase": "HOLD",
+      "elapsedSeconds": 1.125,
+      "file": "test-results-diagnostics/screenshots/cinematic/01-HOLD-1125ms.png"
+    },
+    {
+      "index": 2,
+      "phase": "DEFEAT_CARD",
+      "elapsedSeconds": 2.326,
+      "file": "test-results-diagnostics/screenshots/cinematic/02-DEFEAT_CARD-2326ms.png"
+    },
+    {
+      "index": 3,
+      "phase": "DEFEAT_CARD",
+      "elapsedSeconds": 3.264,
+      "file": "test-results-diagnostics/screenshots/cinematic/03-DEFEAT_CARD-3264ms.png"
+    },
+    {
+      "index": 4,
+      "phase": "DEFEAT_CARD",
+      "elapsedSeconds": 4.263,
+      "file": "test-results-diagnostics/screenshots/cinematic/04-DEFEAT_CARD-4263ms.png"
+    },
+    {
+      "index": 5,
+      "phase": "DEFEAT_CARD",
+      "elapsedSeconds": 5.263,
+      "file": "test-results-diagnostics/screenshots/cinematic/05-DEFEAT_CARD-5263ms.png"
+    }
+  ]
+}

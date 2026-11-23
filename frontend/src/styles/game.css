@@ -203,11 +203,12 @@
   transform: translate(-50%, 0);
 }
 
-/* The creature is shown alone for a moment, then the choices fade in over the bottom of the picture. */
+/* The creature is shown alone first. The choices stay hidden (not focusable, not clickable) until the cinematic has reached its
+   hold, then fade in over the bottom of the picture. The 1.4 s delay is CINEMATIC_TIMES.DEFEAT_CARD in cinematic.ts; a unit
+   test keeps the two equal. */
 .gm-caught[data-scare="true"] {
-  animation: gm-card-in 0.5s ease-out 1.1s both;
+  animation: gm-card-in 0.4s ease-out 1.4s both;
 }
-
 @keyframes gm-card-in {
   from {
     opacity: 0;
@@ -216,7 +217,17 @@
     opacity: 1;
   }
 }
-
+/* The defeat card is gated by the simulation's cinematic phase (set on the root by GameView). Animations override normal
+   declarations, so the gate is a plain rule and the keyframes do not set visibility. */
+.gm-root:not([data-cinematic-phase="DEFEAT_CARD"]) .gm-caught[data-scare="true"] {
+  visibility: hidden;
+}
+/* During the scare the normal HUD, the clue counter and the skip control are hidden: only the creature is on screen. */
+.gm-root[data-phase="PLAYER_CAUGHT"] .gm-hud,
+.gm-root[data-phase="PLAYER_CAUGHT"] .gm-clue,
+.il-overlay[data-phase="PLAYER_CAUGHT"] .il-skip {
+  visibility: hidden;
+}
 @media (prefers-reduced-motion: reduce) {
   .gm-caught[data-scare="true"] {
     animation: none;
