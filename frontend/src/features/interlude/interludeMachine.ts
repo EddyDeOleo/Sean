@@ -6,6 +6,7 @@
  * saved before it started and cannot be changed by anything that happens here. Every way out (escape, capture and giving up,
  * skip, quit, a game that fails to start) ends in REPORT_AVAILABLE.
  *
+ * Every way in (BEGIN with a report, BEGIN_GAME without one) starts with the Ouija.
  * Phases follow the lifecycle names of the owner directive:
  *   OFF -> OUIJA_INTRODUCTION -> OUIJA_ACTIVE -> NARRATIVE_INTERRUPTION -> GAME_INITIALIZATION -> GAME_ACTIVE
  *       -> PLAYER_CAUGHT (retry -> GAME_INITIALIZATION) | GAME_COMPLETED | GAME_SKIPPED -> REPORT_AVAILABLE
@@ -37,8 +38,10 @@ export interface InterludeState {
   beat: 0 | 1 | 2;
   attempts: number;
   endedBy: InterludeEnd | null;
-  /** The game was started on its own (the play button), not after an analysis. It has no report and no Ouija. */
+  /** The game has no report behind it (the demo, or an investigation without a report). It still opens with the Ouija. */
   standalone: boolean;
+  /** The user asked for the game itself (the demo): it follows the Ouija whatever the game settings say. */
+  gameRequested: boolean;
 }
 
 export const initialInterlude: InterludeState = {
@@ -50,11 +53,12 @@ export const initialInterlude: InterludeState = {
   attempts: 0,
   endedBy: null,
   standalone: false,
+  gameRequested: false,
 };
 
 export type InterludeEvent =
   | { type: "BEGIN"; snapshotId: string }
-  | { type: "BEGIN_GAME"; id: string }
+  | { type: "BEGIN_GAME"; id: string; requested?: boolean }
   | { type: "INTRO_DONE" }
   | { type: "STEP"; step: number }
   | { type: "SETTLED" }
@@ -100,9 +104,11 @@ export function interludeReducer(state: InterludeState, event: InterludeEvent): 
       return { ...initialInterlude, phase: "OUIJA_INTRODUCTION", snapshotId: event.snapshotId };
 
     case "BEGIN_GAME":
-      // The game on its own: straight to the game, no board and no interruption.
+      // A game with no report behind it (the demo, or an investigation that failed, was cancelled or ended without a report).
+      // The Ouija is a presentation stage, not a success screen: it plays here too, once, then the interruption, then the
+      // game. Nothing about the investigation is read or changed.
       if (state.phase !== "OFF" && state.phase !== "REPORT_AVAILABLE") return state;
-      return { ...initialInterlude, phase: "GAME_INITIALIZATION", snapshotId: event.id, attempts: 1, standalone: true };
+      return { ...initialInterlude, phase: "OUIJA_INTRODUCTION", snapshotId: event.id, standalone: true, gameRequested: event.requested === true };
 
     case "INTRO_DONE":
       return state.phase === "OUIJA_INTRODUCTION" ? { ...state, phase: "OUIJA_ACTIVE" } : state;
@@ -116,7 +122,8 @@ export function interludeReducer(state: InterludeState, event: InterludeEvent): 
       return state.phase === "NARRATIVE_INTERRUPTION" && state.beat === 1 ? { ...state, beat: 2 } : state;
     case "INTERRUPTION_DONE":
       if (state.phase !== "NARRATIVE_INTERRUPTION") return state;
-      return event.gameAllowed
+      // The demo was asked for explicitly, so its game always follows. Otherwise the game settings decide, as with a report.
+      return event.gameAllowed || state.gameRequested
         ? { ...state, phase: "GAME_INITIALIZATION", attempts: state.attempts + 1 }
         : { ...state, phase: "REPORT_AVAILABLE", endedBy: "NO_GAME" };
 

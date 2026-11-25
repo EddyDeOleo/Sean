@@ -165,7 +165,10 @@ def _asgi_with_headers(app, method, path, headers, payload=None):
         ({"host": "localhost:5173"}, True),
         ({"host": "[::1]:8000"}, True),
         ({"host": "127.0.0.1:5173", "origin": "http://127.0.0.1:5173"}, True),
-        ({"host": "localhost", "origin": "http://localhost:5273"}, True),
+        ({"host": "localhost", "origin": "http://localhost:5173"}, True),
+        # Amended 2026-11-23 (Spec 4 section 13): only exact loopback origins are accepted, not any localhost port.
+        ({"host": "localhost", "origin": "http://localhost:5273"}, False),
+        ({"host": "127.0.0.1:8000", "origin": "http://localhost:3000"}, False),
         ({"host": "evil.example"}, False),  # DNS rebinding
         ({"host": "127.0.0.1.evil.example"}, False),
         ({"host": ""}, False),

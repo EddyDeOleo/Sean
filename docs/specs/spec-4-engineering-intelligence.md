@@ -231,6 +231,12 @@ Repository content is untrusted data. No repository script, hook or command is e
 
 Controls added after the stage 2 review (all in new files):
 - A local-only guard (`app/api/local_guard.py`, included by `app.main_advisor`): the Host must be `127.0.0.1`, `localhost` or `[::1]`, and a request that carries an Origin must come from a localhost origin. This stops a web page in the browser from calling the API and defeats DNS rebinding. It also covers the Phase 3 route when served through `app.main_advisor`.
+- Amended 2026-11-23 (Sean Local + Web, Architecture A27, D05). The Host rule is unchanged. A browser Origin is accepted only if it is in one of two exact lists (scheme, host and port; no wildcards):
+  - `SEAN_LOOPBACK_ORIGINS`: loopback development origins. Unset means `http://127.0.0.1:5173` and `http://localhost:5173`; the value `none` means no loopback browser origin. Any other localhost port is refused.
+  - `SEAN_ALLOWED_ORIGINS`: web origins such as the Netlify site. A request from one of them must carry `Authorization: Bearer <token>`, except `GET /agent/status`, `POST /pair/start` and `POST /pair/complete`. A request body from one of them must be `application/json`; a request without a body (for example `POST /repositories/{id}/profile`) needs no media type. Only these origins get CORS headers (methods GET, POST, PUT, DELETE; headers `Content-Type`, `Authorization`, `X-Sean-Client`; no credentials).
+  - Pairing: `POST /pair/start` prints an 8-character code in the agent console only, never in a response or log. One code is active at a time, a new start waits 30 seconds after the last one, a code lasts 2 minutes and allows 5 attempts. `POST /pair/complete` returns a 256-bit token bound to the requesting origin. Tokens are kept in memory only, as SHA-256 hashes, and expire after 12 hours. Restarting the agent revokes every token.
+  - Every request body is limited to 64 KiB (`413`).
+  - Requests without an Origin header are unchanged.
 - At most 4 profile or interpret requests run at once. More get `429 BUSY`. Profiles are cached per repository and HEAD, so repeated requests do not start new Git processes.
 - Absence is never reported as proof. A scan with a limit hit, an unreadable history, or a skipped manifest yields `PARTIAL_EVIDENCE` and `LOW` confidence for every recommendation.
 - Repository-controlled strings that are echoed (paths, area names) are bounded, and the Groq adapter refuses redirects so the key header cannot be forwarded.

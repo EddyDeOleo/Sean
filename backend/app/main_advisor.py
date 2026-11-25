@@ -15,7 +15,8 @@ import os
 
 from app.api.advisor_routes import create_advisor_router
 from app.api.app import create_app
-from app.api.local_guard import LocalOnlyMiddleware
+from app.api.agent_auth import PairingService, add_agent_boundary
+from app.api.local_guard import loopback_origins_from_environment, web_origins_from_environment
 from app.core.diagnostics import configure_logging, register_secrets
 from app.core.env import load_local_environment
 from app.core.paths import local_data_dir
@@ -52,6 +53,8 @@ configure_logging(logging.getLogger("sean"))
 # 16), so adding, editing, or removing a repository needs no restart. The MCP entry point still loads the registry once.
 _holder = RegistryHolder(*load_snapshot(default_registry_path()))
 app = create_app(_holder)
-app.add_middleware(LocalOnlyMiddleware)
 app.include_router(create_advisor_router(_holder, groq_transport=transport_from_environment()))
 app.include_router(create_repository_router(_holder))
+
+# Sean Local + Web (Spec 4 section 13, amended 2026-11-23): exact origin lists, and configured web origins pair for a token.
+add_agent_boundary(app, loopback_origins_from_environment(), web_origins_from_environment(), PairingService())

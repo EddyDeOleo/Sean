@@ -17,8 +17,8 @@ export interface InterludeOptions {
 export interface Interlude {
   state: InterludeState;
   begin(snapshotId: string): void;
-  /** Start the game on its own. */
-  beginGame(id: string): void;
+  /** Start the Ouija and then the game with no report behind it. `requested`: the user asked for the game itself (the demo). */
+  beginGame(id: string, requested?: boolean): void;
   skip(): void;
   gameReady(): void;
   gameFailed(): void;
@@ -85,7 +85,7 @@ export function useInterlude(options: InterludeOptions): Interlude {
   return {
     state,
     begin: useCallback((snapshotId: string) => dispatch({ type: "BEGIN", snapshotId }), []),
-    beginGame: useCallback((id: string) => dispatch({ type: "BEGIN_GAME", id }), []),
+    beginGame: useCallback((id: string, requested = false) => dispatch({ type: "BEGIN_GAME", id, requested }), []),
     skip: useCallback(() => dispatch({ type: "SKIP" }), []),
     gameReady: useCallback(() => dispatch({ type: "GAME_READY" }), []),
     gameFailed: useCallback(() => dispatch({ type: "GAME_FAILED" }), []),

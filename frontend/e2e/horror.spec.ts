@@ -92,7 +92,8 @@ test.describe("the game: the surprise after a prompt, and the demo in Settings",
     await expect(page.getByTestId("analysis-error")).toBeVisible();
     await page.getByRole("button", { name: "Settings" }).click();
     await page.getByTestId("play-demo").click();
-    await expect(page.getByTestId("game-intro")).toBeVisible();
+    await expect(page.getByTestId("board")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 45_000 });
     await expect(page.getByTestId("game-clue-source")).toContainText("not tied to any report");
     await begin(page);
     await page.keyboard.press("Escape");

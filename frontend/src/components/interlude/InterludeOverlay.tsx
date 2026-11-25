@@ -64,9 +64,11 @@ export function InterludeOverlay({ state, question, reducedMotion, standalone = 
       {!inGame && phase !== "GAME_COMPLETED" && phase !== "GAME_SKIPPED" ? (
         <div className="il-stage" data-glitch={interrupted && state.beat === 1 && !reducedMotion}>
           <OuijaBoard step={state.step} settled={state.boardSettled} dim={interrupted} reducedMotion={reducedMotion} />
-          <p className="il-whisper" data-testid="whisper" aria-hidden={interrupted}>
-            The board remembers your question: <q><bdi>{shownQuestion}</bdi></q>
-          </p>
+          {shownQuestion ? (
+            <p className="il-whisper" data-testid="whisper" aria-hidden={interrupted}>
+              The board remembers your question: <q><bdi>{shownQuestion}</bdi></q>
+            </p>
+          ) : null}
           <div className="il-lines" role="status" aria-live="assertive" aria-atomic="false">
             {state.beat >= 1 ? <p className="il-line" data-testid="line-one">{FIRST_LINE}</p> : null}
             {state.beat >= 2 ? <p className="il-line il-line-two" data-testid="line-two">{SECOND_LINE}</p> : null}

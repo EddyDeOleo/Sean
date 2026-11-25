@@ -12,7 +12,8 @@ import os
 from pathlib import Path
 
 ENV_FILE = Path(__file__).resolve().parents[3] / ".kiro" / ".env"
-ALLOWED = ("SEAN_GROQ_API_KEY", "SEAN_GITHUB_TOKEN")
+# The two optional secrets, and the two origin lists of the local agent boundary (app/api/local_guard.py).
+ALLOWED = ("SEAN_GROQ_API_KEY", "SEAN_GITHUB_TOKEN", "SEAN_ALLOWED_ORIGINS", "SEAN_LOOPBACK_ORIGINS")
 
 
 def load_local_environment(path: Path = ENV_FILE) -> list[str]:

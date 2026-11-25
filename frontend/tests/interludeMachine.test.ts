@@ -55,6 +55,40 @@ describe("interlude machine: the path", () => {
   });
 });
 
+describe("interlude machine: a game without a report still opens with the Ouija", () => {
+  const throughBoard = (begin: InterludeEvent, gameAllowed: boolean): InterludeEvent[] => [
+    begin, { type: "INTRO_DONE" }, { type: "SETTLED" }, { type: "INTERRUPT" }, { type: "SECOND_LINE" }, { type: "INTERRUPTION_DONE", gameAllowed },
+  ];
+  it("BEGIN_GAME starts the board, not the game", () => {
+    const started = run([{ type: "BEGIN_GAME", id: "x" }]);
+    expect(started.phase).toBe("OUIJA_INTRODUCTION");
+    expect(started.standalone).toBe(true);
+    expect(started.attempts).toBe(0);
+    // Nothing can skip ahead to the game before the board and the interruption.
+    expect(interludeReducer(started, { type: "GAME_READY" })).toBe(started);
+    expect(interludeReducer(started, { type: "BEGIN_GAME", id: "y" })).toBe(started);
+  });
+  it("after the interruption the game follows, as attempt 1", () => {
+    const game = run(throughBoard({ type: "BEGIN_GAME", id: "x" }, true));
+    expect(game.phase).toBe("GAME_INITIALIZATION");
+    expect(game.attempts).toBe(1);
+  });
+  it("the game settings decide after a failed investigation; the demo always gets its game", () => {
+    const failed = run(throughBoard({ type: "BEGIN_GAME", id: "x" }, false));
+    expect(failed.phase).toBe("REPORT_AVAILABLE");
+    expect(failed.endedBy).toBe("NO_GAME");
+    const demo = run(throughBoard({ type: "BEGIN_GAME", id: "d", requested: true }, false));
+    expect(demo.phase).toBe("GAME_INITIALIZATION");
+  });
+  it("the board plays once per session: retry goes back to the game, not to the board", () => {
+    const caught = run([...throughBoard({ type: "BEGIN_GAME", id: "x" }, true), { type: "GAME_READY" }, { type: "CAUGHT" }]);
+    const retried = interludeReducer(caught, { type: "RETRY" });
+    expect(retried.phase).toBe("GAME_INITIALIZATION");
+    expect(retried.attempts).toBe(2);
+    expect(interludeReducer(caught, { type: "GIVE_UP" }).phase).toBe("GAME_SKIPPED");
+  });
+});
+
 describe("interlude machine: every exit ends at the report", () => {
   it.each([
     ["escape", [{ type: "ESCAPED" }] as InterludeEvent[], "ESCAPED"],

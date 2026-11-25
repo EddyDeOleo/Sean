@@ -16,6 +16,7 @@
 
 import type { BackendError, InvestigationRequest, InvestigationResult } from "../types/contract";
 import { validateResponse } from "../features/investigation/validateResponse";
+import { agentBaseUrl, agentFetch } from "./agentConnection";
 
 export type SubmitOutcome =
   | { kind: "result"; result: InvestigationResult }
@@ -32,7 +33,8 @@ export interface SubmitOptions {
 
 export type SubmitFn = (request: InvestigationRequest, options?: SubmitOptions) => Promise<SubmitOutcome>;
 
-export const DEFAULT_BASE_URL = "/api";
+/** "/api" through the Vite proxy in development; the local agent in a production build (agentConnection.ts). */
+export const DEFAULT_BASE_URL = agentBaseUrl();
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -59,7 +61,7 @@ export function toBackendError(status: number, body: unknown): BackendError {
 }
 
 export const submitInvestigation: SubmitFn = async (request, options = {}) => {
-  const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = fetch } = options;
+  const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = agentFetch } = options;
   let response: Response;
   try {
     response = await fetchImpl(`${baseUrl}/investigations`, {

@@ -552,10 +552,13 @@ export class GameRenderer {
       // The crimson light is brightest at the impact and eases back as the close-up settles, so the scene does not turn
       // uniformly red and the face stays readable.
       this.creature.light.intensity = 0.5 + 0.6 * cinematic.flash;
+      // Every build: GameView publishes this phase on its root, and game.css shows the defeat card ("You were caught",
+      // Try again, Give up) only at DEFEAT_CARD. Inside the development-only block it stayed null in production, so the
+      // card was never shown after a scare.
+      this.drawnCinematicPhase = cinematic.phase;
       // Development builds only: the browser capture waits for each phase by name.
       if (import.meta.env.DEV) {
         this.canvas.dataset.cinematicPhase = cinematic.phase;
-    this.drawnCinematicPhase = cinematic.phase;
         this.canvas.dataset.cinematicElapsed = this.caughtFor.toFixed(3);
       }
     } else {

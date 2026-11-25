@@ -45,6 +45,10 @@ def prepare(root: Path) -> dict[str, str]:
     environment["LOCALAPPDATA"] = str(root / "localappdata")
     environment["PYTHONPATH"] = str(REPOSITORY_ROOT / "backend")
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
+    # The origin lists of the agent boundary (backend/app/api/local_guard.py), set by the test configuration.
+    for key in ("SEAN_LOOPBACK_ORIGINS", "SEAN_ALLOWED_ORIGINS"):
+        if key in os.environ:
+            environment[key] = os.environ[key]
     return environment
 
 

@@ -11,7 +11,7 @@ import { createIndexedDbStorage, type SnapshotStorage } from "../src/features/re
 import type { CallOutcome } from "../src/services/advisorClient";
 import type { SubmitOutcome } from "../src/services/investigationClient";
 import { act, byRole, click, pressKey, render, type } from "./renderHelpers";
-import { capabilitiesFixture, clone, complete, insufficient, interpretInvestigate, interpretNeedsTarget, profileRich, repositoriesFixture } from "./fixtures";
+import { capabilitiesFixture, clone, complete, insufficient, interpretAdvise, interpretInvestigate, interpretNeedsTarget, profileRich, repositoriesFixture } from "./fixtures";
 
 const tid = (id: string): HTMLElement | null => document.querySelector(`[data-testid="${id}"]`);
 const ok = <T,>(value: T): CallOutcome<T> => ({ kind: "ok", value: clone(value) });
@@ -169,11 +169,15 @@ describe("the Investigate button starts the game, whatever the question", () => 
     await throughInterruption();
     expect(document.querySelectorAll('[data-testid="fake-game"]').length).toBe(1);
   });
-  it("a repository-level question starts the game at once, while the file chooser and its answer stay available", async () => {
+  it("a repository-level question (no report) plays the Ouija, then the game, while the file chooser and its answer stay available", async () => {
     await render(<App {...gameProps(clone(interpretNeedsTarget().body))} />);
     await settle();
     await ask("sample - Which are the domain models?");
-    await advance(200);
+    await advance(1700);
+    // Superseded owner decision: the game no longer starts at once without a report. The Ouija comes first, every time.
+    expect(tid("board")).not.toBeNull();
+    expect(tid("fake-game")).toBeNull();
+    await throughInterruption();
     expect(tid("fake-game")).not.toBeNull();
     await advance(20000);
     expect(tid("file-candidates")).not.toBeNull();
@@ -349,5 +353,88 @@ describe("review follow-up", () => {
     expect(tid("interlude")).toBeNull();
     expect(tid("report")).not.toBeNull();
     expect(tid("game-note")!.textContent).toMatch(/could not run/);
+  });
+});
+
+describe("the Ouija plays for every investigation outcome (owner decision: a presentation stage, not a success screen)", () => {
+  const rejected = (status: number, code: string) => ({ kind: "rejected", status, error: { code, message: `${code} message`, retryable: false } });
+  const answerNone = async () => ({ kind: "network" }) as never;
+  type Case = [string, Partial<NonNullable<AppProps["analysisDeps"]>>, { report: boolean; errorKind?: string; note?: RegExp }];
+  const cases: Case[] = [
+    ["a complete report", {}, { report: true }],
+    ["an incomplete report (the investigation could not be validated)", { investigate: (async () => ({ kind: "invalid", reason: "x" })) as never }, { report: true }],
+    ["a profile error with no investigation (no report at all)", { interpret: (async () => ok(interpretAdvise().body)) as never, profile: (async () => rejected(415, "UNSUPPORTED_MEDIA_TYPE")) as never }, { report: false, errorKind: "NOTHING_AVAILABLE", note: /did not complete/ }],
+    ["an analysis error (the investigation was rejected)", { investigate: (async () => rejected(400, "INVALID_INPUT")) as never }, { report: false, errorKind: "REQUEST_REJECTED", note: /did not accept the investigation/ }],
+    ["a timeout or an unreachable backend", { interpret: (async () => ({ kind: "network" })) as never }, { report: false, errorKind: "NETWORK", note: /could not be reached/ }],
+    ["the agent not connected (or pairing unavailable)", { interpret: (async () => rejected(401, "AGENT_NOT_PAIRED")) as never }, { report: false, errorKind: "REQUEST_REJECTED", note: /not connected to the Sean agent/ }],
+  ];
+  it.each(cases)("%s: board first, once, then the game, and the outcome is kept", async (_name, deps, expected) => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true }));
+    const base = props();
+    await render(<App {...base} renderGame={fakeGame} analysisDeps={{ ...base.analysisDeps!, answer: answerNone, ...deps }} />);
+    await settle();
+    await ask();
+    await advance(3100); // the report may wait up to three seconds for its save before the interlude starts
+    expect(tid("board")).not.toBeNull();
+    expect(tid("fake-game")).toBeNull();
+    await throughInterruption();
+    expect(tid("fake-game")).not.toBeNull();
+    expect(lastGame?.attempt).toBe(1);
+    expect(tid("board")).toBeNull();
+    expect(lastGame?.snapshot === null).toBe(!expected.report);
+    if (expected.note) expect(lastGame?.investigationNote ?? "").toMatch(expected.note);
+    // Leaving the game: the outcome is exactly what the investigation produced, and the board does not come back.
+    await act(async () => lastGame!.onQuit());
+    await advance(1000);
+    expect(tid("interlude")).toBeNull();
+    if (expected.report) expect(tid("report")).not.toBeNull();
+    else {
+      expect(tid("report")).toBeNull();
+      expect(tid("analysis-error")?.getAttribute("data-kind")).toBe(expected.errorKind);
+    }
+    await advance(20000);
+    expect(tid("board")).toBeNull();
+  });
+  it("a cancelled investigation: board first, then the game with the cancelled note", async () => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true }));
+    const base = props();
+    const never = (() => new Promise(() => undefined)) as never;
+    await render(<App {...base} renderGame={fakeGame} analysisDeps={{ ...base.analysisDeps!, answer: answerNone, interpret: never }} />);
+    await settle();
+    await ask();
+    await click(byRole("button", "Stop waiting") as HTMLElement);
+    await advance(200);
+    expect(tid("board")).not.toBeNull();
+    expect(tid("fake-game")).toBeNull();
+    await throughInterruption();
+    expect(lastGame?.investigationNote ?? "").toMatch(/cancelled/);
+  });
+  it("the demo opens with the board too, and its game follows even when the game setting is off", async () => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: false, skipGameplay: true }));
+    await render(<App {...props()} renderGame={fakeGame} />);
+    await settle();
+    await click(byRole("button", "Settings") as HTMLElement);
+    await click(tid("play-demo")!);
+    await advance(1700);
+    expect(tid("board")).not.toBeNull();
+    expect(tid("whisper")).toBeNull(); // no question behind the demo
+    expect(tid("fake-game")).toBeNull();
+    await throughInterruption();
+    expect(tid("fake-game")).not.toBeNull();
+    expect(lastGame?.standalone).toBe(true);
+  });
+  it("a failure with the game setting off still plays the board, then returns to the error", async () => {
+    window.localStorage.setItem("sean.settings.v1", JSON.stringify({ horror: true, skipGameplay: true }));
+    const base = props();
+    await render(<App {...base} renderGame={fakeGame} analysisDeps={{ ...base.analysisDeps!, answer: answerNone, interpret: (async () => ({ kind: "network" })) as never }} />);
+    await settle();
+    await ask();
+    await advance(200);
+    expect(tid("board")).not.toBeNull();
+    await throughInterruption();
+    await advance(1000);
+    expect(tid("fake-game")).toBeNull();
+    expect(tid("interlude")).toBeNull();
+    expect(tid("analysis-error")?.getAttribute("data-kind")).toBe("NETWORK");
   });
 });

@@ -1,0 +1,27 @@
+"$schema" = "https://open-api.netlify.com/netlify.schema.json"
+
+# Netlify build for Sean's frontend (React + Vite). See docs/deployment.md.
+# The frontend lives in frontend/, so it is the base directory; publish is relative to it.
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # The project is developed and verified with Node 24 (README, Getting started).
+  NODE_VERSION = "24"
+
+# Security headers. connect-src allows only this site and the local Sean agent (frontend/src/services/agentConnection.ts).
+# 'wasm-unsafe-eval' is for three.js's meshopt decoder (WebAssembly), and blob: for the model's embedded textures.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' http://127.0.0.1:8000 blob: data:; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+
+# No SPA fallback is needed: the app is one page at "/" with no client-side routes.
+#
+# No /api proxy: the backend is not hosted. The production build calls the Sean agent on the user's own computer at
+# http://127.0.0.1:8000 (Sean Local + Web, docs/development/d05-local-web-deployment-decision-record.md). The agent must list
+# this site's exact origin in SEAN_ALLOWED_ORIGINS, and the browser asks the user to allow the connection.

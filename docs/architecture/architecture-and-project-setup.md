@@ -47,6 +47,8 @@ The MVP must run locally on Windows.
 
 Repository inspection, evidence retrieval, ranking, classification, and the primary user experience must not depend on a hosted backend.
 
+Amended (decision A27, D05): the built frontend may also be served from a static host (Netlify). The backend still runs only on the user's Windows machine as a local agent bound to `127.0.0.1`. All repository access, Git execution, evidence retrieval, and provider keys stay on that machine. A static frontend host is an optional convenience, never a required service, and the local development workflow is unchanged.
+
 ### 2.3 Modular Monolith
 
 Sean uses one backend application with internally separated modules and one frontend application.
@@ -1015,6 +1017,7 @@ Do not claim a configuration is active until it has been tested in the correspon
 - Require approval for destructive or irreversible operations.
 - Apply least privilege to Kiro agents and tools.
 - Verify effective permissions before agent-driven modifications.
+- Local agent boundary (A27): the Host must be a loopback name. Browser origins are accepted only from exact configured lists. A configured web origin must hold a paired, short-lived bearer token. CORS is granted only to configured web origins. CORS and Origin checks are not authentication.
 
 Security controls must be enforced by the application and operating environment, not merely described in prompts.
 
@@ -1133,6 +1136,7 @@ Do not leave placeholders or invent an individual or organization as the copyrig
 | A24 | MCP configuration | Defer until a functional server and verified contract exist | Selected |
 | A25 | Empty directories | Do not create speculative empty directories or placeholders | Selected |
 | A26 | Insufficient evidence UI | Show a neutral investigation status, not a simulated historical conclusion | Selected |
+| A27 | Deployment | Static frontend on Netlify, with the backend as a local Windows agent ("Sean Local + Web", D05) | Selected |
 
 ## 25. Implementation Gate
 
@@ -1166,3 +1170,4 @@ No project initialization or implementation beyond the already authorized docume
 | 1.4 | §23 and decision A13 record the MIT copyright holder, confirmed by the owner, as Eddy Yail De Oleo Arias, year 2026. These edits were made in Phase 2 without a version change and are recorded here retroactively. `LICENSE` is unchanged. | Owner confirmation, Phase 2 closure. |
 | 1.4 | §12.2 is not amended. The existing workspace MCP launch configuration is kept unchanged until the MCP module and entry point exist. This is an accepted deviation from §12.2 wording, recorded as DEC-13 in D02. Enablement waits for all six §12.2 conditions. | Owner decision 4 and DEC-13, Phase 2 closure (CC-4). |
 | 1.4 | No change to the approved runtime stack. Node.js runtime and dependency pins are recorded in D01, not in this document. | Owner decision 1, Phase 2 closure. |
+| 1.4 | §2.2 and §18 amended and decision A27 added: the frontend may be served from a static host, and the backend runs as a local agent behind exact origin lists, pairing and bearer tokens. No new dependency and no change to the runtime stack. | Owner approval of the Sean Local + Web plan and its security review (D05). |

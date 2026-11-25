@@ -28,6 +28,9 @@ export default defineConfig({
     {
       command: `..\\backend\\.venv\\Scripts\\python.exe ..\\scripts\\run_fixture_backend.py --port ${BACKEND_PORT}`,
       port: BACKEND_PORT,
+      // The backend accepts browser origins only from exact lists (backend/app/api/local_guard.py). The tests' dev server is on
+      // FRONTEND_PORT, not the default 5173.
+      env: { SEAN_LOOPBACK_ORIGINS: `http://127.0.0.1:${FRONTEND_PORT},http://localhost:${FRONTEND_PORT}` },
       reuseExistingServer: false,
       timeout: 120_000,
       stdout: "ignore",

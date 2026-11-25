@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="docs/media/sean-banner.png" alt="Sean" width="900">
 </p>
 
@@ -48,7 +48,7 @@ The horror is fiction and is labelled as such on screen. It never changes the re
 
 ### The horror experience
 - **An Ouija interlude.** The planchette moves with the investigation's state, never at random, and the board remembers your
-  question.
+  question. It opens every game, whether the investigation produced a report, failed, or could not run.
 - **A first-person 3D game** (Three.js). You play in an institutional archive of filing cabinets, bookshelves, shelving of
   labelled boxes, carts, lockers and flickering fluorescent light.
 - **The objective.** Collect every clue (5 in a run) to open the gate, then reach the green exit. Clues can come from your
@@ -56,7 +56,7 @@ The horror is fiction and is labelled as such on screen. It never changes the re
 - **The creature.** A rigged, animated monster patrols, hears running, searches and pursues. You can hide from it in lockers,
   unless it saw you get in.
 - **The caught cinematic.** A staged jumpscare (anticipation, acceleration, lunge, impact, hold) ends on a "You were caught"
-  card with **Try again** or **Give up and open the report**.
+  card with **Try again** or **Give up and open the report** (**Give up and leave** when no report is behind the game).
 - **Procedural sound.** All audio is synthesised at run time with the Web Audio API. There are no audio files.
 - **Settings.**
   - Horror intensity: Gentle, Normal or Intense.
@@ -123,6 +123,38 @@ outside the repository, in `%LOCALAPPDATA%\Sean\`.
 
 ## Run Sean
 
+In every mode the backend runs on your Windows computer, because it reads your repositories and runs Git there.
+
+| Mode | Frontend | Backend | Use it for |
+|---|---|---|---|
+| A. Web app + local agent | The site deployed on Netlify | The Sean agent, started with `scripts\start_agent.ps1` | Using Sean from the browser, without running a frontend server |
+| B. Fully local development | The Vite dev server on `127.0.0.1:5173` | The FastAPI backend, started with `uvicorn` | Developing and testing Sean |
+| C. The agent on its own | None locally (the deployed site) | The Sean agent only | Running only the backend for the web app (section C) |
+
+The game and **Play the demo** need no backend in any mode.
+
+### A. Web app + local agent
+
+1. Open your Sean site on Netlify (`https://<your-site>.netlify.app`, or the deploy preview URL Netlify gave you) in Chrome
+   or Edge.
+2. From the repository root, start the agent with that exact origin: `https://`, the host name, no path and no trailing slash.
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\start_agent.ps1 -AllowedOrigin https://<your-site>.netlify.app
+   ```
+
+   The agent listens on `127.0.0.1:8000`, so that port must be free. It uses your real repository registry in
+   `%LOCALAPPDATA%\Sean\`. It refuses a malformed origin and stops. Instead of `-AllowedOrigin`, you can set
+   `SEAN_ALLOWED_ORIGINS` in `.kiro/.env`.
+3. In the site, go to **Settings → Sean agent** and click **Connect to the Sean agent**. Allow the browser's local network
+   permission when it asks.
+4. Type the pairing code shown in the agent's window, and click **Pair**. The card shows "Connected to the Sean agent."
+
+Each deploy preview has its own address, so start the agent again with the new origin after a new deploy. To disconnect
+this browser, click **Disconnect**. To revoke every pairing, stop the agent (Ctrl+C) and start it again.
+
+### B. Fully local development
+
 Open two terminals.
 
 ```powershell
@@ -136,7 +168,17 @@ npm run dev
 ```
 
 Open <http://127.0.0.1:5173>. The Vite dev server proxies `/api` to the backend. Set `SEAN_BACKEND_URL` to use another
-backend address.
+backend address. Started this way, the backend accepts browser requests only from the dev server's origins
+(`http://127.0.0.1:5173` and `http://localhost:5173`), and no pairing is needed.
+
+### C. The agent on its own
+
+`scripts\start_agent.ps1` starts only the backend. It serves no page and is not a local copy of the whole application: the
+interface still comes from the deployed site, and the agent accepts browser requests only from the origin passed in
+`-AllowedOrigin` (or `SEAN_ALLOWED_ORIGINS`), after pairing. It refuses the local dev server's origins, so it is not the
+backend for mode B. To run the entire application on your computer, use mode B.
+
+### Using Sean
 
 1. Go to **Repositories** and add a local Git repository. Give it a name, an identifier, and its folder on this computer.
 2. On **New Investigation**, type a request as `identifier — question`, for example `sean — Why does backend/app/main.py exist?`.
@@ -144,31 +186,22 @@ backend address.
 
 To play without investigating anything, use **Settings → Experience → Play the demo**.
 
-## Deployment (planned)
+## Deployment
 
-Netlify is the planned host. Deployment is **not configured yet**: there is no `netlify.toml` and no deployed site.
+The frontend is deployed on Netlify. The backend is not hosted: it runs as the local agent on each user's Windows computer
+(mode A above). Netlify serves only the static build, so repository access, Git and the optional keys never leave the user's
+machine. [`docs/deployment.md`](docs/deployment.md) has the full settings, the security rules and the preview checklist.
 
-What the code supports today:
-- **The frontend is a static build.** It builds from `frontend/` with `npm run build` into `frontend/dist`, using Node 24.
-  It is one page at `/` with no client-side routes, so it needs no single-page-app redirect rule. The build reads no
-  environment variables, and the runtime monster model is served from `/models/`.
-- **The game works without the backend.** Play the demo makes no API call. A browser test
-  (`e2e/startup-scenarios.spec.ts`) checks that the game still starts, with atmosphere clues, when every backend request
-  fails. Investigations, repositories and reports need the backend.
-- **The backend is local by design.** It is a Python FastAPI process that runs Git on folders of your own computer. Its
-  local-only guard (`backend/app/api/local_guard.py`) refuses any request whose host or origin is not localhost. It is not
-  part of a static deployment.
-
-Still to decide and configure:
-1. **What the deployed site offers.** It could be the game demo only, which the static frontend supports now, or the full
-   investigation, which needs a backend that can be reached from the site.
-2. **`netlify.toml`**: base directory `frontend`, build command `npm run build`, publish directory `dist`, and the Node
-   version.
-3. **For the full investigation:** a hosted backend, plus a `/api/*` rewrite to it. The frontend calls the relative path
-   `/api`, and the Vite proxy that serves it exists only in development. Hosting the backend would also need changes that do
-   not exist today: the local-only guard, authentication, and access to the repositories to investigate.
-4. **Secrets:** `SEAN_GROQ_API_KEY` and `SEAN_GITHUB_TOKEN` are read only by the backend. Never put them in the frontend
-   build's environment.
+- **Netlify build.** `netlify.toml` builds `frontend/` with `npm run build` and Node 24, and publishes `frontend/dist`. It
+  sets a Content-Security-Policy that allows connections only to the site and to `http://127.0.0.1:8000`.
+- **How the site reaches the agent.** The browser calls `http://127.0.0.1:8000` directly. The agent accepts only the exact
+  origins it was started with, and each one must pair first. The site sends no request to the agent before you click
+  **Connect**. The token lasts 12 hours, lives only in the agent's memory and in the tab's `sessionStorage`, and ends when the
+  agent restarts.
+- **Browsers.** The web app targets Chrome and Edge, which ask for the local network permission. The automated browser
+  checks run in Microsoft Edge. Firefox has not been verified.
+- **Secrets.** `SEAN_GROQ_API_KEY` and `SEAN_GITHUB_TOKEN` are read only by the agent (template: `.kiro/.env.example`).
+  Never put them in the frontend build or in a `VITE_` variable.
 
 ## The horror experience
 
@@ -197,6 +230,7 @@ is in this repository, except the workflows, which are managed by the Kiro IDE.
 | **KiroIgnore** | `.kiroignore` | Keeps files out of Kiro's agent context: secrets (`.env`, `.env.*` except `.env.example`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `.git-credentials`), Python environments and caches, `node_modules/`, frontend build and coverage output, Playwright reports and test results, and logs. It limits context; it is not a security boundary. |
 | **MCP** | `.kiro/settings/mcp.json` | Runs Sean's own read-only MCP server (`python -m app.modules.mcp`, STDIO), with the tools `search_history`, `blame_range`, `get_pr` and `get_issue`. They call the same backend logic as the HTTP API. The file holds absolute paths for the author's machine, so adjust them to your clone. |
 | **Reports** | `.kiro/reports/` | Phase status and workstream reports: what was changed, what was verified, and what is still open. |
+| **Powers** | Kiro IDE, installed Power `netlify-deployment` (not stored in this repository) | A Kiro Power with Netlify deployment guidance: CLI-first, configured through `netlify.toml`, with a preview (non-production) deploy unless production is asked for. Sean's deploys followed it: the Netlify CLI, run with `npx`, created the `sean-local-web-preview` project and published draft deploy previews of `frontend/dist`. No Netlify CLI or package was added to the project. |
 | **Workflows** | Kiro IDE, Workflows sidebar (not stored in this repository) | Used to run parallel workstreams. Three completed runs of the `agent-wf-coder` workflow, each a single step by the `wf-coder` agent, built Workstream B (startup that does not depend on the investigation), C (the caught cinematic) and D (the archive). Each was limited to its own files; see the ownership table in `.kiro/reports/workstreams.md` and the summaries in `.kiro/reports/ws-b-startup.md`, `ws-c-cinematic.md` and `ws-d-archive.md`. |
 
 The engineering process itself is documented in the [Kiro Engineering Playbook](docs/development/kiro-engineering-playbook.md)
@@ -212,26 +246,10 @@ and the [Kiro Operating Guide](docs/development/kiro-operating-guide.md).
 | Production build | `npm run build` | Type check plus a Vite production build |
 | Browser end to end | `npm run test:e2e` | Playwright against a real Vite server and a fixture backend on disposable repositories. Covers the journey, startup, game, horror, escape, cinematic and archive checks. |
 | Audio in the browser | `npx playwright test -c playwright.audio.config.ts` | Browser audio behaviour |
+| Web build and agent | `npx playwright test -c playwright.agent.config.ts` (from `frontend\`), then `npm run build` | A production build on its own origin, under the `netlify.toml` headers, paired with the real agent: pairing and tokens, no agent request before Connect, the Ouija for successful and failed investigations, the creature, and the caught screen. It builds with a test agent port, so rebuild afterwards. |
 
 Visual QA evidence (inspected screenshots from the game, the cinematic and the archive) is kept in
 `frontend/evidence/visual-qa/`, with an index in [`visual-qa-report.md`](frontend/evidence/visual-qa/visual-qa-report.md).
-
-### Known open item: the escape acceptance gate
-
-`frontend/e2e/escape-deterministic.spec.ts` plays seeds **1, 2 and 3** with a scripted player and requires each to escape on
-its first attempt. On the current build:
-
-| Seed | First attempt | Result |
-|---|---|---|
-| 1 | Caught at 66.55 s (escapes on a retry) | **Fails** |
-| 2 | Caught at 47.88 s (escapes on a retry) | **Fails** |
-| 3 | Escaped at 148.93 s | Passes |
-
-The cause is the archive furniture's collision, which changes the scripted player's route. Seed 1 has failed since the
-furniture became solid, and seed 2 since the decoration was restored. Across seeds 1 to 40, first-attempt escapes are within
-sampling noise of the layout without furniture collision, and the 400-game balance suite passes. The gate is recorded as
-unresolved and has not been redefined to pass. `frontend/e2e/archive-states.spec.ts` is an older archive fixture that is also
-known to fail. `archive-qa.spec.ts` replaces it, and it is kept pending a decision.
 
 ## Project structure
 
@@ -242,7 +260,7 @@ Sean/
 │   └── variants/             optional benchmark variants (local only, not in Git)
 ├── backend/                  FastAPI backend (Python)
 │   ├── app/
-│   │   ├── api/              HTTP routes, local-only guard
+│   │   ├── api/              HTTP routes, origin guard, agent pairing
 │   │   ├── core/             configuration, safe Git runner, limits, redaction
 │   │   ├── modules/          repository, git_history, github, evidence, investigation,
 │   │   │                     explanation, answer, advisor, intent, repository_profile, mcp
@@ -261,7 +279,7 @@ Sean/
 │   ├── tests/                Vitest suites
 │   ├── e2e/                  Playwright suites and the deterministic game driver
 │   └── evidence/visual-qa/   inspected visual QA evidence
-├── scripts/                  backend start, fixture repositories, diagnostics, monster rigging tools
+├── scripts/                  backend and agent start, fixture repositories, diagnostics, monster rigging tools
 ├── docs/
 │   ├── specs/                approved specifications (Specs 1 to 4)
 │   ├── architecture/         architecture and project setup
@@ -290,6 +308,7 @@ Sean/
 - [Spec 4: Engineering Intelligence](docs/specs/spec-4-engineering-intelligence.md)
 - [Architecture and Project Setup](docs/architecture/architecture-and-project-setup.md)
 - [Audio asset manifest](docs/development/audio-asset-manifest.md)
+- [Deployment](docs/deployment.md)
 
 ## Credits and license
 

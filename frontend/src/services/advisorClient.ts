@@ -20,6 +20,7 @@ import {
   type Validated,
 } from "../features/analysis/validateAdvisor";
 import { DEFAULT_BASE_URL, toBackendError } from "./investigationClient";
+import { agentFetch } from "./agentConnection";
 
 export type CallOutcome<T> =
   | { kind: "ok"; value: T }
@@ -63,7 +64,7 @@ async function call<T>(
   options: CallOptions,
   successStatus = 200,
 ): Promise<CallOutcome<T>> {
-  const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = fetch } = options;
+  const { signal, baseUrl = DEFAULT_BASE_URL, fetchImpl = agentFetch } = options;
   // The deadline is aborted by the timer or by the caller. Only the caller's own abort is reported as `aborted`.
   const deadline = new AbortController();
   const timer = setTimeout(() => deadline.abort(), ADVISOR_TIMEOUT_MS);

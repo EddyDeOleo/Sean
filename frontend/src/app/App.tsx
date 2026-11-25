@@ -23,6 +23,7 @@ function investigationFailureNote(error: AnalysisError | null, cancelled: boolea
   const tail = " The game uses atmosphere clues only, and no repository finding is shown in it.";
   if (cancelled) return `The investigation was cancelled.${tail}`;
   if (error?.kind === "NETWORK") return `The backend could not be reached for the investigation.${tail}`;
+  if (error?.kind === "REQUEST_REJECTED" && error.backend.code === NOT_PAIRED_CODE) return `This site is not connected to the Sean agent, so no investigation ran.${tail}`;
   if (error?.kind === "REQUEST_REJECTED") return `The backend did not accept the investigation (status ${error.status}).${tail}`;
   if (error?.kind === "INVALID_RESPONSE") return `The investigation response could not be validated.${tail}`;
   return `The investigation did not complete.${tail}`;
@@ -45,6 +46,7 @@ import {
   listRepositories as defaultListRepositories, previewArtifacts as defaultPreviewArtifacts, updateRepository as defaultUpdateRepository,
   type CallOutcome, type CapabilitiesFn, type CreateRepositoryFn, type DeleteRepositoryFn, type ListRepositoriesFn, type PreviewFn, type UpdateRepositoryFn,
 } from "../services/advisorClient";
+import { NOT_PAIRED_CODE, agentReady } from "../services/agentConnection";
 import type { RepositoryListItem } from "../types/advisor";
 import type { InvestigationRequest } from "../types/contract";
 
@@ -57,6 +59,8 @@ export interface AppProps {
   deleteRepository?: DeleteRepositoryFn;
   getCapabilities?: CapabilitiesFn;
   previewArtifacts?: PreviewFn;
+  /** Whether the startup loads may contact the agent yet (services/agentConnection.ts, agentReady). */
+  agentReady?: () => boolean;
   exporter?: Exporter;
   /** The game to run after the interruption. Without one, the interlude ends after the Ouija. */
   renderGame?: RenderGame;
@@ -124,18 +128,30 @@ export function App(props: AppProps) {
   const [repositories, setRepositories] = useState<RepositoryListItem[] | null>(null);
   const [repositoriesProblem, setRepositoriesProblem] = useState<string | null>(null);
   const listRepositories = props.listRepositories ?? defaultListRepositories;
+  // Bumped when the web build pairs with the local agent, so the loads that the agent refused before pairing run again.
+  const [agentEpoch, setAgentEpoch] = useState(0);
+  const onAgentPaired = useCallback((): void => setAgentEpoch((epoch) => epoch + 1), []);
+  const isAgentReady = props.agentReady ?? agentReady;
   useEffect(() => {
+    // A production build waits for pairing: no request reaches the agent before the user clicks Connect.
+    if (!isAgentReady()) {
+      setRepositories([]);
+      setRepositoriesProblem("Connect to the Sean agent in Settings to see your repositories.");
+      return;
+    }
     const controller = new AbortController();
     void listRepositories({ signal: controller.signal }).then((outcome) => {
-      if (outcome.kind === "ok") setRepositories(outcome.value);
-      else if (outcome.kind === "aborted") return;
+      if (outcome.kind === "ok") {
+        setRepositories(outcome.value);
+        setRepositoriesProblem(null);
+      } else if (outcome.kind === "aborted") return;
       else {
         setRepositories([]);
         setRepositoriesProblem(outcome.kind === "network" ? "The backend could not be reached, so the repository list is unavailable." : "The repository list could not be loaded.");
       }
     });
     return () => controller.abort();
-  }, [listRepositories]);
+  }, [listRepositories, agentEpoch, isAgentReady]);
 
   const createRepositoryFn = props.createRepository ?? defaultCreateRepository;
   const updateRepositoryFn = props.updateRepository ?? defaultUpdateRepository;
@@ -165,12 +181,13 @@ export function App(props: AppProps) {
   const [aiAvailable, setAiAvailable] = useState(false);
   const getCapabilities = props.getCapabilities ?? defaultGetCapabilities;
   useEffect(() => {
+    if (!isAgentReady()) return; // see the repository list above
     const controller = new AbortController();
     void getCapabilities({ signal: controller.signal }).then((outcome) => {
       setAiAvailable(outcome.kind === "ok" && outcome.value.ai_interpreter.available);
     });
     return () => controller.abort();
-  }, [getCapabilities]);
+  }, [getCapabilities, agentEpoch, isAgentReady]);
 
   // Sound: nothing exists until the user turns it on (a gesture in this page). Levels and mute persist; "on" never does.
   const { controller: audio, snapshot: audioState } = useAudio(props.audioFactory);
@@ -227,8 +244,12 @@ export function App(props: AppProps) {
     setGameNote(null);
     // The demo has no investigation, so no note from an earlier analysis may appear on its intro card.
     setInvestigationNote(null);
-    beginGame(`standalone-${standaloneCount.current}`);
+    // Nor a question on the Ouija.
+    setBoardQuestion("");
+    beginGame(`standalone-${standaloneCount.current}`, true);
   }, [beginGame, renderGameAvailable]);
+  // The question the Ouija recalls when there is no report (an investigation without one). Empty for the demo.
+  const [boardQuestion, setBoardQuestion] = useState("");
   const [finishedInterludes, setFinishedInterludes] = useState<ReadonlySet<string>>(new Set());
 
   // The sound follows the interlude's phase and the planchette's steps. Leaving the interlude silences everything.
@@ -311,30 +332,33 @@ export function App(props: AppProps) {
   const analysisToken = state.token;
   const analysisPhase = state.phase;
   const analysisError = state.error;
+  const analysisText = state.text;
   useEffect(() => {
     if (!investigationArmed.current) return;
+    // The Ouija does not depend on the investigation either: with the experience on, it plays for every outcome. The game
+    // settings then decide, as after a report, whether the game follows it (useInterlude's gameAllowed).
     if (analysisPhase === "NEEDS_TARGET") {
       investigationArmed.current = false;
-      const gameWanted = settingsRef.current.horror && !settingsRef.current.skipGameplay && renderGameAvailable;
-      if (gameWanted && !isActive(phaseRef.current)) {
+      if (settingsRef.current.horror && !isActive(phaseRef.current)) {
         setGameNote(null);
         setInvestigationNote(null);
+        setBoardQuestion(analysisText);
         beginGame(`investigation-${analysisToken}`);
       }
     } else if (analysisPhase === "ERROR" || analysisPhase === "CANCELLED") {
       // Gameplay does not depend on the investigation. A failed or cancelled investigation starts the game with atmosphere
       // clues, and the technical reason is shown on the game's intro card, apart from the fiction.
       investigationArmed.current = false;
-      const gameWanted = settingsRef.current.horror && !settingsRef.current.skipGameplay && renderGameAvailable;
-      if (gameWanted && !isActive(phaseRef.current)) {
+      if (settingsRef.current.horror && !isActive(phaseRef.current)) {
         setInvestigationNote(investigationFailureNote(analysisError, analysisPhase === "CANCELLED"));
         setGameNote(null);
+        setBoardQuestion(analysisText);
         beginGame(`investigation-unavailable-${analysisToken}`);
       }
     } else if (analysisPhase === "READY") {
       investigationArmed.current = false;
     }
-  }, [analysisPhase, analysisToken, analysisError, beginGame, renderGameAvailable]);
+  }, [analysisPhase, analysisToken, analysisError, analysisText, beginGame]);
   useEffect(() => {
     setArtifactRecords(state.snapshot ? [...state.snapshot.artifacts] : []);
     // Only a different snapshot resets the records.
@@ -460,6 +484,7 @@ export function App(props: AppProps) {
   } else if (view === "settings") {
     content = (
       <SettingsView
+        onAgentPaired={onAgentPaired}
         motion={settings.motion}
         onMotion={(motion: MotionPreference) => persist({ motion })}
         experience={settings.horror}
@@ -609,7 +634,7 @@ export function App(props: AppProps) {
       </main>
     </div>
     {interludeActive ? (
-      <InterludeOverlay state={interlude.state} question={state.snapshot?.input.question ?? ""} standalone={standalone} reducedMotion={reduced} onSkip={interlude.skip}>
+      <InterludeOverlay state={interlude.state} question={standalone ? boardQuestion : state.snapshot?.input.question ?? ""} standalone={standalone} reducedMotion={reduced} onSkip={interlude.skip}>
         {game}
       </InterludeOverlay>
     ) : null}

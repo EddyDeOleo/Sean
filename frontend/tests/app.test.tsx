@@ -670,3 +670,22 @@ describe("how the report presents each answer source", () => {
     expect(text("ai-status")).toContain("Not sent.");
   });
 });
+describe("web build startup (Sean Local + Web)", () => {
+  it("contacts the agent only once a pairing token exists, then loads the repositories and capabilities", async () => {
+    const h = harness();
+    const listRepositories = vi.fn(h.props.listRepositories!);
+    const getCapabilities = vi.fn(h.props.getCapabilities!);
+    let ready = false;
+    const agentReady = (): boolean => ready;
+    const view = await render(<App {...h.props} listRepositories={listRepositories} getCapabilities={getCapabilities} agentReady={agentReady} />);
+    await settle();
+    expect(listRepositories).not.toHaveBeenCalled();
+    expect(getCapabilities).not.toHaveBeenCalled();
+    await view.unmount();
+    ready = true; // paired in this browser session
+    await render(<App {...h.props} listRepositories={listRepositories} getCapabilities={getCapabilities} agentReady={agentReady} />);
+    await settle();
+    expect(listRepositories).toHaveBeenCalledTimes(1);
+    expect(getCapabilities).toHaveBeenCalledTimes(1);
+  });
+});

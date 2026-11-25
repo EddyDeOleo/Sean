@@ -157,7 +157,9 @@ export async function enterStandalone(page: Page, settings: Record<string, unkno
   await page.goto("/");
   await page.getByRole("button", { name: "Settings" }).click();
   await page.getByTestId("play-demo").click();
-  await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 15_000 });
+  // The demo opens with the Ouija (about 14 s of fixed beats) before the game, like every other way in.
+  await expect(page.getByTestId("board")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByTestId("game-intro")).toBeVisible({ timeout: 45_000 });
 }
 
 /** The player's tile centre and the creature's, as the game publishes them. */

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { SnapshotSummary } from "../../features/report/reportSnapshot";
 import type { MotionPreference, Settings } from "../../features/experience/settingsStore";
 import { ClassificationBadge, PlainBadge, RetrievalBadge } from "../report/badges";
+import { AgentConnection } from "./AgentConnection";
 
 export function SavedReportsView(props: {
   items: SnapshotSummary[] | null;
@@ -87,6 +88,8 @@ export function SettingsView(props: {
   onJumpscare(value: boolean): void;
   reducedEffective: boolean;
   onClearReports(): Promise<boolean>;
+  /** Called when the web build pairs with the local agent. */
+  onAgentPaired?(): void;
 }) {
   const [cleared, setCleared] = useState<"idle" | "done" | "failed">("idle");
   const [confirming, setConfirming] = useState(false);
@@ -180,6 +183,7 @@ export function SettingsView(props: {
           </div>
         ))}
       </section>
+      <AgentConnection onPaired={props.onAgentPaired} />
       <section className="sx-card" aria-labelledby="data-heading">
         <h2 className="sx-h2" id="data-heading">Saved reports</h2>
         <p className="sx-muted" style={{ marginTop: 0 }}>Remove every report saved in this browser. This cannot be undone.</p>
