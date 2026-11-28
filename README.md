@@ -1,4 +1,4 @@
-<p align="center">
+﻿<p align="center">
   <img src="docs/media/sean-banner.png" alt="Sean" width="900">
 </p>
 
@@ -25,6 +25,10 @@ repository", and you are dropped into a dark, first-person archive. Collect ever
 exit while a creature hunts you. Get caught and it gets very close.
 
 The horror is fiction and is labelled as such on screen. It never changes the report, and it can always be skipped.
+
+Sean is local-first. The frontend is deployed publicly on Netlify, but the repository investigation backend is not hosted
+there. It runs as a local companion agent on your Windows computer, so repository access and Git operations stay on your
+machine. The browser connects to the agent only after you start the connection and complete pairing.
 
 ## Gameplay demo
 
@@ -135,13 +139,14 @@ The game and **Play the demo** need no backend in any mode.
 
 ### A. Web app + local agent
 
-1. Open your Sean site on Netlify (`https://<your-site>.netlify.app`, or the deploy preview URL Netlify gave you) in Chrome
-   or Edge.
+1. Open the Sean site, <https://sean-local-web-preview.netlify.app>, in Chrome or Edge.
 2. From the repository root, start the agent with that exact origin: `https://`, the host name, no path and no trailing slash.
 
    ```powershell
-   powershell -ExecutionPolicy Bypass -File scripts\start_agent.ps1 -AllowedOrigin https://<your-site>.netlify.app
+   powershell -ExecutionPolicy Bypass -File scripts\start_agent.ps1 -AllowedOrigin https://sean-local-web-preview.netlify.app
    ```
+
+   `-AllowedOrigin` must match the exact origin of the website open in the browser.
 
    The agent listens on `127.0.0.1:8000`, so that port must be free. It uses your real repository registry in
    `%LOCALAPPDATA%\Sean\`. It refuses a malformed origin and stops. Instead of `-AllowedOrigin`, you can set
@@ -150,8 +155,9 @@ The game and **Play the demo** need no backend in any mode.
    permission when it asks.
 4. Type the pairing code shown in the agent's window, and click **Pair**. The card shows "Connected to the Sean agent."
 
-Each deploy preview has its own address, so start the agent again with the new origin after a new deploy. To disconnect
-this browser, click **Disconnect**. To revoke every pairing, stop the agent (Ctrl+C) and start it again.
+Each deploy preview has a different origin from the production site, so to use a preview, start the agent with that preview's
+exact URL as `-AllowedOrigin`. To disconnect this browser, click **Disconnect**. To revoke every pairing, stop the agent
+(Ctrl+C) and start it again.
 
 ### B. Fully local development
 
@@ -186,11 +192,22 @@ backend for mode B. To run the entire application on your computer, use mode B.
 
 To play without investigating anything, use **Settings → Experience → Play the demo**.
 
+### Connect the local agent to the deployed site
+
+The deployed site at <https://sean-local-web-preview.netlify.app> cannot read your repositories by itself. To investigate one,
+start the local agent with the site's origin, then pair the browser with it, as described in mode A. The tutorial shows the
+whole process.
+
+[Watch the Sean agent pairing tutorial](docs/media/sean-pairing-agent-tutorial.mp4)
+
 ## Deployment
 
-The frontend is deployed on Netlify. The backend is not hosted: it runs as the local agent on each user's Windows computer
-(mode A above). Netlify serves only the static build, so repository access, Git and the optional keys never leave the user's
-machine. [`docs/deployment.md`](docs/deployment.md) has the full settings, the security rules and the preview checklist.
+The frontend is deployed on Netlify at <https://sean-local-web-preview.netlify.app>. Netlify hosts the static frontend only.
+The backend is not hosted: it runs as the local agent on each user's Windows computer (mode A above), and the browser
+communicates directly with `http://127.0.0.1:8000`. Pairing and origin authorization are required before any investigation
+request, so repository access, Git and the optional keys never leave the user's machine.
+[`docs/deployment.md`](docs/deployment.md) remains the detailed reference for the settings, the security rules and the
+preview checklist.
 
 - **Netlify build.** `netlify.toml` builds `frontend/` with `npm run build` and Node 24, and publishes `frontend/dist`. It
   sets a Content-Security-Policy that allows connections only to the site and to `http://127.0.0.1:8000`.
