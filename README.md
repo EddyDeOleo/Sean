@@ -198,7 +198,9 @@ The deployed site at <https://sean-local-web-preview.netlify.app> cannot read yo
 start the local agent with the site's origin, then pair the browser with it, as described in mode A. The tutorial shows the
 whole process.
 
-[Watch the Sean agent pairing tutorial](docs/media/sean-pairing-agent-tutorial.mp4)
+<p align="center">
+  <img src="docs/media/sean-pairing-agent-tutorial.gif" alt="Sean Agent Pairing Tutorial" width="900">
+</p>
 
 ## Deployment
 
